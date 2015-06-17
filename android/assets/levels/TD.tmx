@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="left-up" width="25" height="15" tilewidth="46" tileheight="46" nextobjectid="7">
+ <tileset firstgid="1" name="background" tilewidth="358" tileheight="400">
+  <tile id="0">
+   <image width="358" height="400" source="D:/Programs/Java/libGDX Progects/Tower Defense/android/assets/pics/tower-defense/tower-defense-background-stars.png"/>
+  </tile>
+ </tileset>
+ <tileset firstgid="2" name="walls" tilewidth="46" tileheight="46">
+  <tile id="0">
+   <image width="46" height="46" source="D:/Programs/Java/libGDX Progects/Tower Defense/android/assets/pics/tiles/tile-1-center.gif"/>
+  </tile>
+  <tile id="1">
+   <image width="46" height="46" source="D:/Programs/Java/libGDX Progects/Tower Defense/android/assets/pics/tiles/tile-1-corner-left-bottom.gif"/>
+  </tile>
+  <tile id="2">
+   <image width="46" height="46" source="D:/Programs/Java/libGDX Progects/Tower Defense/android/assets/pics/tiles/tile-1-corner-left-top.gif"/>
+  </tile>
+  <tile id="3">
+   <image width="46" height="46" source="D:/Programs/Java/libGDX Progects/Tower Defense/android/assets/pics/tiles/tile-1-corner-right-bottom.gif"/>
+  </tile>
+  <tile id="4">
+   <image width="46" height="46" source="D:/Programs/Java/libGDX Progects/Tower Defense/android/assets/pics/tiles/tile-1-corner-right-top.gif"/>
+  </tile>
+  <tile id="5">
+   <image width="46" height="46" source="D:/Programs/Java/libGDX Progects/Tower Defense/android/assets/pics/tiles/tile-1-horizontal.gif"/>
+  </tile>
+  <tile id="6">
+   <image width="46" height="46" source="D:/Programs/Java/libGDX Progects/Tower Defense/android/assets/pics/tiles/tile-1-vertical.gif"/>
+  </tile>
+ </tileset>
+ <imagelayer name="Image Layer 1" visible="0"/>
+ <layer name="background" width="25" height="15">
+  <data encoding="base64" compression="zlib">
+   eJxjYBgFo4D6gJHOcqNgFAwlQI/8AQAULAAJ
+  </data>
+ </layer>
+ <layer name="Walls" width="25" height="15">
+  <data encoding="base64" compression="zlib">
+   eJy9k1sKACAIBIUeev8TV5QQS/2tLoj04ziQJjt2ep2lxOrXbO/sGDCY++uHkeEhAS4vBvow3j8Gs0fuj4wi/LtABjvoEXUX2R4S4NISPDxrPvs/vXwGEW8FzA==
+  </data>
+ </layer>
+ <objectgroup name="Object Layer 1">
+  <object id="3" name="spawn location" x="47" y="0" width="46" height="46"/>
+  <object id="4" name="goal location" x="138" y="0" width="46" height="46"/>
+ </objectgroup>
+</map>
