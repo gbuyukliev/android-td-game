@@ -2,7 +2,9 @@ package bg.ittalents.tower_defense.screens;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.FPSLogger;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import bg.ittalents.tower_defense.game.WorldController;
 import bg.ittalents.tower_defense.game.WorldRenderer;
@@ -26,14 +28,14 @@ public class GameScreen extends AbstractGameScreen {
     @Override
     public void render(float deltaTime) {
         // Do not update game world when paused.
-        if (!paused) {
+        if (!paused && deltaTime < 1f) {
             // Update game world by the time that has passed
             // since last rendered frame.
             worldController.update(deltaTime);
-        }
 
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        worldRenderer.render();
+            Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+            worldRenderer.render();
+        }
     }
 
     @Override

@@ -1,5 +1,6 @@
 package bg.ittalents.tower_defense.game.objects;
 
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
@@ -7,13 +8,18 @@ import com.badlogic.gdx.math.Vector2;
 import bg.ittalents.tower_defense.utils.Constants;
 
 public abstract class AbstractObject {
+    //position of center
     Vector2 position;
-    TextureRegion texture;
-    float rotation;
+    //left bottom of texture to be draw to
+    Vector2 texturePosition;
+    float angle;
     boolean visible;
+    TextureRegion texture;
 
-    public AbstractObject(Vector2 position, TextureRegion texture) {
-        this.position = new Vector2(position);
+    public AbstractObject(float positionX, float positionY, TextureRegion texture) {
+        position = new Vector2(positionX, positionY);
+        texturePosition = new Vector2(positionX - (texture.getRegionWidth() / 2),
+                positionY - (texture.getRegionHeight() / 2));
         this.texture = texture;
         visible = true;
     }
@@ -26,17 +32,20 @@ public abstract class AbstractObject {
         this.visible = visible;
     }
 
-//    public void setRotation(float rotation) {
-//        this.rotation = rotation;
-//    }
-
-    public static double countAngle(Vector2 position, Vector2 point) {
-        return Math.atan2(point.y - position.y, point.x - position.x);
+    public static double countAngle(Vector2 position, Vector2 targetPosition) {
+        return Math.atan2(targetPosition.y - position.y, targetPosition.x - position.x);
     }
 
-    public void render(SpriteBatch batch) {
-        batch.draw(texture, position.x, position.y,
-                Constants.TILE_WIDTH / 2, Constants.TILE_HEIGHT / 2,
-                Constants.TILE_WIDTH, Constants.TILE_HEIGHT, 1f, 1f, rotation);
+    protected void updatePosition(float x, float y) {
+        position.x = x;
+        position.y = y;
+        texturePosition.x = x - texture.getRegionWidth() / 2;
+        texturePosition.y = y - texture.getRegionHeight() / 2;
+    }
+
+    public void render(Batch batch) {
+        batch.draw(texture, texturePosition.x, texturePosition.y,
+                texture.getRegionWidth() / 2, texture.getRegionWidth() / 2,
+                texture.getRegionWidth(), texture.getRegionHeight(), 1f, 1f, angle);
     }
 }

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="left-up" width="15" height="9" tilewidth="46" tileheight="46" backgroundcolor="#000000" nextobjectid="3">
+ <properties>
+  <property name="starting_position" value="1,0"/>
+  <property name="target_position" value="3,0"/>
+  <property name="waypoints" value="1,0|1,7|13,7|13,1|5,1|5,3|11,3|11,5|3,5|3,0"/>
+ </properties>
+ <tileset firstgid="1" name="tiles" tilewidth="46" tileheight="46" spacing="2" margin="2">
+  <image source="../tiles.png" width="128" height="256"/>
+ </tileset>
+ <layer name="wall_layer" width="15" height="9">
+  <data encoding="base64" compression="zlib">
+   eJxjZmBgYCMDswIxOwN5gB1JLzMJ9qHrJdZ+ZPXoevHZT0gvIfuJ0YvLbhYK7EW2H10PEx470e0HAP8fAd0=
+  </data>
+ </layer>
+</map>

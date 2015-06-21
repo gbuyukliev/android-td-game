@@ -3,8 +3,9 @@ package bg.ittalents.tower_defense.game.objects;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
@@ -13,19 +14,59 @@ public abstract class AbstractCreep extends AbstractObject {
 
     Animation animation;
     float speed;
-    float health;
-    private float stateTime;
+    int health;
+    int maxHealth;
+    float stateTime;
+    HealthBar healthBar;
 
     int currentWaypoint;
     Array<Vector2> waypoints;
 
-    public AbstractCreep(Vector2 position, Animation animation) {
-        super(position, null);
+    private class HealthBar {
+        private final short BUFFER_X = 3;
+        private final short BUFFER_Y = 44;
+        private static final float SCALE = 1f;
+
+        private Sprite healthBarBG;
+        private Sprite healthBarFG;
+        private AbstractCreep owner;
+
+        public HealthBar(AbstractCreep owner, Texture healthBG, Texture healthFG) {
+            this.owner = owner;
+            healthBarBG = new Sprite(healthBG);
+            healthBarFG = new Sprite(healthFG);
+            setPosition();
+            healthBarBG.setOrigin(0, 0);
+            healthBarFG.setOrigin(0, 0);
+            healthBarBG.setScale(SCALE);
+        }
+
+        private void setPosition() {
+            healthBarBG.setX(texturePosition.x + BUFFER_X);
+            healthBarBG.setY(texturePosition.y + BUFFER_Y);
+            healthBarFG.setX(texturePosition.x + BUFFER_X);
+            healthBarFG.setY(texturePosition.y + BUFFER_Y);
+        }
+
+        public void update() {
+            setPosition();
+            healthBarFG.setScale(owner.health / (float) owner.maxHealth * SCALE, SCALE);
+        }
+
+        public void render(Batch batch) {
+            healthBarBG.draw(batch);
+            healthBarFG.draw(batch);
+        }
+    }
+
+    public AbstractCreep(float positionX, float positionY, Animation animation) {
+        super(positionX, positionY, animation.getKeyFrames()[0]);
         this.animation = animation;
-        rotation = 90f;
+        angle = 90f;
         currentWaypoint = -1;
 
-//        Gdx.app.debug("Creep pos", position.toString());
+        healthBar = new HealthBar(this, new Texture("enemyhealthbg.png"),
+                new Texture("enemyhealthfg.png"));
     }
 
     public void setWaypoints(Array<Vector2> waypoints) {
@@ -36,20 +77,16 @@ public abstract class AbstractCreep extends AbstractObject {
     private void getNextWaypoint() {
         if (++this.currentWaypoint >= waypoints.size) {
             setVisible(false);
-        } else {
-            Gdx.app.debug("Waypoint", waypoints.get(currentWaypoint).toString());
         }
     }
 
     private boolean isWaypointReached() {
         if (MathUtils.isEqual(position.x, waypoints.get(currentWaypoint).x, 1f) &&
                 MathUtils.isEqual(position.y, waypoints.get(currentWaypoint).y, 1f)) {
-//        if (position.equals(waypoints.get(currentWaypoint))) {
             position.x = waypoints.get(currentWaypoint).x;
             position.y = waypoints.get(currentWaypoint).y;
             return true;
         }
-
         return false;
     }
 
@@ -63,29 +100,32 @@ public abstract class AbstractCreep extends AbstractObject {
                 getNextWaypoint();
                 return;
             }
-//            float dx = waypoints.get(currentWaypoint).x - position.x;
-//            float dy = waypoints.get(currentWaypoint).y - position.y;
-//
-//            double radRotation = Math.atan(dy / dx);
-//            if (MathUtils.isEqual(dy, 0f) && dx < 0) {
-//                radRotation = Math.PI;
-//            }
-
-            double radRotation = AbstractCreep.countAngle(position, waypoints.get(currentWaypoint));
-            rotation = (float) Math.toDegrees(radRotation);
-
-            position.x += speed * deltaTime * Math.cos(radRotation);
-            position.y += speed * deltaTime * Math.sin(radRotation);
+            double radRotation = AbstractObject.countAngle(position, waypoints.get(currentWaypoint));
+            angle = (float) Math.toDegrees(radRotation);
+            updatePosition(position.x + speed * deltaTime * (float)Math.cos(radRotation),
+                    position.y + speed * deltaTime * (float)Math.sin(radRotation));
         }
+    }
 
-
-//        Gdx.app.debug("Rotation", "" + rotation);
-//       Gdx.app.debug("Position", position.toString() + ", " +waypoints.get(currentWaypoint).toString());
+    public void reciveDamage(float damage) {
+        health -= damage;
+        if (health <= 0) {
+            setVisible(false);
+        }
     }
 
     public void update(float deltaTime) {
         updatePosition(deltaTime);
         stateTime += deltaTime;
         texture = animation.getKeyFrame(stateTime);
+        healthBar.update();
+    }
+
+    @Override
+    public void render(Batch batch) {
+        super.render(batch);
+//        if (health < maxHealth) {
+            healthBar.render(batch);
+//        }
     }
 }

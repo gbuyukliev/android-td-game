@@ -8,7 +8,7 @@ import bg.ittalents.tower_defense.game.objects.Assets;
 
 public abstract class AbstractGameScreen implements Screen {
 
-    Game game;
+    protected Game game;
 
     public AbstractGameScreen(Game game) {
         this.game = game;

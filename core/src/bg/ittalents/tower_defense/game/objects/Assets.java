@@ -12,28 +12,24 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Disposable;
 
-import bg.ittalents.tower_defense.utils.Constants;
-
 public class Assets implements Disposable, AssetErrorListener {
+    // Location of description file for texture atlas
+    public static final String TEXTURE_ATLAS_OBJECTS = "texture/texture.pack";
 
     public static final String TAG = Assets.class.getName();
 
     public static final Assets instance = new Assets();
 
     private AssetManager assetManager;
-    public AssetWall wall;
     public AssetCreeps creep;
     public AssetTower towers;
+    public AssetBackground background;
 
-    public class AssetWall {
-        public final AtlasRegion corner;
-        public final AtlasRegion middle;
-        public final AtlasRegion center;
+    public class AssetBackground {
+        public final AtlasRegion background;
 
-        public AssetWall(TextureAtlas atlas) {
-            corner = atlas.findRegion("tiles/tile-1-corner-left-bottom");
-            middle = atlas.findRegion("tiles/tile-1-horizontal");
-            center = atlas.findRegion("tiles/tile-1-center");
+        public AssetBackground(TextureAtlas atlas) {
+            background = atlas.findRegion("tower-defense-background-stars");
         }
     }
 
@@ -46,7 +42,7 @@ public class Assets implements Disposable, AssetErrorListener {
             for (int type = 1; type <= 7; type++) {
                 for (int strength = 1; strength <= 3; strength++) {
                     tower[type - 1][strength - 1] = atlas.findRegion(
-                            "tower-defense-turrets/turret-" + type + "-" + strength);
+                            "turret-" + type + "-" + strength);
                 }
             }
         }
@@ -87,7 +83,7 @@ public class Assets implements Disposable, AssetErrorListener {
         }
 
         private Animation init(TextureAtlas atlas, String creepColor, int creepNumber) {
-            String path = "creep/creep-" + creepNumber + "-" + creepColor + "/";
+            String path = "creep-" + creepNumber + "-" + creepColor + "/";
 
             int frameCount = 4;
 
@@ -116,7 +112,7 @@ public class Assets implements Disposable, AssetErrorListener {
         // set asset manager error handler
         assetManager.setErrorListener(this);
         // load texture atlas
-        assetManager.load(Constants.TEXTURE_ATLAS_OBJECTS,
+        assetManager.load(Assets.TEXTURE_ATLAS_OBJECTS,
                 TextureAtlas.class);
         // start loading assets and wait until finished
         assetManager.finishLoading();
@@ -126,13 +122,13 @@ public class Assets implements Disposable, AssetErrorListener {
             Gdx.app.debug(TAG, "asset: " + a);
 
         TextureAtlas atlas =
-                assetManager.get(Constants.TEXTURE_ATLAS_OBJECTS);
+                assetManager.get(Assets.TEXTURE_ATLAS_OBJECTS);
         // enable texture filtering for pixel smoothing
         for (Texture t : atlas.getTextures()) {
             t.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
         }
         // create game resource objects
-        wall = new AssetWall(atlas);
+        background = new AssetBackground(atlas);
         creep = new AssetCreeps(atlas);
         towers = new AssetTower(atlas);
     }

@@ -3,6 +3,7 @@ package bg.ittalents.tower_defense.game.objects;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 
 import bg.ittalents.tower_defense.utils.Constants;
@@ -14,16 +15,22 @@ public abstract class AbstractTower extends AbstractObject {
     int upgrade;
     AbstractCreep foe;
 
+    // rotation speed degrees per second
+    float rotationSpeed;
     float range;
-    float rate;
-    float damage;
+    float fireRate;
+    float timeFromLastShot;
+    int damage;
 
-    public AbstractTower(Vector2 position, TextureRegion[] textures) {
-        super(position, null);
+    public AbstractTower(float positionX, float positionY, TextureRegion[] textures) {
+        super(positionX, positionY, textures[0]);
         this.textures = textures;
         upgrade = -1;
         upgrade();
     }
+
+    public abstract AbstractProjectile shoot();
+    public abstract boolean isReady();
 
     public boolean isInRange(AbstractCreep foe) {
         float dx = (foe.position.x - position.x);
@@ -31,9 +38,12 @@ public abstract class AbstractTower extends AbstractObject {
         return (range * range) > ((dx * dx) + (dy * dy));
     }
 
+    public AbstractCreep getFoe() {
+        return foe;
+    }
+
     public void setFoe(AbstractCreep foe) {
         this.foe = foe;
-//        Gdx.app.debug(TAG, "Foe");
     }
 
     public void upgrade() {
@@ -48,10 +58,16 @@ public abstract class AbstractTower extends AbstractObject {
     }
 
     public void update(float deltaTime) {
+        timeFromLastShot += deltaTime;
         if (hasTarget()) {
-            double radRotation = AbstractCreep.countAngle(position, foe.position);
-            rotation = (float) Math.toDegrees(radRotation) -90f;
-//            Gdx.app.debug(TAG, "Rotation: " + rotation);
+            if (!foe.isVisible()) {
+                foe = null;
+                return;
+            }
+            double angleRad = AbstractObject.countAngle(position, foe.position);
+            angle = (float) Math.toDegrees(angleRad);
+
+//            Gdx.app.debug(TAG, "Rotation: " + angle);
         }
     }
 }

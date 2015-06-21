@@ -1,65 +1,75 @@
 package bg.ittalents.tower_defense.game;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TmxMapLoader;
+import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Disposable;
+
+import java.util.Iterator;
 
 import bg.ittalents.tower_defense.game.objects.AbstractCreep;
+import bg.ittalents.tower_defense.game.objects.AbstractProjectile;
 import bg.ittalents.tower_defense.game.objects.AbstractTower;
 import bg.ittalents.tower_defense.game.objects.Assets;
+import bg.ittalents.tower_defense.game.objects.Background;
 import bg.ittalents.tower_defense.game.objects.Creep;
 import bg.ittalents.tower_defense.game.objects.Tower;
-import bg.ittalents.tower_defense.game.objects.Wall;
-import bg.ittalents.tower_defense.utils.Constants;
 
-public class Level {
+public class Level implements Disposable {
 
     public static final String TAG = Level.class.getName();
 
-    private int rows;
-    private int columns;
-
+    private int tileRows;
+    private int tileColumns;
+    private int tileWidth;
+    private int tileHeight;
     Vector2 startPosition;
 
-//    TiledMap tiledMap;
-//    OrthogonalTiledMapRenderer mapRenderer;
+    private TiledMap tiledMap;
+    private OrthogonalTiledMapRenderer mapRenderer;
+    private Background background;
+
     private Array<AbstractTower> towers;
     private Array<AbstractCreep> creeps;
-    private Array<Wall> walls;
+    private Array<AbstractProjectile> projectiles;
     private Array<Vector2> wayponts;
 
+    private Batch batch;
+
     public Level(String fileName) {
-//        TmxMapLoader tmxMapLoader = new TmxMapLoader();
-//        tiledMap = tmxMapLoader.load("levels/TD.tmx");
-//        mapRenderer = new OrthogonalTiledMapRenderer(tiledMap);
 
         towers = new Array<AbstractTower>();
         creeps = new Array<AbstractCreep>();
-        walls = new Array<Wall>();
         wayponts = new Array<Vector2>();
+        projectiles = new Array<AbstractProjectile>();
 
         startPosition = new Vector2();
         init(fileName);
+        background = new Background(getWidth(), getHeight());
     }
 
     private void init(String fileName) {
         load(fileName);
         loadWayPoints(fileName);
 
-        Tower tower1 = new Tower(new Vector2(2 * Constants.TILE_WIDTH, 6 * Constants.TILE_HEIGHT),
+        Tower tower1 = new Tower(2.5f * tileWidth, 6.5f * tileHeight,
                 Assets.instance.towers.tower[0]);
-        Tower tower2 = new Tower(new Vector2(4 * Constants.TILE_WIDTH, 4 * Constants.TILE_HEIGHT),
+        Tower tower2 = new Tower(4.5f * tileWidth, 4.5f * tileHeight,
                 Assets.instance.towers.tower[1]);
-        Tower tower3 = new Tower(new Vector2(6 * Constants.TILE_WIDTH, 2 * Constants.TILE_HEIGHT),
+        Tower tower3 = new Tower(6.5f * tileWidth, 2.5f * tileHeight,
                 Assets.instance.towers.tower[2]);
-        Tower tower4 = new Tower(new Vector2(10 * Constants.TILE_WIDTH, 4 * Constants.TILE_HEIGHT),
+        Tower tower4 = new Tower(10.5f * tileWidth, 4.5f * tileHeight,
                 Assets.instance.towers.tower[3]);
-        Tower tower5 = new Tower(new Vector2(12 * Constants.TILE_WIDTH, 6 * Constants.TILE_HEIGHT),
+        Tower tower5 = new Tower(12.5f * tileWidth, 6.5f * tileHeight,
                 Assets.instance.towers.tower[4]);
-        Tower tower6 = new Tower(new Vector2(12 * Constants.TILE_WIDTH, 2 * Constants.TILE_HEIGHT),
+        Tower tower6 = new Tower(12.5f * tileWidth, 2.5f * tileHeight,
                 Assets.instance.towers.tower[5]);
-        Tower tower7 = new Tower(new Vector2(2 * Constants.TILE_WIDTH, 4 * Constants.TILE_HEIGHT),
+        Tower tower7 = new Tower(2.5f * tileWidth, 4.5f * tileHeight,
                 Assets.instance.towers.tower[6]);
         towers.add(tower1);
         towers.add(tower2);
@@ -68,68 +78,63 @@ public class Level {
         towers.add(tower5);
         towers.add(tower6);
         towers.add(tower7);
-
-
-//        build();
     }
 
-//    private void build() {
-//
-//    }
 
     private void load(String fileName) {
-        String levelStr = Gdx.files.internal(fileName + ".lvl").readString();
+        tiledMap = new TmxMapLoader().load(fileName);
+        tileColumns = tiledMap.getProperties().get("width", Integer.class);
+        tileRows = tiledMap.getProperties().get("height", Integer.class);
+        tileWidth = tiledMap.getProperties().get("tilewidth", Integer.class);
+        tileHeight = tiledMap.getProperties().get("tileheight", Integer.class);
+        mapRenderer = new OrthogonalTiledMapRenderer(tiledMap);
+        batch = mapRenderer.getBatch();
 
-        String[] levelRows = levelStr.split("[\r\n]+");
-
-        rows = levelRows.length;
-        columns = levelRows[0].length();
-
-        Gdx.app.debug(TAG, rows + "x" + columns);
-
-        for (int row = 0; row < rows; row++) {
-            String currentRow = levelRows[row];
-            for (int col = 0; col < columns; col++) {
-                char currentTile = currentRow.charAt(col);
-
-                if (currentTile == '#') {
-                    Vector2 currentPosition = new Vector2(col * Constants.TILE_WIDTH,
-                            row * Constants.TILE_HEIGHT);
-                    walls.add(new Wall(currentPosition));
-                } else if (currentTile == 'S') {
-                    startPosition.y = row * Constants.TILE_HEIGHT;
-                    startPosition.x = col * Constants.TILE_WIDTH;
-                } else if (currentTile == 'W') {
-                    this.wayponts.add(new Vector2(row * Constants.TILE_HEIGHT,
-                            col * Constants.TILE_WIDTH));
-                }
-            }
-        }
+        loadWayPoints(tiledMap.getProperties().get("waypoints", String.class));
     }
 
-    private void loadWayPoints(String fileName) {
-        String pathStr = Gdx.files.internal(fileName + ".path").readString();
-        String[] pathWaypoints = pathStr.split("[\r\n]+");
+    private void loadWayPoints(String pathStr) {
+        String[] pathWaypoints = pathStr.split("\\|");
 
         for(String waypoint : pathWaypoints) {
             String[] coordinates = waypoint.split(",");
-            this.wayponts.add(new Vector2(
-                    Float.parseFloat(coordinates[0]) * Constants.TILE_WIDTH,
-                    Float.parseFloat(coordinates[1]) * Constants.TILE_HEIGHT));
+            if (coordinates.length >= 2) {
+                this.wayponts.add(new Vector2(
+                        Float.parseFloat(coordinates[0]) * tileWidth + tileWidth / 2,
+                        Float.parseFloat(coordinates[1]) * tileHeight + tileWidth / 2));
+                Gdx.app.debug(TAG, "Waypoint(" + wayponts.get(wayponts.size - 1).toString() + ") added");
+            }
+        }
 
-            Gdx.app.debug(TAG, "Waypoint(" + coordinates[0] + ", " + coordinates[1] + ") added");
+        if (wayponts.size > 0) {
+            startPosition = wayponts.first();
         }
     }
 
     public void spawnCreep() {
-        Creep creep = new Creep(startPosition, Assets.instance.creep.creep1blue);
+        Creep creep = new Creep(startPosition.x, startPosition.y,
+                Assets.instance.creep.creep1blue);
         creep.setWaypoints(wayponts);
         creeps.add(creep);
     }
 
     public void update(float deltaTime) {
-        for (AbstractCreep creep : creeps) {
-            creep.update(deltaTime);
+        for (Iterator<AbstractCreep> creepIterator = creeps.iterator(); creepIterator.hasNext();) {
+            AbstractCreep creep = creepIterator.next();
+            if (creep.isVisible()) {
+                creep.update(deltaTime);
+            } else {
+                creepIterator.remove();
+            }
+        }
+
+        for (Iterator<AbstractProjectile> projectileIterator = projectiles.iterator(); projectileIterator.hasNext();) {
+            AbstractProjectile projectile = projectileIterator.next();
+            if (projectile.isVisible()) {
+                projectile.update(deltaTime);
+            } else {
+                projectileIterator.remove();
+            }
         }
 
         for (AbstractTower tower : towers) {
@@ -142,32 +147,51 @@ public class Level {
                 }
             }
             tower.update(deltaTime);
+            if(tower.isReady() && tower.hasTarget()) {
+                projectiles.add(tower.shoot());
+            }
         }
     }
 
     public int getWidth() {
-        return columns * Constants.TILE_WIDTH;
+        return tileColumns * tileWidth;
     }
 
     public int getHeight() {
-        return rows * Constants.TILE_HEIGHT;
+        return tileRows * tileHeight;
     }
 
-    public void render(SpriteBatch batch) {
+    public void render(OrthographicCamera camera) {
+
+        batch.setProjectionMatrix(camera.combined);
+        batch.begin();
+
+        background.render(batch);
+
+        batch.end();
+        mapRenderer.setView(camera);
+        mapRenderer.render();
+        batch.begin();
+
         for (AbstractCreep creep : creeps) {
             if(creep.isVisible()) {
                 creep.render(batch);
             }
         }
-
-        for (Wall wall : walls) {
-            wall.render(batch);
-        }
-
         for (AbstractTower tower : towers) {
             tower.render(batch);
         }
+        for (AbstractProjectile projectile : projectiles) {
+            if(projectile.isVisible()) {
+                projectile.render(batch);
+            }
+        }
+        batch.end();
+    }
 
-//        mapRenderer.render();
+    @Override
+    public void dispose() {
+        mapRenderer.dispose();
+        tiledMap.dispose();
     }
 }

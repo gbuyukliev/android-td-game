@@ -1,44 +1,44 @@
 package bg.ittalents.tower_defense.game;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.FPSLogger;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Disposable;
 
-import bg.ittalents.tower_defense.utils.Constants;
-
 public class WorldRenderer implements Disposable {
+    public static final float VIEWPORT = 350f;
 
     private OrthographicCamera camera;
-    private SpriteBatch batch;
     private WorldController worldController;
+    private FPSLogger fpsLogger;
 
     public WorldRenderer(WorldController worldController) {
         this.worldController = worldController;
         init();
+        fpsLogger = new FPSLogger();
     }
 
     private void init() {
-        batch = new SpriteBatch();
-        camera = new OrthographicCamera(Constants.VIEWPORT_WIDTH,
-                Constants.VIEWPORT_HEIGHT);
+        camera = new OrthographicCamera(WorldRenderer.VIEWPORT,
+                WorldRenderer.VIEWPORT);
         camera.position.set(0, 0, 0);
         camera.update();
     }
 
     public void render() {
+        fpsLogger.log();
+//        Gdx.graphics.setTitle("Tower Defense -- FPS: " + Gdx.graphics.getFramesPerSecond());
         renderWorld();
     }
 
     private void renderWorld() {
         worldController.cameraHelper.applyTo(camera);
-        batch.setProjectionMatrix(camera.combined);
-        batch.begin();
-        worldController.level.render(batch);
-        batch.end();
+
+        worldController.level.render(camera);
     }
 
     public void resize(int width, int height) {
-        camera.viewportWidth = (Constants.VIEWPORT_HEIGHT / height) *
+        camera.viewportWidth = (WorldRenderer.VIEWPORT / height) *
                 width;
         camera.update();
         worldController.updateScale();
@@ -46,6 +46,6 @@ public class WorldRenderer implements Disposable {
 
     @Override
     public void dispose() {
-        batch.dispose();
+        worldController.level.dispose();
     }
 }
