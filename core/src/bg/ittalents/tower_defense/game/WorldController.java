@@ -74,7 +74,8 @@ public class WorldController extends InputAdapter implements Disposable {
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
         if (screenX == touchedPositionX && screenY == touchedPositionY) {
-            level.spawnCreep();
+//            level.spawnCreep();
+            worldRenderer.handleTouch(screenX, screenY);
         }
         return true;
     }
@@ -87,6 +88,11 @@ public class WorldController extends InputAdapter implements Disposable {
         lastPointerPositionX = screenX;
         lastPointerPositionY = screenY;
         return true;
+    }
+
+
+    public float getScale() {
+        return scale;
     }
 
     public void render() {

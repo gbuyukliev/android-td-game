@@ -15,7 +15,7 @@ import bg.ittalents.tower_defense.game.objects.Background;
 
 public class WorldRenderer implements Disposable {
     public static final float VIEWPORT = 350f;
-    public static final float SCALE = Gdx.graphics.getHeight() / VIEWPORT;
+    public static float scale;
 
     private TiledMap tiledMap;
     private OrthogonalTiledMapRenderer mapRenderer;
@@ -93,16 +93,16 @@ public class WorldRenderer implements Disposable {
         float y = 5;
 
         fpsFont.draw(batch, "Money: " + level.getMoney(), 5, y);
-        fpsFont.draw(batch, "Score: " + level.getScore(), screenWidth / 2 - SCALE * 30, y);
-        fpsFont.draw(batch, "Lives: " + level.getLives(), screenWidth - SCALE * 60, y);
+        fpsFont.draw(batch, "Score: " + level.getScore(), screenWidth / 2 - scale * 50, y);
+        fpsFont.draw(batch, "Lives: " + level.getLives(), screenWidth - scale * 100, y);
     }
 
     private void renderGuiFpsCounter() {
         int fps = Gdx.graphics.getFramesPerSecond();
         BitmapFont fpsFont = Assets.instance.fonts.defaultFont;
 
-        float x = cameraGUI.viewportWidth - SCALE * 45;
-        float y = cameraGUI.viewportHeight - SCALE * 10;
+        float x = cameraGUI.viewportWidth - scale * 80;
+        float y = cameraGUI.viewportHeight - scale * 20;
         if (fps >= 45) {
             // 45 or more FPS show up in green
             fpsFont.setColor(0, 1, 0, 1);
@@ -118,11 +118,26 @@ public class WorldRenderer implements Disposable {
         fpsFont.setColor(1, 1, 1, 1); // white
     }
 
+    public void handleTouch(int screenX, int screenY) {
+        int mapX = (int) (screenX * scale + camera.position.x - (camera.viewportWidth / 2));
+        int mapY = (int) ((Gdx.graphics.getHeight() - screenY) * scale +
+                camera.position.y - (camera.viewportHeight / 2));
+
+        level.handleTouch(mapX, mapY);
+
+//        Gdx.app.debug("Touch coordinates", x + ", " + y);
+//        Gdx.app.debug("Level size", level.getWidth() + ", " + level.getHeight());
+//        Gdx.app.debug("Graphics size", Gdx.graphics.getWidth() + ", " + Gdx.graphics.getHeight());
+//        Gdx.app.debug("Camera size", camera.viewportWidth + ", " + camera.viewportHeight);
+//        Gdx.app.debug("Camera position", camera.position.toString());
+    }
+
     public void resize(int width, int height) {
         camera.viewportWidth = (WorldRenderer.VIEWPORT / height) *
                 width;
         camera.update();
         worldController.updateScale();
+        scale = worldController.getScale();
     }
 
     @Override

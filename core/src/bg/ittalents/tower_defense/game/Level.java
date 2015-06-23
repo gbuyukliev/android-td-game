@@ -2,7 +2,11 @@ package bg.ittalents.tower_defense.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.maps.MapLayer;
+import com.badlogic.gdx.maps.MapObjects;
 import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TiledMapTile;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
@@ -33,12 +37,22 @@ public class Level implements Disposable {
     private int tileHeight;
     Vector2 startPosition;
 
-
-
     private Array<AbstractTower> towers;
     private Array<AbstractCreep> creeps;
     private Array<AbstractProjectile> projectiles;
     private Array<Vector2> wayponts;
+
+    private Tile[][] tiles;
+
+    private class Tile {
+        boolean buildable;
+        AbstractTower tower;
+
+        Tile() {
+            buildable = false;
+            tower = null;
+        }
+    }
 
 //    private Batch batch;
 
@@ -54,32 +68,50 @@ public class Level implements Disposable {
         startPosition = new Vector2();
 
         loadLevelData(tiledMap);
-        init();
+        initTiles(tiledMap);
+
     }
 
-    private void init() {
+    private void initTiles(TiledMap tiledMap) {
+        tiles = new Tile[tileRows][tileColumns];
+        TiledMapTileLayer mapLayer = (TiledMapTileLayer) tiledMap.getLayers().get("wall_layer");
 
-        Tower tower1 = new Tower(2.5f * tileWidth, 6.5f * tileHeight,
-                Assets.instance.towers.tower[0]);
-        Tower tower2 = new Tower(4.5f * tileWidth, 4.5f * tileHeight,
-                Assets.instance.towers.tower[1]);
-        Tower tower3 = new Tower(6.5f * tileWidth, 2.5f * tileHeight,
-                Assets.instance.towers.tower[2]);
-        Tower tower4 = new Tower(10.5f * tileWidth, 4.5f * tileHeight,
-                Assets.instance.towers.tower[3]);
-        Tower tower5 = new Tower(12.5f * tileWidth, 6.5f * tileHeight,
-                Assets.instance.towers.tower[4]);
-        Tower tower6 = new Tower(12.5f * tileWidth, 2.5f * tileHeight,
-                Assets.instance.towers.tower[5]);
-        Tower tower7 = new Tower(2.5f * tileWidth, 4.5f * tileHeight,
-                Assets.instance.towers.tower[6]);
-        towers.add(tower1);
-        towers.add(tower2);
-        towers.add(tower3);
-        towers.add(tower4);
-        towers.add(tower5);
-        towers.add(tower6);
-        towers.add(tower7);
+        for (int row = 0; row < tileRows; row++) {
+            for (int col = 0; col < tileColumns; col++) {
+                tiles[row][col] = new Tile();
+                if (mapLayer.getCell(col, row) != null &&
+                        mapLayer.getCell(col, row).getTile() != null) {
+                    tiles[row][col].buildable = true;
+                }
+            }
+        }
+
+//        mapLayer.getCell(0, 0).getTile();
+
+
+//        Gdx.app.debug(TAG, "" + mapLayer.getCell(1, 0).getTile().toString());
+
+//        Tower tower1 = new Tower(2.5f * tileWidth, 6.5f * tileHeight,
+//                Assets.instance.towers.tower[0]);
+//        Tower tower2 = new Tower(4.5f * tileWidth, 4.5f * tileHeight,
+//                Assets.instance.towers.tower[1]);
+//        Tower tower3 = new Tower(6.5f * tileWidth, 2.5f * tileHeight,
+//                Assets.instance.towers.tower[2]);
+//        Tower tower4 = new Tower(10.5f * tileWidth, 4.5f * tileHeight,
+//                Assets.instance.towers.tower[3]);
+//        Tower tower5 = new Tower(12.5f * tileWidth, 6.5f * tileHeight,
+//                Assets.instance.towers.tower[4]);
+//        Tower tower6 = new Tower(12.5f * tileWidth, 2.5f * tileHeight,
+//                Assets.instance.towers.tower[5]);
+//        Tower tower7 = new Tower(2.5f * tileWidth, 4.5f * tileHeight,
+//                Assets.instance.towers.tower[6]);
+//        towers.add(tower1);
+//        towers.add(tower2);
+//        towers.add(tower3);
+//        towers.add(tower4);
+//        towers.add(tower5);
+//        towers.add(tower6);
+//        towers.add(tower7);
     }
 
     private void loadLevelData(TiledMap tiledMap) {
@@ -114,6 +146,23 @@ public class Level implements Disposable {
                 Assets.instance.creep.creep1blue);
         creep.setWaypoints(wayponts);
         creeps.add(creep);
+    }
+
+    public void buildTower(int x, int y) {
+        Tower tower = new Tower((x + 0.5f) * tileWidth, (y + 0.5f) * tileHeight,
+                Assets.instance.towers.tower[0]);
+        towers.add(tower);
+    }
+
+    public void handleTouch(int mapX, int mapY) {
+        int col = mapX / tileWidth;
+        int row = mapY / tileHeight;
+
+        if(tiles[row][col].buildable) {
+            buildTower(col, row);
+        } else {
+            spawnCreep();
+        }
     }
 
     public void update(float deltaTime) {
