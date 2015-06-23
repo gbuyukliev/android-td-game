@@ -12,7 +12,6 @@ import bg.ittalents.tower_defense.utils.CameraHelper;
 public class WorldController extends InputAdapter implements Disposable {
 
     private Level level;
-    CameraHelper cameraHelper;
     private Game game;
 
     private float scale;
@@ -28,7 +27,6 @@ public class WorldController extends InputAdapter implements Disposable {
         Gdx.input.setInputProcessor(this);
         worldRenderer = new WorldRenderer(this);
         level = worldRenderer.getLevel();
-        cameraHelper = new CameraHelper(new Vector2(level.getWidth() / 2, level.getHeight() / 2));
         this.game = game;
         updateScale();
     }
@@ -37,29 +35,13 @@ public class WorldController extends InputAdapter implements Disposable {
         level.update(deltaTime);
     }
 
+
+
     public void updateScale() {
         scale = WorldRenderer.VIEWPORT / Gdx.graphics.getHeight();
     }
 
-    private void moveCamera(float x, float y) {
-        x += cameraHelper.getPosition().x;
-        y += cameraHelper.getPosition().y;
-        float viewportWidth = WorldRenderer.VIEWPORT * Gdx.graphics.getWidth() / Gdx.graphics.getHeight();
 
-        if (x < (viewportWidth / 2)) {
-            x = (viewportWidth / 2);
-        } else if (x > level.getWidth() - (viewportWidth / 2)) {
-            x = (level.getWidth() - (viewportWidth / 2));
-        }
-
-        if (y < (WorldRenderer.VIEWPORT / 2)) {
-            y = (WorldRenderer.VIEWPORT / 2);
-        } else if (y > level.getHeight() - (WorldRenderer.VIEWPORT / 2)) {
-            y = (level.getHeight() - (WorldRenderer.VIEWPORT / 2));
-        }
-
-        cameraHelper.setPosition(x, y);
-    }
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
@@ -84,7 +66,7 @@ public class WorldController extends InputAdapter implements Disposable {
     public boolean touchDragged(int screenX, int screenY, int pointer) {
         int dX = lastPointerPositionX - screenX;
         int dY = screenY - lastPointerPositionY;
-        moveCamera(dX * scale, dY * scale);
+        worldRenderer.moveCamera(dX * scale, dY * scale);
         lastPointerPositionX = screenX;
         lastPointerPositionY = screenY;
         return true;

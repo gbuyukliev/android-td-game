@@ -8,10 +8,12 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Disposable;
 
 import bg.ittalents.tower_defense.game.objects.Assets;
 import bg.ittalents.tower_defense.game.objects.Background;
+import bg.ittalents.tower_defense.utils.CameraHelper;
 
 public class WorldRenderer implements Disposable {
     public static final float VIEWPORT = 350f;
@@ -24,6 +26,8 @@ public class WorldRenderer implements Disposable {
     private Level level;
     private OrthographicCamera camera;
     private OrthographicCamera cameraGUI;
+    CameraHelper cameraHelper;
+
     private WorldController worldController;
     private Batch batch;
 
@@ -54,6 +58,8 @@ public class WorldRenderer implements Disposable {
         cameraGUI.position.set(0, 0, 0);
         cameraGUI.setToOrtho(true); // flip y-axis
         cameraGUI.update();
+
+        cameraHelper = new CameraHelper(new Vector2(level.getWidth() / 2, level.getHeight() / 2));
     }
 
     public void render() {
@@ -62,8 +68,28 @@ public class WorldRenderer implements Disposable {
         renderGui();
     }
 
+    public void moveCamera(float x, float y) {
+        x += cameraHelper.getPosition().x;
+        y += cameraHelper.getPosition().y;
+        float viewportWidth = WorldRenderer.VIEWPORT * Gdx.graphics.getWidth() / Gdx.graphics.getHeight();
+
+        if (x < (viewportWidth / 2)) {
+            x = (viewportWidth / 2);
+        } else if (x > level.getWidth() - (viewportWidth / 2)) {
+            x = (level.getWidth() - (viewportWidth / 2));
+        }
+
+        if (y < (WorldRenderer.VIEWPORT / 2)) {
+            y = (WorldRenderer.VIEWPORT / 2);
+        } else if (y > level.getHeight() - (WorldRenderer.VIEWPORT / 2)) {
+            y = (level.getHeight() - (WorldRenderer.VIEWPORT / 2));
+        }
+
+        cameraHelper.setPosition(x, y);
+    }
+
     private void renderWorld() {
-        worldController.cameraHelper.applyTo(camera);
+        cameraHelper.applyTo(camera);
         batch.setProjectionMatrix(camera.combined);
 
         batch.begin();
@@ -93,16 +119,16 @@ public class WorldRenderer implements Disposable {
         float y = 5;
 
         fpsFont.draw(batch, "Money: " + level.getMoney(), 5, y);
-        fpsFont.draw(batch, "Score: " + level.getScore(), screenWidth / 2 - scale * 50, y);
-        fpsFont.draw(batch, "Lives: " + level.getLives(), screenWidth - scale * 100, y);
+        fpsFont.draw(batch, "Score: " + level.getScore(), screenWidth / 2 - 30 / scale, y);
+        fpsFont.draw(batch, "Lives: " + level.getLives(), screenWidth - 60 / scale, y);
     }
 
     private void renderGuiFpsCounter() {
         int fps = Gdx.graphics.getFramesPerSecond();
         BitmapFont fpsFont = Assets.instance.fonts.defaultFont;
 
-        float x = cameraGUI.viewportWidth - scale * 80;
-        float y = cameraGUI.viewportHeight - scale * 20;
+        float x = cameraGUI.viewportWidth - 45 / scale;
+        float y = cameraGUI.viewportHeight - 10 / scale;
         if (fps >= 45) {
             // 45 or more FPS show up in green
             fpsFont.setColor(0, 1, 0, 1);

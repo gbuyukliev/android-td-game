@@ -45,7 +45,7 @@ public class Assets implements Disposable, AssetErrorListener {
         public AssetFonts() {
 
             // how much bigger is the real device screen, compared to the defined viewport
-            float scale = 1.0f * Gdx.graphics.getHeight() / WorldRenderer.VIEWPORT ;
+            float scale = Gdx.graphics.getHeight() / WorldRenderer.VIEWPORT ;
 
             // prevents unwanted downscale on devices with resolution SMALLER than 320x480
             if (scale < 1)

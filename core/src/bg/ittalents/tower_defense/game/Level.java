@@ -148,10 +148,11 @@ public class Level implements Disposable {
         creeps.add(creep);
     }
 
-    public void buildTower(int x, int y) {
-        Tower tower = new Tower((x + 0.5f) * tileWidth, (y + 0.5f) * tileHeight,
+    public void buildTower(int col, int row) {
+        Tower tower = new Tower((col + 0.5f) * tileWidth, (row + 0.5f) * tileHeight,
                 Assets.instance.towers.tower[0]);
         towers.add(tower);
+        tiles[row][col].tower = tower;
     }
 
     public void handleTouch(int mapX, int mapY) {
@@ -159,7 +160,13 @@ public class Level implements Disposable {
         int row = mapY / tileHeight;
 
         if(tiles[row][col].buildable) {
-            buildTower(col, row);
+            if(tiles[row][col].tower != null) {
+                tiles[row][col].tower.upgrade();
+                Gdx.app.debug(TAG, "upgrading tower");
+            } else {
+                buildTower(col, row);
+                Gdx.app.debug(TAG, "" + towers.size);
+            }
         } else {
             spawnCreep();
         }

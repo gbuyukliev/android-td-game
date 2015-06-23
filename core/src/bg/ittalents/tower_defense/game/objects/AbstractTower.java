@@ -52,6 +52,9 @@ public abstract class AbstractTower extends AbstractObject {
     public void upgrade() {
         if (textures != null && textures.length > upgrade + 1) {
             texture = textures[++upgrade];
+            damage *= 1.33f;
+            range *= 1.2f;
+            fireRate *= 0.7f;
         } else {
             Gdx.app.debug(TAG, "can't upgrade tower");
         }
