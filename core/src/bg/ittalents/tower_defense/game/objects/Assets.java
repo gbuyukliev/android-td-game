@@ -7,10 +7,14 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Animation.PlayMode;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.utils.Disposable;
+
+import bg.ittalents.tower_defense.game.WorldRenderer;
 
 public class Assets implements Disposable, AssetErrorListener {
     // Location of description file for texture atlas
@@ -21,9 +25,11 @@ public class Assets implements Disposable, AssetErrorListener {
     public static final Assets instance = new Assets();
 
     private AssetManager assetManager;
+
     public AssetCreeps creep;
     public AssetTower towers;
     public AssetBackground background;
+    public AssetFonts fonts;
 
     public class AssetBackground {
         public final AtlasRegion background;
@@ -33,8 +39,33 @@ public class Assets implements Disposable, AssetErrorListener {
         }
     }
 
+    public class AssetFonts {
+        public final BitmapFont defaultFont;
+
+        public AssetFonts() {
+
+            // how much bigger is the real device screen, compared to the defined viewport
+            float scale = 1.0f * Gdx.graphics.getHeight() / WorldRenderer.VIEWPORT ;
+
+            // prevents unwanted downscale on devices with resolution SMALLER than 320x480
+            if (scale < 1)
+                scale = 1;
+
+            FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("font/Roboto-Bold.ttf"));
+            FreeTypeFontGenerator.FreeTypeFontParameter fontParameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+            fontParameter.size = (int) (12 * scale);
+            fontParameter.flip = true;
+            // 12 is the size i want to give for the font on all devices
+            // bigger font textures = better results
+            defaultFont = generator.generateFont(fontParameter);
+
+            //Apply Linear filtering; best choice to keep everything looking sharp
+            defaultFont.getRegion().getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+        }
+    }
+
     public class AssetTower {
-        public AtlasRegion[][] tower;
+        public final AtlasRegion[][] tower;
 
         public AssetTower(TextureAtlas atlas) {
             tower = new AtlasRegion[7][3];
@@ -128,6 +159,7 @@ public class Assets implements Disposable, AssetErrorListener {
             t.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
         }
         // create game resource objects
+        fonts = new AssetFonts();
         background = new AssetBackground(atlas);
         creep = new AssetCreeps(atlas);
         towers = new AssetTower(atlas);
@@ -137,6 +169,7 @@ public class Assets implements Disposable, AssetErrorListener {
     @Override
     public void dispose() {
         assetManager.dispose();
+        fonts.defaultFont.dispose();
     }
 
     @Override

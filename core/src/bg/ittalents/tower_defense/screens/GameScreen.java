@@ -12,7 +12,6 @@ import bg.ittalents.tower_defense.game.WorldRenderer;
 public class GameScreen extends AbstractGameScreen {
 
     private WorldController worldController;
-    private WorldRenderer worldRenderer;
     private boolean paused;
 
     public GameScreen(Game game) {
@@ -22,7 +21,6 @@ public class GameScreen extends AbstractGameScreen {
     @Override
     public void show() {
         worldController = new WorldController(game);
-        worldRenderer = new WorldRenderer(worldController);
     }
 
     @Override
@@ -32,15 +30,13 @@ public class GameScreen extends AbstractGameScreen {
             // Update game world by the time that has passed
             // since last rendered frame.
             worldController.update(deltaTime);
-
-            Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-            worldRenderer.render();
+            worldController.render();
         }
     }
 
     @Override
     public void resize(int width, int height) {
-        worldRenderer.resize(width, height);
+        worldController.resize(width, height);
     }
 
     @Override
@@ -57,7 +53,7 @@ public class GameScreen extends AbstractGameScreen {
 
     @Override
     public void hide() {
-        worldRenderer.dispose();
+        worldController.dispose();
         Gdx.input.setCatchBackKey(false);
     }
 }

@@ -1,11 +1,8 @@
 package bg.ittalents.tower_defense.game;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.maps.tiled.TmxMapLoader;
-import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
@@ -16,13 +13,19 @@ import bg.ittalents.tower_defense.game.objects.AbstractCreep;
 import bg.ittalents.tower_defense.game.objects.AbstractProjectile;
 import bg.ittalents.tower_defense.game.objects.AbstractTower;
 import bg.ittalents.tower_defense.game.objects.Assets;
-import bg.ittalents.tower_defense.game.objects.Background;
 import bg.ittalents.tower_defense.game.objects.Creep;
 import bg.ittalents.tower_defense.game.objects.Tower;
 
 public class Level implements Disposable {
 
+    public static final int STARTING_LIVES = 10;
+    public static final int STARTING_MONEY = 100;
+
     public static final String TAG = Level.class.getName();
+
+    private int lives;
+    private int money;
+    private int score;
 
     private int tileRows;
     private int tileColumns;
@@ -30,32 +33,31 @@ public class Level implements Disposable {
     private int tileHeight;
     Vector2 startPosition;
 
-    private TiledMap tiledMap;
-    private OrthogonalTiledMapRenderer mapRenderer;
-    private Background background;
+
 
     private Array<AbstractTower> towers;
     private Array<AbstractCreep> creeps;
     private Array<AbstractProjectile> projectiles;
     private Array<Vector2> wayponts;
 
-    private Batch batch;
+//    private Batch batch;
 
-    public Level(String fileName) {
+    public Level(TiledMap tiledMap) {
+
+        money = STARTING_MONEY;
+        lives = STARTING_LIVES;
 
         towers = new Array<AbstractTower>();
         creeps = new Array<AbstractCreep>();
         wayponts = new Array<Vector2>();
         projectiles = new Array<AbstractProjectile>();
-
         startPosition = new Vector2();
-        init(fileName);
-        background = new Background(getWidth(), getHeight());
+
+        loadLevelData(tiledMap);
+        init();
     }
 
-    private void init(String fileName) {
-        load(fileName);
-        loadWayPoints(fileName);
+    private void init() {
 
         Tower tower1 = new Tower(2.5f * tileWidth, 6.5f * tileHeight,
                 Assets.instance.towers.tower[0]);
@@ -80,15 +82,11 @@ public class Level implements Disposable {
         towers.add(tower7);
     }
 
-
-    private void load(String fileName) {
-        tiledMap = new TmxMapLoader().load(fileName);
+    private void loadLevelData(TiledMap tiledMap) {
         tileColumns = tiledMap.getProperties().get("width", Integer.class);
         tileRows = tiledMap.getProperties().get("height", Integer.class);
         tileWidth = tiledMap.getProperties().get("tilewidth", Integer.class);
         tileHeight = tiledMap.getProperties().get("tileheight", Integer.class);
-        mapRenderer = new OrthogonalTiledMapRenderer(tiledMap);
-        batch = mapRenderer.getBatch();
 
         loadWayPoints(tiledMap.getProperties().get("waypoints", String.class));
     }
@@ -119,15 +117,31 @@ public class Level implements Disposable {
     }
 
     public void update(float deltaTime) {
+        updateCreeps(deltaTime);
+        updateProjectiles(deltaTime);
+        updateTowers(deltaTime);
+
+//        Gdx.app.debug(TAG, "Money: " + money + ", Score: " + score + ", Lives: " + lives);
+    }
+
+    private void updateCreeps(float deltaTime) {
         for (Iterator<AbstractCreep> creepIterator = creeps.iterator(); creepIterator.hasNext();) {
             AbstractCreep creep = creepIterator.next();
             if (creep.isVisible()) {
                 creep.update(deltaTime);
             } else {
+                if (creep.isDead()) {
+                    money += creep.getReward();
+                    score += creep.getReward();
+                } else {
+                    lives--;
+                }
                 creepIterator.remove();
             }
         }
+    }
 
+    private void updateProjectiles(float deltaTime) {
         for (Iterator<AbstractProjectile> projectileIterator = projectiles.iterator(); projectileIterator.hasNext();) {
             AbstractProjectile projectile = projectileIterator.next();
             if (projectile.isVisible()) {
@@ -136,7 +150,9 @@ public class Level implements Disposable {
                 projectileIterator.remove();
             }
         }
+    }
 
+    private void updateTowers(float deltaTime) {
         for (AbstractTower tower : towers) {
             if (!tower.hasTarget()) {
                 for (AbstractCreep creep : creeps) {
@@ -147,7 +163,7 @@ public class Level implements Disposable {
                 }
             }
             tower.update(deltaTime);
-            if(tower.isReady() && tower.hasTarget()) {
+            if(tower.isReadyToShoot() && tower.hasTarget()) {
                 projectiles.add(tower.shoot());
             }
         }
@@ -161,37 +177,35 @@ public class Level implements Disposable {
         return tileRows * tileHeight;
     }
 
-    public void render(OrthographicCamera camera) {
+    public int getLives() {
+        return lives;
+    }
 
-        batch.setProjectionMatrix(camera.combined);
-        batch.begin();
+    public int getMoney() {
+        return money;
+    }
 
-        background.render(batch);
+    public int getScore() {
+        return score;
+    }
 
-        batch.end();
-        mapRenderer.setView(camera);
-        mapRenderer.render();
+    public void render(Batch batch) {
         batch.begin();
 
         for (AbstractCreep creep : creeps) {
-            if(creep.isVisible()) {
-                creep.render(batch);
-            }
+            creep.render(batch);
         }
         for (AbstractTower tower : towers) {
             tower.render(batch);
         }
         for (AbstractProjectile projectile : projectiles) {
-            if(projectile.isVisible()) {
-                projectile.render(batch);
-            }
+            projectile.render(batch);
         }
+
         batch.end();
     }
 
     @Override
     public void dispose() {
-        mapRenderer.dispose();
-        tiledMap.dispose();
     }
 }

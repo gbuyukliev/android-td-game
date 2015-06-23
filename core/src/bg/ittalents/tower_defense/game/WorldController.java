@@ -3,15 +3,15 @@ package bg.ittalents.tower_defense.game;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Disposable;
 
 import bg.ittalents.tower_defense.utils.CameraHelper;
-import bg.ittalents.tower_defense.utils.Constants;
 
-public class WorldController extends InputAdapter {
+public class WorldController extends InputAdapter implements Disposable {
 
-    public Level level;
+    private Level level;
     CameraHelper cameraHelper;
     private Game game;
 
@@ -21,9 +21,13 @@ public class WorldController extends InputAdapter {
     private int touchedPositionX;
     private int touchedPositionY;
 
+    private WorldRenderer worldRenderer;
+
+
     public WorldController(Game game) {
         Gdx.input.setInputProcessor(this);
-        level = new Level("levels/level1.tmx");
+        worldRenderer = new WorldRenderer(this);
+        level = worldRenderer.getLevel();
         cameraHelper = new CameraHelper(new Vector2(level.getWidth() / 2, level.getHeight() / 2));
         this.game = game;
         updateScale();
@@ -72,7 +76,7 @@ public class WorldController extends InputAdapter {
         if (screenX == touchedPositionX && screenY == touchedPositionY) {
             level.spawnCreep();
         }
-        return super.touchUp(screenX, screenY, pointer, button);
+        return true;
     }
 
     @Override
@@ -83,5 +87,19 @@ public class WorldController extends InputAdapter {
         lastPointerPositionX = screenX;
         lastPointerPositionY = screenY;
         return true;
+    }
+
+    public void render() {
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        worldRenderer.render();
+    }
+
+    public void resize(int width, int height) {
+        worldRenderer.resize(width, height);
+    }
+
+    @Override
+    public void dispose() {
+        worldRenderer.dispose();
     }
 }

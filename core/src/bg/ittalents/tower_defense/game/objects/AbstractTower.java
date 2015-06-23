@@ -30,7 +30,10 @@ public abstract class AbstractTower extends AbstractObject {
     }
 
     public abstract AbstractProjectile shoot();
-    public abstract boolean isReady();
+
+    public boolean isReadyToShoot() {
+        return timeFromLastShot > fireRate;
+    }
 
     public boolean isInRange(AbstractCreep foe) {
         float dx = (foe.position.x - position.x);

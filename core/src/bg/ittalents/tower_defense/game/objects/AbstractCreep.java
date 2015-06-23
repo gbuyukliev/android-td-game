@@ -4,16 +4,22 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.utils.Array;
 
 public abstract class AbstractCreep extends AbstractObject {
 
+    private static final Texture ENEMY_BG_TEXTURE = new Texture("enemyhealthbg.png");
+    private static final Texture ENEMY_FG_TEXTURE = new Texture("enemyhealthfg.png");
+    private static final Texture ENEMY_FG = new Texture(Gdx.files.internal("enemyhealth.png"));
+
     Animation animation;
     float speed;
+    int reward;
     int health;
     int maxHealth;
     float stateTime;
@@ -29,12 +35,15 @@ public abstract class AbstractCreep extends AbstractObject {
 
         private Sprite healthBarBG;
         private Sprite healthBarFG;
+        NinePatchDrawable health;
         private AbstractCreep owner;
 
         public HealthBar(AbstractCreep owner, Texture healthBG, Texture healthFG) {
             this.owner = owner;
             healthBarBG = new Sprite(healthBG);
             healthBarFG = new Sprite(healthFG);
+            health = new NinePatchDrawable(new NinePatch(ENEMY_FG, 1, 1, 1, 1));
+
             setPosition();
             healthBarBG.setOrigin(0, 0);
             healthBarFG.setOrigin(0, 0);
@@ -55,7 +64,8 @@ public abstract class AbstractCreep extends AbstractObject {
 
         public void render(Batch batch) {
             healthBarBG.draw(batch);
-            healthBarFG.draw(batch);
+            health.draw(batch, texturePosition.x + BUFFER_X, texturePosition.y + BUFFER_Y, owner.health / (float) owner.maxHealth * 40f, 5f);
+//            healthBarFG.draw(batch);
         }
     }
 
@@ -65,8 +75,8 @@ public abstract class AbstractCreep extends AbstractObject {
         angle = 90f;
         currentWaypoint = -1;
 
-        healthBar = new HealthBar(this, new Texture("enemyhealthbg.png"),
-                new Texture("enemyhealthfg.png"));
+        healthBar = new HealthBar(this, ENEMY_BG_TEXTURE,
+                ENEMY_FG_TEXTURE);
     }
 
     public void setWaypoints(Array<Vector2> waypoints) {
@@ -78,6 +88,14 @@ public abstract class AbstractCreep extends AbstractObject {
         if (++this.currentWaypoint >= waypoints.size) {
             setVisible(false);
         }
+    }
+
+    public boolean isDead() {
+        return health <= 0;
+    }
+
+    public int getReward () {
+        return reward;
     }
 
     private boolean isWaypointReached() {

@@ -10,7 +10,7 @@ import bg.ittalents.tower_defense.utils.Constants;
 public abstract class AbstractObject {
     //position of center
     Vector2 position;
-    //left bottom of texture to be draw to
+    //position to render
     Vector2 texturePosition;
     float angle;
     boolean visible;
