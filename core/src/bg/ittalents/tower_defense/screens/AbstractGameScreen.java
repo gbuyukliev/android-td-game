@@ -7,8 +7,7 @@ import com.badlogic.gdx.assets.AssetManager;
 import bg.ittalents.tower_defense.game.Assets;
 
 public abstract class AbstractGameScreen implements Screen {
-
-    protected Game game;
+    private Game game;
 
     public AbstractGameScreen(Game game) {
         this.game = game;
@@ -21,4 +20,9 @@ public abstract class AbstractGameScreen implements Screen {
     public void dispose() {
         Assets.instance.dispose();
     }
+
+    public Game getGame() {
+        return game;
+    }
+
 }

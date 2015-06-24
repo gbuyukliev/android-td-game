@@ -20,7 +20,7 @@ public class GameScreen extends AbstractGameScreen {
 
     @Override
     public void show() {
-        worldController = new WorldController(game);
+        worldController = new WorldController(getGame());
     }
 
     @Override

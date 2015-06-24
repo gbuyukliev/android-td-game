@@ -14,10 +14,9 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 public class LoginScreen extends AbstractGameScreen {
 
-    Stage stage;
-
-    TextField txtUsername;
-    TextField txtPassword;
+    private Stage stage;
+    private TextField txtUsername;
+    private TextField txtPassword;
 
     public LoginScreen(Game game) {
         super(game);
@@ -51,8 +50,9 @@ public class LoginScreen extends AbstractGameScreen {
         btnLogin.setSize(80, 30);
         btnLogin.addListener(new ClickListener() {
             @Override
-            public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
-                Gdx.app.debug("Login", "Username: " + txtUsername.getText() +  ", Pasword" + txtPassword.getText());
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                Gdx.app.debug("Login", "Username: " + txtUsername.getText() + ", Pasword" + txtPassword.getText());
+                getGame().setScreen(new GameScreen(getGame()));
             }
         });
         stage.addActor(btnLogin);
