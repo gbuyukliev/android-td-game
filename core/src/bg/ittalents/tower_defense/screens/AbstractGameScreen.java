@@ -4,7 +4,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
 
-import bg.ittalents.tower_defense.game.objects.Assets;
+import bg.ittalents.tower_defense.game.Assets;
 
 public abstract class AbstractGameScreen implements Screen {
 

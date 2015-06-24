@@ -5,8 +5,8 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 
-import bg.ittalents.tower_defense.game.objects.Assets;
-import bg.ittalents.tower_defense.screens.GameScreen;
+import bg.ittalents.tower_defense.game.Assets;
+import bg.ittalents.tower_defense.screens.LoginScreen;
 
 public class TowerDefense extends Game {
 
@@ -17,6 +17,7 @@ public class TowerDefense extends Game {
 		// Load assets
 		Assets.instance.init(new AssetManager());
 		// Start game at menu screen
-		setScreen(new GameScreen(this));
+		setScreen(new LoginScreen(this));
+//		setScreen(new GameScreen(this));
 	}
 }

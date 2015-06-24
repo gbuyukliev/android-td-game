@@ -1,12 +1,9 @@
 package bg.ittalents.tower_defense.game.objects;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.math.Vector2;
 
-import bg.ittalents.tower_defense.utils.Constants;
+import bg.ittalents.tower_defense.game.Assets;
 
 public abstract class AbstractTower extends AbstractObject {
     public static final String TAG = Assets.class.getName();

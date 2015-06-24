@@ -11,7 +11,6 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Disposable;
 
-import bg.ittalents.tower_defense.game.objects.Assets;
 import bg.ittalents.tower_defense.game.objects.Background;
 import bg.ittalents.tower_defense.utils.CameraHelper;
 

@@ -2,10 +2,7 @@ package bg.ittalents.tower_defense.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.maps.MapLayer;
-import com.badlogic.gdx.maps.MapObjects;
 import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.maps.tiled.TiledMapTile;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
@@ -16,7 +13,6 @@ import java.util.Iterator;
 import bg.ittalents.tower_defense.game.objects.AbstractCreep;
 import bg.ittalents.tower_defense.game.objects.AbstractProjectile;
 import bg.ittalents.tower_defense.game.objects.AbstractTower;
-import bg.ittalents.tower_defense.game.objects.Assets;
 import bg.ittalents.tower_defense.game.objects.Creep;
 import bg.ittalents.tower_defense.game.objects.Tower;
 
