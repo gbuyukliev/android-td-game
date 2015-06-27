@@ -104,12 +104,14 @@ public class RegisterScreen extends AbstractGameScreen {
         btnRegister.addListener(new ClickListener() {
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                Gdx.app.debug("Login", "Username: " + txtUsername.getText() + ", Pasword" + txtPassword.getText());
+                Gdx.app.debug("Login", "Username: " + txtUsername.getText() + ", Password" + txtPassword.getText());
                 getGame().setScreen(new LoginScreen(getGame()));
             }
         });
         stage.addActor(btnRegister);
     }
+
+    
 
     @Override
     public void render(float delta) {
