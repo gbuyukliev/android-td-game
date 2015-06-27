@@ -6,6 +6,14 @@ import com.badlogic.gdx.Net;
 public class Network implements INetwork {
 
     public static final String URL = "http://192.168.7.189:8080/towerdefense/";
+    public static final String LOGIN_MANAGER = "LoginManager";
+    public static final String REGISTER_MANAGER = "RegisterManager";
+    public static final String ACCOUNT_INFO_MANAGER = "ChangeAccountIfnoManager";
+    public static final String ALL_HIGH_SCORE_MANAGER = "AllHighScoreManager";
+    public static final String TOWER_MANAGER = "TowerManager";
+    public static final String LEVEL_MANAGER = "LevelManager";
+    public static final String LEVEL_END_MANAGER = "LevelEndManager";
+    public static final String ALL_LEVEL_SCORE_MANAGER = "AllLevelScoreManager";
 
     @Override
     public String getLevelData(int levelNumber) {
@@ -14,7 +22,7 @@ public class Network implements INetwork {
 
     public void postLogin(String content) {
         Net.HttpRequest httpRequest = new Net.HttpRequest(Net.HttpMethods.POST);
-        httpRequest.setUrl(URL + "LoginManager");
+        httpRequest.setUrl(URL + LOGIN_MANAGER);
         httpRequest.setContent(content);
         Gdx.net.sendHttpRequest(httpRequest, new Net.HttpResponseListener() {
             @Override

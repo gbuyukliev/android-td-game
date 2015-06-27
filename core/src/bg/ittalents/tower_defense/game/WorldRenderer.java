@@ -48,12 +48,12 @@ public class WorldRenderer implements Disposable {
     }
 
     private void init() {
-        camera = new OrthographicCamera(WorldRenderer.VIEWPORT,
+        camera = new OrthographicCamera(WorldRenderer.VIEWPORT * Gdx.graphics.getWidth() / Gdx.graphics.getHeight(),
                 WorldRenderer.VIEWPORT);
         camera.position.set(0, 0, 0);
         camera.update();
 
-        cameraGUI = new OrthographicCamera(WorldRenderer.VIEWPORT,
+        cameraGUI = new OrthographicCamera(WorldRenderer.VIEWPORT * Gdx.graphics.getWidth() / Gdx.graphics.getHeight(),
                 WorldRenderer.VIEWPORT);
         cameraGUI.position.set(0, 0, 0);
         cameraGUI.setToOrtho(true); // flip y-axis

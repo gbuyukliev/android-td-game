@@ -3,15 +3,16 @@ package bg.ittalents.tower_defense.game.waves;
 import com.badlogic.gdx.utils.Array;
 
 public class LevelData {
-    Array<CreepTypes> typesOfEnemies;
+    Array<CreepTypes> enemies;
     Array<Array<CreepCount>> waves;
+    Array<TowerTypes> towers;
 
     public static class CreepTypes {
-        int moveSpeed;
-        int award;
+        float moveSpeed;
+        float award;
         int level;
         String name;
-        int health;
+        float health;
         String typeOfEnemy;
 
         @Override
@@ -48,31 +49,54 @@ public class LevelData {
         }
     }
 
-    public static LevelData testWaves() {
-        LevelData levelData = new LevelData();
+    public static class TowerTypes {
+        float damage;
+        String typeOfTower;
+        float price;
+        float attackSpeed;
+        float range;
+        float sellPrice;
 
-        levelData.typesOfEnemies = new Array<CreepTypes>();
-        levelData.waves = new Array<Array<CreepCount>>();
-
-        levelData.typesOfEnemies.add(new CreepTypes());
-        levelData.typesOfEnemies.add(new CreepTypes());
-        levelData.typesOfEnemies.add(new CreepTypes());
-        Array<CreepCount> wave = new Array<CreepCount>();
-        wave.add(new CreepCount(1, "Type"));
-        wave.add(new CreepCount(1, "Type"));
-        wave.add(new CreepCount(1, "Type"));
-
-        levelData.waves.add(wave);
-        levelData.waves.add(wave);
-        levelData.waves.add(wave);
-        return levelData;
+        @Override
+        public String toString() {
+            return "TowerTypes{" +
+                    "damage=" + damage +
+                    ", typeOfTower='" + typeOfTower + '\'' +
+                    ", price=" + price +
+                    ", attackSpeed=" + attackSpeed +
+                    ", range=" + range +
+                    ", sellPrice=" + sellPrice +
+                    '}';
+        }
     }
+
+//    public static LevelData testWaves() {
+//        LevelData levelData = new LevelData();
+//
+//        levelData.enemies = new Array<CreepTypes>();
+//        levelData.waves = new Array<Array<CreepCount>>();
+//
+//        levelData.enemies.add(new CreepTypes());
+//        levelData.enemies.add(new CreepTypes());
+//        levelData.enemies.add(new CreepTypes());
+//        Array<CreepCount> wave = new Array<CreepCount>();
+//        wave.add(new CreepCount(1, "Type"));
+//        wave.add(new CreepCount(1, "Type"));
+//        wave.add(new CreepCount(1, "Type"));
+//
+//        levelData.waves.add(wave);
+//        levelData.waves.add(wave);
+//        levelData.waves.add(wave);
+//        return levelData;
+//    }
+
 
     @Override
     public String toString() {
-        return "WaveManager{" +
-                "typesOfEnemies=" + typesOfEnemies +
-                ", waves=" + waves +
+        return "LevelData{" +
+                "enemies=" + enemies +
+                "\nwaves=" + waves +
+                "\ntowers=" + towers +
                 '}';
     }
 }

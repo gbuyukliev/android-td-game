@@ -1,0 +1,224 @@
+{
+  "waves": [
+    [
+      {
+        "levelOfEnemy": 4,
+        "count": 1,
+        "typeOfEnemy": "normalEnemy"
+      },
+      {
+        "levelOfEnemy": 3,
+        "count": 1,
+        "typeOfEnemy": "fastEnemy"
+      },
+      {
+        "levelOfEnemy": 2,
+        "count": 1,
+        "typeOfEnemy": "slowEnemy"
+      },
+      {
+        "levelOfEnemy": 1,
+        "count": 1,
+        "typeOfEnemy": "healingEnemy"
+      }
+    ],
+    [
+      {
+        "levelOfEnemy": 4,
+        "count": 2,
+        "typeOfEnemy": "normalEnemy"
+      },
+      {
+        "levelOfEnemy": 3,
+        "count": 2,
+        "typeOfEnemy": "fastEnemy"
+      },
+      {
+        "levelOfEnemy": 2,
+        "count": 2,
+        "typeOfEnemy": "slowEnemy"
+      },
+      {
+        "levelOfEnemy": 1,
+        "count": 2,
+        "typeOfEnemy": "healingEnemy"
+      }
+    ],
+    [
+      {
+        "levelOfEnemy": 4,
+        "count": 3,
+        "typeOfEnemy": "normalEnemy"
+      },
+      {
+        "levelOfEnemy": 3,
+        "count": 3,
+        "typeOfEnemy": "fastEnemy"
+      },
+      {
+        "levelOfEnemy": 2,
+        "count": 3,
+        "typeOfEnemy": "slowEnemy"
+      },
+      {
+        "levelOfEnemy": 1,
+        "count": 3,
+        "typeOfEnemy": "healingEnemy"
+      }
+    ],
+    [
+      {
+        "levelOfEnemy": 4,
+        "count": 4,
+        "typeOfEnemy": "normalEnemy"
+      },
+      {
+        "levelOfEnemy": 3,
+        "count": 4,
+        "typeOfEnemy": "fastEnemy"
+      },
+      {
+        "levelOfEnemy": 2,
+        "count": 4,
+        "typeOfEnemy": "slowEnemy"
+      },
+      {
+        "levelOfEnemy": 1,
+        "count": 4,
+        "typeOfEnemy": "healingEnemy"
+      }
+    ],
+    [
+      {
+        "levelOfEnemy": 4,
+        "count": 5,
+        "typeOfEnemy": "normalEnemy"
+      },
+      {
+        "levelOfEnemy": 3,
+        "count": 5,
+        "typeOfEnemy": "fastEnemy"
+      },
+      {
+        "levelOfEnemy": 2,
+        "count": 5,
+        "typeOfEnemy": "slowEnemy"
+      },
+      {
+        "levelOfEnemy": 1,
+        "count": 5,
+        "typeOfEnemy": "healingEnemy"
+      }
+    ],
+    [
+      {
+        "levelOfEnemy": 4,
+        "count": 6,
+        "typeOfEnemy": "normalEnemy"
+      },
+      {
+        "levelOfEnemy": 3,
+        "count": 6,
+        "typeOfEnemy": "fastEnemy"
+      },
+      {
+        "levelOfEnemy": 2,
+        "count": 6,
+        "typeOfEnemy": "slowEnemy"
+      },
+      {
+        "levelOfEnemy": 1,
+        "count": 6,
+        "typeOfEnemy": "healingEnemy"
+      }
+    ],
+    [
+      {
+        "levelOfEnemy": 4,
+        "count": 7,
+        "typeOfEnemy": "normalEnemy"
+      },
+      {
+        "levelOfEnemy": 3,
+        "count": 7,
+        "typeOfEnemy": "fastEnemy"
+      },
+      {
+        "levelOfEnemy": 2,
+        "count": 7,
+        "typeOfEnemy": "slowEnemy"
+      },
+      {
+        "levelOfEnemy": 1,
+        "count": 7,
+        "typeOfEnemy": "healingEnemy"
+      }
+    ]
+  ],
+  "enemies": [
+    {
+      "moveSpeed": 2,
+      "levelOfEnemy": 4,
+      "award": 4,
+      "health": 4,
+      "typeOfEnemy": "normalEnemy"
+    },
+    {
+      "moveSpeed": 6,
+      "levelOfEnemy": 3,
+      "award": 3.5999999999999996,
+      "health": 1,
+      "typeOfEnemy": "fastEnemy"
+    },
+    {
+      "moveSpeed": 1,
+      "levelOfEnemy": 2,
+      "award": 2.8,
+      "health": 4,
+      "typeOfEnemy": "slowEnemy"
+    },
+    {
+      "moveSpeed": 1,
+      "levelOfEnemy": 1,
+      "award": 1.4,
+      "health": 1,
+      "typeOfEnemy": "healingEnemy"
+    }
+  ],
+  "towers": [
+    {
+      "damage": 1,
+      "typeOfTower": "normalDamageTower",
+      "price": 1.2,
+      "attackSpeed": 1,
+      "range": 1,
+      "sellPrice": 0
+    },
+    {
+      "damage": 0.8,
+      "typeOfTower": "fastDamageTower",
+      "price": 1.3,
+      "attackSpeed": 1.4,
+      "range": 0.8,
+      "sellPrice": 0
+    },
+    {
+      "slow": 1,
+      "timeOfSlow": 1,
+      "typeOfTower": "frostTower",
+      "price": 0.9,
+      "attackSpeed": 1.4,
+      "range": 0.8,
+      "sellPrice": 0
+    },
+    {
+      "damage": 0.7,
+      "splashRange": 1,
+      "typeOfTower": "splashDamageTower",
+      "price": 1.4,
+      "attackSpeed": 1,
+      "range": 1,
+      "sellPrice": 0
+    }
+  ]
+}

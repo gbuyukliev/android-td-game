@@ -2,6 +2,7 @@ package bg.ittalents.tower_defense.screens;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Net;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -13,6 +14,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
+
+import bg.ittalents.tower_defense.network.Network;
 
 public class RegisterScreen extends AbstractGameScreen {
 
@@ -105,13 +110,62 @@ public class RegisterScreen extends AbstractGameScreen {
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                 Gdx.app.debug("Login", "Username: " + txtUsername.getText() + ", Password" + txtPassword.getText());
-                getGame().setScreen(new LoginScreen(getGame()));
+                register();
+
             }
         });
         stage.addActor(btnRegister);
     }
 
-    
+    private void register() {
+        JsonObject json = new JsonObject();
+        json.add("userName", new JsonPrimitive(txtUsername.getText()));
+        json.add("nickName", new JsonPrimitive(txtNickname.getText()));
+        json.add("password", new JsonPrimitive(txtPassword.getText()));
+        json.add("email", new JsonPrimitive(txtEmail.getText()));
+//        String spam;
+//        if (checkBox.isChecked()) {
+//            spam = "YES";
+//        } else {
+//            spam = "NO";
+//        }
+        json.add("spam", new JsonPrimitive(checkBox.isChecked()));
+
+        Gdx.app.debug("URL", Network.URL + Network.REGISTER_MANAGER);
+        Gdx.app.debug("JSON", json.toString());
+
+        final Net.HttpRequest httpRequest = new Net.HttpRequest(Net.HttpMethods.POST);
+        httpRequest.setUrl(Network.URL + Network.REGISTER_MANAGER);
+        httpRequest.setHeader("Content-Type", "application/json");
+        httpRequest.setContent(json.toString());
+        Gdx.net.sendHttpRequest(httpRequest, new Net.HttpResponseListener() {
+            @Override
+            public void handleHttpResponse(Net.HttpResponse httpResponse) {
+                if (httpResponse.getStatus().getStatusCode() == 200) {
+                    Gdx.app.postRunnable(new Runnable() {
+                        @Override
+                        public void run() {
+                            Gdx.net.cancelHttpRequest(httpRequest);
+                            getGame().setScreen(new LoginScreen(getGame()));
+                        }
+                    });
+                } else {
+                    Gdx.app.debug("Login POST", "" + httpResponse.getHeaders().toString());
+                    Gdx.app.debug("Login POST", "" + httpResponse.getStatus().getStatusCode());
+                }
+            }
+
+            @Override
+            public void failed(Throwable t) {
+                Gdx.app.debug("Login POST", "" + "FAILED");
+            }
+
+            @Override
+            public void cancelled() {
+                Gdx.app.debug("Login POST", "" + "CANCELLED");
+            }
+        });
+    }
 
     @Override
     public void render(float delta) {

@@ -1,1 +1,98 @@
-[[{"moveSpeed":1,"award":1,"level":1,"name":"NormalEnemy_1","health":1,"typeOfEnemy":"NormalEnemy"},{"moveSpeed":2,"award":2,"level":2,"name":"NormalEnemy_2","health":2,"typeOfEnemy":"NormalEnemy"},{"moveSpeed":1,"award":1,"level":1,"name":"FastEnemy_1","health":1,"typeOfEnemy":"FastEnemy"},{"moveSpeed":2,"award":2,"level":2,"name":"BossEnemy_2","health":2,"typeOfEnemy":"BossEnemy"},{"moveSpeed":2,"award":2,"level":2,"name":"FastEnemy_2","health":2,"typeOfEnemy":"FastEnemy"},{"moveSpeed":2,"award":2,"level":2,"name":"SlowEnemy_2","health":2,"typeOfEnemy":"SlowEnemy"}],[[{"count":3,"typeOfEnemy":"NormalEnemy_1"},{"count":5,"typeOfEnemy":"NormalEnemy_2"},{"count":8,"typeOfEnemy":"FastEnemy_2"}],[{"count":3,"typeOfEnemy":"NormalEnemy_2"},{"count":5,"typeOfEnemy":"NormalEnemy_1"},{"count":8,"typeOfEnemy":"SlowEnemy_2"}],[{"count":3,"typeOfEnemy":"FastEnemy_2"},{"count":5,"typeOfEnemy":"FastEnemy_1"},{"count":8,"typeOfEnemy":"BossEnemy_2"}]]]
+{
+  "waves": [
+    [
+      {
+        "levelOfEnemy": 2,
+        "count": 2,
+        "typeOfEnemy": "normalEnemy"
+      },
+      {
+        "levelOfEnemy": 1,
+        "count": 2,
+        "typeOfEnemy": "fastEnemy"
+      }
+    ],
+    [
+      {
+        "levelOfEnemy": 2,
+        "count": 4,
+        "typeOfEnemy": "normalEnemy"
+      },
+      {
+        "levelOfEnemy": 1,
+        "count": 4,
+        "typeOfEnemy": "fastEnemy"
+      }
+    ],
+    [
+      {
+        "levelOfEnemy": 2,
+        "count": 6,
+        "typeOfEnemy": "normalEnemy"
+      },
+      {
+        "levelOfEnemy": 1,
+        "count": 6,
+        "typeOfEnemy": "fastEnemy"
+      }
+    ],
+    [
+      {
+        "levelOfEnemy": 2,
+        "count": 8,
+        "typeOfEnemy": "normalEnemy"
+      },
+      {
+        "levelOfEnemy": 1,
+        "count": 8,
+        "typeOfEnemy": "fastEnemy"
+      }
+    ],
+    [
+      {
+        "levelOfEnemy": 2,
+        "count": 10,
+        "typeOfEnemy": "normalEnemy"
+      },
+      {
+        "levelOfEnemy": 1,
+        "count": 10,
+        "typeOfEnemy": "fastEnemy"
+      }
+    ]
+  ],
+  "enemies": [
+    {
+      "moveSpeed": 2,
+      "levelOfEnemy": 2,
+      "award": 2,
+      "health": 2,
+      "typeOfEnemy": "normalEnemy"
+    },
+    {
+      "moveSpeed": 2,
+      "levelOfEnemy": 1,
+      "award": 1.2,
+      "health": 0,
+      "typeOfEnemy": "fastEnemy"
+    }
+  ],
+  "towers": [
+    {
+      "damage": 1,
+      "typeOfTower": "normalDamageTower",
+      "price": 1.2,
+      "attackSpeed": 1,
+      "range": 1,
+      "sellPrice": 0
+    },
+    {
+      "damage": 0.8,
+      "typeOfTower": "fastDamageTower",
+      "price": 1.3,
+      "attackSpeed": 1.4,
+      "range": 0.8,
+      "sellPrice": 0
+    }
+  ]
+}
