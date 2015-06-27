@@ -1,11 +1,8 @@
 package bg.ittalents.tower_defense.game.objects;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
-
-import bg.ittalents.tower_defense.utils.Constants;
 
 public abstract class AbstractObject {
     //position of center

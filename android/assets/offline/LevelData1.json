@@ -1,0 +1,96 @@
+{
+  "typesOfEnemies": [
+    {
+      "moveSpeed": 1,
+      "award": 1,
+      "level": 1,
+      "name": "NormalEnemy_1",
+      "health": 1,
+      "typeOfEnemy": "NormalEnemy"
+    },
+    {
+      "moveSpeed": 2,
+      "award": 2,
+      "level": 2,
+      "name": "NormalEnemy_2",
+      "health": 2,
+      "typeOfEnemy": "NormalEnemy"
+    },
+    {
+      "moveSpeed": 1,
+      "award": 1,
+      "level": 1,
+      "name": "FastEnemy_1",
+      "health": 1,
+      "typeOfEnemy": "FastEnemy"
+    },
+    {
+      "moveSpeed": 2,
+      "award": 2,
+      "level": 2,
+      "name": "BossEnemy_2",
+      "health": 2,
+      "typeOfEnemy": "BossEnemy"
+    },
+    {
+      "moveSpeed": 2,
+      "award": 2,
+      "level": 2,
+      "name": "FastEnemy_2",
+      "health": 2,
+      "typeOfEnemy": "FastEnemy"
+    },
+    {
+      "moveSpeed": 2,
+      "award": 2,
+      "level": 2,
+      "name": "SlowEnemy_2",
+      "health": 2,
+      "typeOfEnemy": "SlowEnemy"
+    }
+  ],
+  "waves": [
+    [
+      {
+        "count": 3,
+        "typeOfEnemy": "NormalEnemy_1"
+      },
+      {
+        "count": 5,
+        "typeOfEnemy": "NormalEnemy_2"
+      },
+      {
+        "count": 8,
+        "typeOfEnemy": "FastEnemy_2"
+      }
+    ],
+    [
+      {
+        "count": 3,
+        "typeOfEnemy": "NormalEnemy_2"
+      },
+      {
+        "count": 5,
+        "typeOfEnemy": "NormalEnemy_1"
+      },
+      {
+        "count": 8,
+        "typeOfEnemy": "SlowEnemy_2"
+      }
+    ],
+    [
+      {
+        "count": 3,
+        "typeOfEnemy": "FastEnemy_2"
+      },
+      {
+        "count": 5,
+        "typeOfEnemy": "FastEnemy_1"
+      },
+      {
+        "count": 8,
+        "typeOfEnemy": "BossEnemy_2"
+      }
+    ]
+  ]
+}

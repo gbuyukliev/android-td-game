@@ -4,7 +4,6 @@ package bg.ittalents.tower_defense.screens;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -13,7 +12,12 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.Json;
+import com.badlogic.gdx.utils.JsonWriter;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
+
+import bg.ittalents.tower_defense.game.waves.LevelData;
+import bg.ittalents.tower_defense.network.Offline;
 
 public class LoginScreen extends AbstractGameScreen {
 
@@ -63,8 +67,22 @@ public class LoginScreen extends AbstractGameScreen {
         btnLogin.addListener(new ClickListener() {
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                Gdx.app.debug("Login", "Username: " + txtUsername.getText() + ", Pasword" + txtPassword.getText());
-                getGame().setScreen(new GameScreen(getGame()));
+//                Gdx.app.debug("Login", "Username: " + txtUsername.getText() + ", Pasword" + txtPassword.getText());
+//                getGame().setScreen(new GameScreen(getGame()));
+
+//                WaveManager waveManager = WaveManager.testWaves();
+//                Json json = new Json();
+//                json.setElementType(WaveManager.class, "waves", WaveManager.CreepCount.class);
+//                Gdx.app.debug("JSON", json.prettyPrint(waveManager));
+
+                Json json = new Json();
+                json.setTypeName(null);
+                json.setUsePrototypes(false);
+                json.setIgnoreUnknownFields(true);
+                json.setOutputType(JsonWriter.OutputType.json);
+                LevelData levelData = json.fromJson(LevelData.class, new Offline().getLevelData(1));
+
+                Gdx.app.debug("JSON", levelData.toString());
             }
         });
         stage.addActor(btnLogin);
@@ -80,6 +98,18 @@ public class LoginScreen extends AbstractGameScreen {
             }
         });
         stage.addActor(btnRegister);
+
+        TextButton btnOffline = new TextButton("Play offline", skin);
+        btnOffline.setPosition(500, 100);
+        btnOffline.setSize(120, 30);
+        btnOffline.addListener(new ClickListener() {
+            @Override
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                Gdx.app.debug("Login", "Username: " + txtUsername.getText() + ", Pasword" + txtPassword.getText());
+                getGame().setScreen(new GameScreen(getGame()));
+            }
+        });
+        stage.addActor(btnOffline);
     }
 
     @Override
@@ -105,5 +135,4 @@ public class LoginScreen extends AbstractGameScreen {
         stage.dispose();
         skin.dispose();
     }
-
 }
