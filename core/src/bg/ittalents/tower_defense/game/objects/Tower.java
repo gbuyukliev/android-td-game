@@ -14,7 +14,7 @@ public class Tower extends AbstractTower {
         timeFromLastShot = Float.MAX_VALUE;
         damage = 10;
         fireRate = 1f;
-        range = 120f;
+        range = 90f;
         rotationSpeed = 90f;
     }
 
