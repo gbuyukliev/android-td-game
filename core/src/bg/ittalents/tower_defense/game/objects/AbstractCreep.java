@@ -13,16 +13,26 @@ import com.badlogic.gdx.utils.Array;
 
 public abstract class AbstractCreep extends AbstractObject {
 
-    private static final Texture ENEMY_BG_TEXTURE = new Texture("enemyhealthbg.png");
-    private static final Texture ENEMY_FG_TEXTURE = new Texture("enemyhealthfg.png");
-    private static final Texture ENEMY_FG = new Texture(Gdx.files.internal("enemyhealth.png"));
+    private static final Texture ENEMY_BG_TEXTURE;
+    private static final Texture ENEMY_FG_TEXTURE;
+    private static final Texture ENEMY_FG;
+
+    private static float waveCoeff;
+
+    static {
+        ENEMY_BG_TEXTURE = new Texture("enemyhealthbg.png");
+        ENEMY_FG_TEXTURE = new Texture("enemyhealthfg.png");
+        ENEMY_FG = new Texture(Gdx.files.internal("enemyhealth.png"));
+        waveCoeff = 1f;
+    }
 
     Animation animation;
     float speed;
     int reward;
-    int health;
-    int maxHealth;
+    float health;
+    float maxHealth;
     float stateTime;
+    boolean isFlying;
     HealthBar healthBar;
 
     int currentWaypoint;
@@ -59,12 +69,12 @@ public abstract class AbstractCreep extends AbstractObject {
 
         public void update() {
             setPosition();
-            healthBarFG.setScale(owner.health / (float) owner.maxHealth * SCALE, SCALE);
+            healthBarFG.setScale(owner.health / owner.maxHealth * SCALE, SCALE);
         }
 
         public void render(Batch batch) {
             healthBarBG.draw(batch);
-            health.draw(batch, texturePosition.x + BUFFER_X, texturePosition.y + BUFFER_Y, owner.health / (float) owner.maxHealth * 40f, 5f);
+            health.draw(batch, texturePosition.x + BUFFER_X, texturePosition.y + BUFFER_Y, owner.health / owner.maxHealth * 40f, 5f);
 //            healthBarFG.draw(batch);
         }
     }
@@ -145,5 +155,15 @@ public abstract class AbstractCreep extends AbstractObject {
 //        if (health < maxHealth) {
             healthBar.render(batch);
 //        }
+    }
+
+    public static void setCoeff(float newWaveCoeff) {
+        if (newWaveCoeff > 0) {
+            waveCoeff = newWaveCoeff;
+        }
+    }
+
+    public static float getCoeff() {
+        return waveCoeff;
     }
 }

@@ -11,6 +11,7 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Disposable;
 
+import bg.ittalents.tower_defense.game.Assets;
 import bg.ittalents.tower_defense.game.objects.Background;
 import bg.ittalents.tower_defense.utils.CameraHelper;
 
@@ -58,7 +59,7 @@ public class WorldRenderer implements Disposable {
         cameraGUI.setToOrtho(true); // flip y-axis
         cameraGUI.update();
 
-        cameraHelper = new CameraHelper(new Vector2(level.getWidth() / 2, level.getHeight() / 2));
+        cameraHelper = new CameraHelper(new Vector2(camera.viewportWidth / 2, camera.viewportHeight / 2));
     }
 
     public void render() {
@@ -114,12 +115,18 @@ public class WorldRenderer implements Disposable {
         BitmapFont fpsFont = Assets.instance.fonts.defaultFont;
 
         float screenWidth = Gdx.graphics.getWidth();
+        float screenHeight = Gdx.graphics.getHeight();
 
         float y = 5;
 
-        fpsFont.draw(batch, "Money: " + level.getMoney(), 5, y);
-        fpsFont.draw(batch, "Score: " + level.getScore(), screenWidth / 2 - 30 / scale, y);
+        fpsFont.draw(batch, "Wave: " + level.getCurrentWave(), 5, y);
+        fpsFont.draw(batch, "Money: " + level.getMoney(), screenWidth / 2 - 120 / scale, y);
+        fpsFont.draw(batch, "Score: " + level.getScore(), screenWidth / 2 + 80 / scale, y);
         fpsFont.draw(batch, "Lives: " + level.getLives(), screenWidth - 60 / scale, y);
+
+        if (level.isTriggerCountTime()) {
+            fpsFont.draw(batch, "TIME TILL NEXT WAVE: " + (int) (Level.TIME_TILL_NEXT_WAVE - level.getTimeSinceLastWave()), screenWidth / 2 - 50 / scale, screenHeight / 2);
+        }
     }
 
     private void renderGuiFpsCounter() {

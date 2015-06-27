@@ -14,6 +14,8 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.utils.Disposable;
 
+import bg.ittalents.tower_defense.game.WorldRenderer;
+
 public class Assets implements Disposable, AssetErrorListener {
     // Location of description file for texture atlas
     public static final String TEXTURE_ATLAS_OBJECTS = "texture/texture.pack";
