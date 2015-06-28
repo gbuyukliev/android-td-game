@@ -2,11 +2,14 @@ package bg.ittalents.tower_defense.game;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Disposable;
 
+import bg.ittalents.tower_defense.screens.LoginScreen;
 import bg.ittalents.tower_defense.utils.CameraHelper;
 
 public class WorldController extends InputAdapter implements Disposable {
@@ -41,7 +44,14 @@ public class WorldController extends InputAdapter implements Disposable {
         scale = WorldRenderer.VIEWPORT / Gdx.graphics.getHeight();
     }
 
-
+    @Override
+    public boolean keyUp (int keycode) {
+        if (keycode == Input.Keys.ESCAPE || keycode == Input.Keys.BACK) {
+            // switch to menu screen
+            game.setScreen(new LoginScreen(game));
+        }
+        return false;
+    }
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {

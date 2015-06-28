@@ -4,7 +4,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Net;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -12,14 +12,14 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 
 import bg.ittalents.tower_defense.network.Network;
 
-public class RegisterScreen extends AbstractGameScreen {
+public class RegisterScreen extends AbstractGameScreen{
 
     private Stage stage;
     private Skin skin;
@@ -97,24 +97,34 @@ public class RegisterScreen extends AbstractGameScreen {
         txtEmail.setSize(120, 30);
         stage.addActor(txtEmail);
 
-        checkBox = new CheckBox("Send spam", skin);
-        checkBox.setPosition(400, 150);
-        checkBox.setSize(120, 30);
+        checkBox = new CheckBox("Send notification when\nsomeone beats your record! ", skin);
+        checkBox.setPosition(300, 150);
+        checkBox.setSize(240, 60);
         checkBox.setChecked(true);
         stage.addActor(checkBox);
 
         TextButton btnRegister = new TextButton("Register", skin);
-        btnRegister.setPosition(400, 100);
+        btnRegister.setPosition(300, 100);
         btnRegister.setSize(80, 30);
-        btnRegister.addListener(new ClickListener() {
+        btnRegister.addListener(new ChangeListener() {
             @Override
-            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+            public void changed(ChangeEvent event, Actor actor) {
                 Gdx.app.debug("Login", "Username: " + txtUsername.getText() + ", Password" + txtPassword.getText());
                 register();
-
             }
         });
         stage.addActor(btnRegister);
+
+        TextButton btnCancel = new TextButton("Cancel", skin);
+        btnCancel.setPosition(400, 100);
+        btnCancel.setSize(80, 30);
+        btnCancel.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                getGame().setScreen(new LoginScreen(getGame()));
+            }
+        });
+        stage.addActor(btnCancel);
     }
 
     private void register() {
@@ -123,12 +133,6 @@ public class RegisterScreen extends AbstractGameScreen {
         json.add("nickName", new JsonPrimitive(txtNickname.getText()));
         json.add("password", new JsonPrimitive(txtPassword.getText()));
         json.add("email", new JsonPrimitive(txtEmail.getText()));
-//        String spam;
-//        if (checkBox.isChecked()) {
-//            spam = "YES";
-//        } else {
-//            spam = "NO";
-//        }
         json.add("spam", new JsonPrimitive(checkBox.isChecked()));
 
         Gdx.app.debug("URL", Network.URL + Network.REGISTER_MANAGER);
@@ -189,5 +193,6 @@ public class RegisterScreen extends AbstractGameScreen {
     public void hide() {
         stage.dispose();
         skin.dispose();
+        Gdx.input.setCatchBackKey(false);
     }
 }

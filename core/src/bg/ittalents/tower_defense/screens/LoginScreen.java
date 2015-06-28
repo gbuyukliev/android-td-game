@@ -3,16 +3,17 @@ package bg.ittalents.tower_defense.screens;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Net;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonWriter;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
@@ -29,6 +30,7 @@ public class LoginScreen extends AbstractGameScreen {
     private Skin skin;
     private TextField txtUsername;
     private TextField txtPassword;
+    private Label lblStatus;
 
     public LoginScreen(Game game) {
         super(game);
@@ -42,6 +44,13 @@ public class LoginScreen extends AbstractGameScreen {
         Table table = new Table();
         skin = new Skin(Gdx.files.internal("data/uiskin.json"));
 //        BitmapFont bitmapFont = Assets.instance.fonts.defaultFont;
+
+        lblStatus = new Label("", skin);
+        lblStatus.setColor(Color.RED);
+        lblStatus.setPosition(100, 50);
+        lblStatus.setSize(600, 30);
+        lblStatus.setAlignment(Align.center);
+        stage.addActor(lblStatus);
 
         Label lblUsername = new Label("Username: ", skin);
         lblUsername.setPosition(300, 300);
@@ -68,9 +77,9 @@ public class LoginScreen extends AbstractGameScreen {
         final TextButton btnLogin = new TextButton("Login", skin);
         btnLogin.setPosition(300, 200);
         btnLogin.setSize(80, 30);
-        btnLogin.addListener(new ClickListener() {
+        btnLogin.addListener(new ChangeListener() {
             @Override
-            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+            public void changed(ChangeEvent event, Actor actor) {
                 Gdx.app.debug("Login", "Username: " + txtUsername.getText() + ", Pasword" + txtPassword.getText());
 //                getGame().setScreen(new GameScreen(getGame()));
 
@@ -83,54 +92,8 @@ public class LoginScreen extends AbstractGameScreen {
 //
 //                Gdx.app.debug("JSON", levelData.toString());
 
-//                login();
-                btnLogin.setDisabled(true);
-                btnLogin.setTouchable(Touchable.disabled);
-                JsonObject json = new JsonObject();
-                json.add("userName", new JsonPrimitive(txtUsername.getText()));
-                json.add("password", new JsonPrimitive(txtPassword.getText()));
-
-                Gdx.app.debug("URL", Network.URL + Network.LOGIN_MANAGER);
-                Gdx.app.debug("JSON", json.toString());
-
-                final Net.HttpRequest httpRequest = new Net.HttpRequest(Net.HttpMethods.POST);
-                httpRequest.setUrl(Network.URL + Network.LOGIN_MANAGER);
-                httpRequest.setHeader("Content-Type", "application/json");
-                httpRequest.setContent(json.toString());
-                Gdx.net.sendHttpRequest(httpRequest, new Net.HttpResponseListener() {
-                    @Override
-                    public void handleHttpResponse(Net.HttpResponse httpResponse) {
-                        if (httpResponse.getStatus().getStatusCode() == 200) {
-                            Gdx.app.postRunnable(new Runnable() {
-                                @Override
-                                public void run() {
-                                    Gdx.net.cancelHttpRequest(httpRequest);
-                                    getGame().setScreen(new GameScreen(getGame()));
-                                }
-                            });
-                        } else {
-                            Gdx.app.debug("Login POST", "" + httpResponse.getStatus().getStatusCode());
-                            Gdx.net.cancelHttpRequest(httpRequest);
-                        }
-                    }
-
-                    @Override
-                    public void failed(Throwable t) {
-                        Gdx.app.debug("Login POST", "FAILED" + t.getMessage());
-                    }
-
-                    @Override
-                    public void cancelled() {
-                        Gdx.app.postRunnable(new Runnable() {
-                            @Override
-                            public void run() {
-                                btnLogin.setDisabled(false);
-                                btnLogin.setTouchable(Touchable.enabled);
-                                Gdx.app.debug("Login POST", "CANCELLED");
-                            }
-                        });
-                    }
-                });
+                login();
+//
 
 //                JsonValue jsonValue = new JsonValue();
             }
@@ -140,9 +103,9 @@ public class LoginScreen extends AbstractGameScreen {
         TextButton btnRegister = new TextButton("Register", skin);
         btnRegister.setPosition(400, 200);
         btnRegister.setSize(80, 30);
-        btnRegister.addListener(new ClickListener() {
+        btnRegister.addListener(new ChangeListener() {
             @Override
-            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+            public void changed (ChangeEvent event, Actor actor) {
                 Gdx.app.debug("Login", "Username: " + txtUsername.getText() + ", Pasword" + txtPassword.getText());
                 getGame().setScreen(new RegisterScreen(getGame()));
             }
@@ -152,9 +115,9 @@ public class LoginScreen extends AbstractGameScreen {
         TextButton btnOffline = new TextButton("Play offline", skin);
         btnOffline.setPosition(500, 100);
         btnOffline.setSize(120, 30);
-        btnOffline.addListener(new ClickListener() {
+        btnOffline.addListener(new ChangeListener() {
             @Override
-            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+            public void changed (ChangeEvent event, Actor actor) {
                 Json json = new Json();
                 json.setTypeName(null);
                 json.setUsePrototypes(false);
@@ -171,7 +134,54 @@ public class LoginScreen extends AbstractGameScreen {
     }
 
     private void login() {
+//        btnLogin.setDisabled(true);
+//                btnLogin.setTouchable(Touchable.disabled);
+        JsonObject json = new JsonObject();
+        json.add("userName", new JsonPrimitive(txtUsername.getText()));
+        json.add("password", new JsonPrimitive(txtPassword.getText()));
 
+        Gdx.app.debug("URL", Network.URL + Network.LOGIN_MANAGER);
+        Gdx.app.debug("JSON", json.toString());
+
+        final Net.HttpRequest httpRequest = new Net.HttpRequest(Net.HttpMethods.POST);
+        httpRequest.setUrl(Network.URL + Network.LOGIN_MANAGER);
+        httpRequest.setHeader("Content-Type", "application/json");
+        httpRequest.setContent(json.toString());
+        Gdx.net.sendHttpRequest(httpRequest, new Net.HttpResponseListener() {
+            @Override
+            public void handleHttpResponse(Net.HttpResponse httpResponse) {
+                if (httpResponse.getStatus().getStatusCode() == 200) {
+                    Gdx.app.postRunnable(new Runnable() {
+                        @Override
+                        public void run() {
+                            Gdx.net.cancelHttpRequest(httpRequest);
+                            getGame().setScreen(new GameScreen(getGame()));
+                        }
+                    });
+                } else {
+                    lblStatus.setText(httpResponse.getResultAsString());
+                    Gdx.app.debug("Login POST", "" + httpResponse.getStatus().getStatusCode());
+                    Gdx.net.cancelHttpRequest(httpRequest);
+                }
+            }
+
+            @Override
+            public void failed(Throwable t) {
+                Gdx.app.debug("Login POST", "FAILED" + t.getMessage());
+            }
+
+            @Override
+            public void cancelled() {
+                Gdx.app.postRunnable(new Runnable() {
+                    @Override
+                    public void run() {
+//                                btnLogin.setDisabled(false);
+//                                btnLogin.setTouchable(Touchable.enabled);
+                        Gdx.app.debug("Login POST", "CANCELLED");
+                    }
+                });
+            }
+        });
     }
 
     @Override

@@ -20,6 +20,7 @@ public class GameScreen extends AbstractGameScreen {
 
     @Override
     public void show() {
+        Gdx.input.setCatchBackKey(true);
         worldController = new WorldController(getGame());
     }
 
