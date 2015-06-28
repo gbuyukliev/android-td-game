@@ -158,16 +158,18 @@ public class Level implements Disposable {
         int col = mapX / tileWidth;
         int row = mapY / tileHeight;
 
-        if(tiles[row][col].buildable) {
-            if(tiles[row][col].tower != null) {
-                tiles[row][col].tower.upgrade();
-                Gdx.app.debug(TAG, "upgrading tower");
+        if (col >= 0 && col < tileWidth && row >= 0 && row < tileHeight) {
+            if (tiles[row][col].buildable) {
+                if (tiles[row][col].tower != null) {
+                    tiles[row][col].tower.upgrade();
+                    Gdx.app.debug(TAG, "upgrading tower");
+                } else {
+                    buildTower(col, row);
+                    Gdx.app.debug(TAG, "" + towers.size);
+                }
             } else {
-                buildTower(col, row);
-                Gdx.app.debug(TAG, "" + towers.size);
+                spawnCreep();
             }
-        } else {
-            spawnCreep();
         }
     }
 

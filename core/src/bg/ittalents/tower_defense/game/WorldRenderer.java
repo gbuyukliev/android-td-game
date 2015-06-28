@@ -1,6 +1,7 @@
 package bg.ittalents.tower_defense.game;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -11,13 +12,13 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Disposable;
 
-import bg.ittalents.tower_defense.game.Assets;
 import bg.ittalents.tower_defense.game.objects.Background;
 import bg.ittalents.tower_defense.utils.CameraHelper;
 
 public class WorldRenderer implements Disposable {
     public static final float VIEWPORT = 350f;
-    public static float scale;
+    private float scale;
+    private float aspectRatio;
 
     private TiledMap tiledMap;
     private OrthogonalTiledMapRenderer mapRenderer;
@@ -26,34 +27,33 @@ public class WorldRenderer implements Disposable {
     private Level level;
     private OrthographicCamera camera;
     private OrthographicCamera cameraGUI;
-    CameraHelper cameraHelper;
+    private CameraHelper cameraHelper;
 
+    private Gui gui;
     private WorldController worldController;
     private Batch batch;
-
-    public Level getLevel() {
-        return level;
-    }
 
     public WorldRenderer(WorldController worldController) {
         this.worldController = worldController;
         batch = new SpriteBatch();
+
         tiledMap = new TmxMapLoader().load("levels/level1.tmx");
         mapRenderer = new OrthogonalTiledMapRenderer(tiledMap, batch);
 
+        aspectRatio = Gdx.graphics.getWidth() / (float) Gdx.graphics.getHeight();
         level = new Level(tiledMap);
-
+        gui = new Gui(level, aspectRatio, batch);
         background = new Background(level.getWidth(), level.getHeight());
         init();
     }
 
     private void init() {
-        camera = new OrthographicCamera(WorldRenderer.VIEWPORT * Gdx.graphics.getWidth() / Gdx.graphics.getHeight(),
+        camera = new OrthographicCamera(WorldRenderer.VIEWPORT * aspectRatio,
                 WorldRenderer.VIEWPORT);
         camera.position.set(0, 0, 0);
         camera.update();
 
-        cameraGUI = new OrthographicCamera(WorldRenderer.VIEWPORT * Gdx.graphics.getWidth() / Gdx.graphics.getHeight(),
+        cameraGUI = new OrthographicCamera(WorldRenderer.VIEWPORT * aspectRatio,
                 WorldRenderer.VIEWPORT);
         cameraGUI.position.set(0, 0, 0);
         cameraGUI.setToOrtho(true); // flip y-axis
@@ -66,23 +66,25 @@ public class WorldRenderer implements Disposable {
 //        Gdx.graphics.setTitle("Tower Defense -- FPS: " + Gdx.graphics.getFramesPerSecond());
         renderWorld();
         renderGui();
+        gui.render(batch);
     }
 
     public void moveCamera(float x, float y) {
+        final float LEVEL_BORDER = 20f;
         x += cameraHelper.getPosition().x;
         y += cameraHelper.getPosition().y;
-        float viewportWidth = WorldRenderer.VIEWPORT * Gdx.graphics.getWidth() / Gdx.graphics.getHeight();
+        float viewportWidth = WorldRenderer.VIEWPORT * aspectRatio;
 
-        if (x < (viewportWidth / 2)) {
-            x = (viewportWidth / 2);
-        } else if (x > level.getWidth() - (viewportWidth / 2)) {
-            x = (level.getWidth() - (viewportWidth / 2));
+        if (x < (viewportWidth / 2) - LEVEL_BORDER) {
+            x = (viewportWidth / 2) - LEVEL_BORDER;
+        } else if (x > level.getWidth() - (viewportWidth / 2) + LEVEL_BORDER) {
+            x = (level.getWidth() - (viewportWidth / 2) + LEVEL_BORDER);
         }
 
-        if (y < (WorldRenderer.VIEWPORT / 2)) {
-            y = (WorldRenderer.VIEWPORT / 2);
-        } else if (y > level.getHeight() - (WorldRenderer.VIEWPORT / 2)) {
-            y = (level.getHeight() - (WorldRenderer.VIEWPORT / 2));
+        if (y < (WorldRenderer.VIEWPORT / 2) - LEVEL_BORDER) {
+            y = (WorldRenderer.VIEWPORT / 2) - LEVEL_BORDER;
+        } else if (y > level.getHeight() - (WorldRenderer.VIEWPORT / 2) + LEVEL_BORDER) {
+            y = (level.getHeight() - (WorldRenderer.VIEWPORT / 2) + LEVEL_BORDER);
         }
 
         cameraHelper.setPosition(x, y);
@@ -129,6 +131,10 @@ public class WorldRenderer implements Disposable {
         }
     }
 
+    public InputProcessor getInputProcessor() {
+        return gui.getInputProcessor();
+    }
+
     private void renderGuiFpsCounter() {
         int fps = Gdx.graphics.getFramesPerSecond();
         BitmapFont fpsFont = Assets.instance.fonts.defaultFont;
@@ -165,8 +171,10 @@ public class WorldRenderer implements Disposable {
     }
 
     public void resize(int width, int height) {
-        camera.viewportWidth = (WorldRenderer.VIEWPORT / height) *
-                width;
+        aspectRatio = width / (float) height;
+        gui.setAspectRatio(aspectRatio);
+        Gdx.app.debug("Aspect", "" + aspectRatio);
+        camera.viewportWidth = (WorldRenderer.VIEWPORT * aspectRatio);
         camera.update();
         worldController.updateScale();
         scale = worldController.getScale();
@@ -177,5 +185,9 @@ public class WorldRenderer implements Disposable {
         mapRenderer.dispose();
         tiledMap.dispose();
         level.dispose();
+    }
+
+    public Level getLevel() {
+        return level;
     }
 }

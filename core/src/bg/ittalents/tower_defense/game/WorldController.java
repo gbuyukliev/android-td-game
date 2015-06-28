@@ -4,6 +4,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.Vector2;
@@ -27,8 +28,13 @@ public class WorldController extends InputAdapter implements Disposable {
 
 
     public WorldController(Game game) {
-        Gdx.input.setInputProcessor(this);
         worldRenderer = new WorldRenderer(this);
+
+        InputMultiplexer inputMultiplexer = new InputMultiplexer();
+        inputMultiplexer.addProcessor(worldRenderer.getInputProcessor());
+        inputMultiplexer.addProcessor(this);
+
+        Gdx.input.setInputProcessor(inputMultiplexer);
         level = worldRenderer.getLevel();
         this.game = game;
         updateScale();
@@ -37,8 +43,6 @@ public class WorldController extends InputAdapter implements Disposable {
     public void update(float deltaTime) {
         level.update(deltaTime);
     }
-
-
 
     public void updateScale() {
         scale = WorldRenderer.VIEWPORT / Gdx.graphics.getHeight();
@@ -82,12 +86,12 @@ public class WorldController extends InputAdapter implements Disposable {
         return true;
     }
 
-
     public float getScale() {
         return scale;
     }
 
     public void render() {
+        Gdx.gl.glClearColor(0, 0, 0, 0);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         worldRenderer.render();
     }
