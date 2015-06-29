@@ -29,7 +29,6 @@ public class WorldRenderer implements Disposable {
     private OrthographicCamera cameraGUI;
     private CameraHelper cameraHelper;
 
-    private Gui gui;
     private WorldController worldController;
     private Batch batch;
 
@@ -41,8 +40,7 @@ public class WorldRenderer implements Disposable {
         mapRenderer = new OrthogonalTiledMapRenderer(tiledMap, batch);
 
         aspectRatio = Gdx.graphics.getWidth() / (float) Gdx.graphics.getHeight();
-        level = new Level(tiledMap);
-        gui = new Gui(level, aspectRatio, batch);
+        level = new Level(tiledMap, aspectRatio, batch);
         background = new Background(level.getWidth(), level.getHeight());
         init();
     }
@@ -66,25 +64,24 @@ public class WorldRenderer implements Disposable {
 //        Gdx.graphics.setTitle("Tower Defense -- FPS: " + Gdx.graphics.getFramesPerSecond());
         renderWorld();
         renderGui();
-        gui.render(batch);
+        level.getGui().render(batch);
     }
 
     public void moveCamera(float x, float y) {
-        final float LEVEL_BORDER = 20f;
         x += cameraHelper.getPosition().x;
         y += cameraHelper.getPosition().y;
         float viewportWidth = WorldRenderer.VIEWPORT * aspectRatio;
 
-        if (x < (viewportWidth / 2) - LEVEL_BORDER) {
-            x = (viewportWidth / 2) - LEVEL_BORDER;
-        } else if (x > level.getWidth() - (viewportWidth / 2) + LEVEL_BORDER) {
-            x = (level.getWidth() - (viewportWidth / 2) + LEVEL_BORDER);
+        if (x < (viewportWidth / 2)) {
+            x = (viewportWidth / 2);
+        } else if (x > level.getWidth() - (viewportWidth / 2)) {
+            x = (level.getWidth() - (viewportWidth / 2));
         }
 
-        if (y < (WorldRenderer.VIEWPORT / 2) - LEVEL_BORDER) {
-            y = (WorldRenderer.VIEWPORT / 2) - LEVEL_BORDER;
-        } else if (y > level.getHeight() - (WorldRenderer.VIEWPORT / 2) + LEVEL_BORDER) {
-            y = (level.getHeight() - (WorldRenderer.VIEWPORT / 2) + LEVEL_BORDER);
+        if (y < (WorldRenderer.VIEWPORT / 2)) {
+            y = (WorldRenderer.VIEWPORT / 2);
+        } else if (y > level.getHeight() - (WorldRenderer.VIEWPORT / 2)) {
+            y = (level.getHeight() - (WorldRenderer.VIEWPORT / 2));
         }
 
         cameraHelper.setPosition(x, y);
@@ -132,7 +129,7 @@ public class WorldRenderer implements Disposable {
     }
 
     public InputProcessor getInputProcessor() {
-        return gui.getInputProcessor();
+        return level.getGui().getInputProcessor();
     }
 
     private void renderGuiFpsCounter() {
@@ -172,7 +169,7 @@ public class WorldRenderer implements Disposable {
 
     public void resize(int width, int height) {
         aspectRatio = width / (float) height;
-        gui.setAspectRatio(aspectRatio);
+        level.getGui().setAspectRatio(aspectRatio);
         Gdx.app.debug("Aspect", "" + aspectRatio);
         camera.viewportWidth = (WorldRenderer.VIEWPORT * aspectRatio);
         camera.update();

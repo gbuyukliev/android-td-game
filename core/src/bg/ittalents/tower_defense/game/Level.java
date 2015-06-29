@@ -1,12 +1,22 @@
 package bg.ittalents.tower_defense.game;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
+import com.badlogic.gdx.utils.viewport.StretchViewport;
 
 import java.util.Iterator;
 
@@ -30,6 +40,8 @@ public class Level implements Disposable {
     private static final int DEFAULT_CURRENT_CREEP = 1;
     public static final float TIME_TILL_NEXT_WAVE = 10f;
 
+    private Gui gui;
+
     private int lives;
     private int money;
     private int score;
@@ -45,6 +57,9 @@ public class Level implements Disposable {
     private int tileWidth;
     private int tileHeight;
     Vector2 startPosition;
+
+    private int colTower;
+    private int rowTower;
 
     private Array<AbstractTower> towers;
     private Array<AbstractCreep> creeps;
@@ -63,9 +78,61 @@ public class Level implements Disposable {
         }
     }
 
+    public class Gui {
+        private Stage stage;
+        private Skin skin;
+        private float aspectRatio;
+        private Label lblScore;
+        private TextButton testButton;
+
+        public Gui(float aspectRatio, Batch batch) {
+            setAspectRatio(aspectRatio);
+            stage = new Stage(new StretchViewport(WorldRenderer.VIEWPORT * aspectRatio, WorldRenderer.VIEWPORT), batch);
+
+            skin = new Skin(Gdx.files.internal("data/uiskin.json"));
+//        BitmapFont bitmapFont = Assets.instance.fonts.defaultFont;
+
+            lblScore = new Label("Test", skin);
+            lblScore.setColor(Color.RED);
+            lblScore.setPosition(100, 50);
+            lblScore.setSize(80, 30);
+            lblScore.setAlignment(Align.center);
+            stage.addActor(lblScore);
+
+            testButton = new TextButton("Test", skin);
+            testButton.setPosition(0, 0);
+            testButton.setSize(80, 30);
+            testButton.setVisible(false);
+            testButton.addListener(new ChangeListener() {
+                @Override
+                public void changed(ChangeEvent event, Actor actor) {
+                    buildTower(colTower, rowTower);
+                    testButton.setVisible(false);
+                }
+            });
+            stage.addActor(testButton);
+        }
+
+        public InputProcessor getInputProcessor() {
+            return stage;
+        }
+
+        public void setAspectRatio(float aspectRatio) { this.aspectRatio = aspectRatio; }
+
+//    public void update(float deltaTime) {
+//        stage.act(deltaTime);
+//    }
+
+        public void render(Batch batch) {
+            stage.act(Gdx.graphics.getDeltaTime());
+            stage.draw();
+        }
+    }
+
 //    private Batch batch;
 
-    public Level(TiledMap tiledMap) {
+    public Level(TiledMap tiledMap, float aspectRatio, Batch batch) {
+        gui = new Gui(aspectRatio, batch);
 
         money = STARTING_MONEY;
         lives = STARTING_LIVES;
@@ -154,6 +221,10 @@ public class Level implements Disposable {
         tiles[row][col].tower = tower;
     }
 
+    private void makeTowerButton() {
+
+    }
+
     public void handleTouch(int mapX, int mapY) {
         int col = mapX / tileWidth;
         int row = mapY / tileHeight;
@@ -164,7 +235,9 @@ public class Level implements Disposable {
                     tiles[row][col].tower.upgrade();
                     Gdx.app.debug(TAG, "upgrading tower");
                 } else {
-                    buildTower(col, row);
+                    colTower = col;
+                    rowTower = row;
+                    getGui().testButton.setVisible(true);
                     Gdx.app.debug(TAG, "" + towers.size);
                 }
             } else {
@@ -284,6 +357,8 @@ public class Level implements Disposable {
     public int getScore() {
         return score;
     }
+
+    public Gui getGui() { return gui; }
 
     public boolean isTriggerCountTime() {
         return triggerCountTime;
