@@ -2,6 +2,7 @@ package bg.ittalents.tower_defense.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Vector2;
@@ -37,13 +38,20 @@ public class Level implements Disposable {
     private float timeSinceSpawn;
     private float timeSinceLastWave;
     private boolean triggerCountTime;
+    private String buildStatus;
     private Wave wave;
+    private ShapeRenderer shapeRenderer;
+
+    private Gui gui;
 
     private int tileRows;
     private int tileColumns;
     private int tileWidth;
     private int tileHeight;
     Vector2 startPosition;
+
+    private int colTower;
+    private int rowTower;
 
     private Array<AbstractTower> towers;
     private Array<AbstractCreep> creeps;
@@ -52,20 +60,44 @@ public class Level implements Disposable {
 
     private Tile[][] tiles;
 
-    private class Tile {
+    public int getColTower() {
+        return colTower;
+    }
+
+    public int getRowTower() {
+        return rowTower;
+    }
+
+    public Tile[][] getTiles() {
+        return tiles;
+    }
+
+    public String getBuildStatus() {
+        return buildStatus;
+    }
+
+    public class Tile {
         boolean buildable;
-        AbstractTower tower;
+        private AbstractTower tower;
 
         Tile() {
             buildable = false;
             tower = null;
         }
+
+        public AbstractTower getTower() {
+            return tower;
+        }
     }
+
+
 
 //    private Batch batch;
 
-    public Level(TiledMap tiledMap) {
-
+    public Level(TiledMap tiledMap, Gui gui) {
+        this.gui = gui;
+        shapeRenderer = new ShapeRenderer();
+        buildStatus = "";
         money = STARTING_MONEY;
         lives = STARTING_LIVES;
         wave = new Wave();
@@ -92,10 +124,10 @@ public class Level implements Disposable {
 
         for (int row = 0; row < tileRows; row++) {
             for (int col = 0; col < tileColumns; col++) {
-                tiles[row][col] = new Tile();
+                getTiles()[row][col] = new Tile();
                 if (mapLayer.getCell(col, row) != null &&
                         mapLayer.getCell(col, row).getTile() != null) {
-                    tiles[row][col].buildable = true;
+                    getTiles()[row][col].buildable = true;
                 }
             }
         }
@@ -150,7 +182,7 @@ public class Level implements Disposable {
         Tower tower = new Tower((col + 0.5f) * tileWidth, (row + 0.5f) * tileHeight,
                 Assets.instance.towers.tower[0]);
         towers.add(tower);
-        tiles[row][col].tower = tower;
+        getTiles()[row][col].tower = tower;
     }
 
     public void handleTouch(int mapX, int mapY) {
@@ -159,15 +191,20 @@ public class Level implements Disposable {
 
         if (row >=0 && row < tileRows && col >= 0 && col < tileColumns) {
             if (tiles[row][col].buildable) {
-                if (tiles[row][col].tower != null) {
-                    tiles[row][col].tower.upgrade();
-                    Gdx.app.debug(TAG, "upgrading tower");
+                colTower = col;
+                rowTower = row;
+
+                if (tiles[row][col].getTower() != null) {
+                    buildStatus = "upgrade";
+                    gui.getTestButton().setText("Upgrade");
                 } else {
-                    buildTower(col, row);
-                    Gdx.app.debug(TAG, "" + towers.size);
+                    buildStatus = "build";
+                    gui.getTestButton().setText("Build");
                 }
+
+                gui.getTestButton().setVisible(true);
             } else {
-                spawnCreep();
+                gui.getTestButton().setVisible(false);
             }
         }
     }

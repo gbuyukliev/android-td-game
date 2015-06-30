@@ -41,8 +41,9 @@ public class WorldRenderer implements Disposable {
         mapRenderer = new OrthogonalTiledMapRenderer(tiledMap, batch);
 
         aspectRatio = Gdx.graphics.getWidth() / (float) Gdx.graphics.getHeight();
-        level = new Level(tiledMap);
-        gui = new Gui(level, aspectRatio, batch);
+        gui = new Gui(aspectRatio, batch);
+        level = new Level(tiledMap, gui);
+        gui.setLevel(level);
         background = new Background(level.getWidth(), level.getHeight());
         init();
     }
@@ -70,21 +71,20 @@ public class WorldRenderer implements Disposable {
     }
 
     public void moveCamera(float x, float y) {
-        final float LEVEL_BORDER = 20f;
         x += cameraHelper.getPosition().x;
         y += cameraHelper.getPosition().y;
         float viewportWidth = WorldRenderer.VIEWPORT * aspectRatio;
 
-        if (x < (viewportWidth / 2) - LEVEL_BORDER) {
-            x = (viewportWidth / 2) - LEVEL_BORDER;
-        } else if (x > level.getWidth() - (viewportWidth / 2) + LEVEL_BORDER) {
-            x = (level.getWidth() - (viewportWidth / 2) + LEVEL_BORDER);
+        if (x < (viewportWidth / 2)) {
+            x = (viewportWidth / 2);
+        } else if (x > level.getWidth() - (viewportWidth / 2)) {
+            x = (level.getWidth() - (viewportWidth / 2));
         }
 
-        if (y < (WorldRenderer.VIEWPORT / 2) - LEVEL_BORDER) {
-            y = (WorldRenderer.VIEWPORT / 2) - LEVEL_BORDER;
-        } else if (y > level.getHeight() - (WorldRenderer.VIEWPORT / 2) + LEVEL_BORDER) {
-            y = (level.getHeight() - (WorldRenderer.VIEWPORT / 2) + LEVEL_BORDER);
+        if (y < (WorldRenderer.VIEWPORT / 2)) {
+            y = (WorldRenderer.VIEWPORT / 2);
+        } else if (y > level.getHeight() - (WorldRenderer.VIEWPORT / 2)) {
+            y = (level.getHeight() - (WorldRenderer.VIEWPORT / 2));
         }
 
         cameraHelper.setPosition(x, y);

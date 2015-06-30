@@ -14,18 +14,16 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 
 public class Gui {
-    private Stage stage;
-    private float aspectRatio;
     private Level level;
+    private Stage stage;
     private Skin skin;
-
+    private float aspectRatio;
     private Label lblScore;
+    private TextButton testButton;
 
-    public Gui(Level level, float aspectRatio, Batch batch) {
-        this.level = level;
+    public Gui(float aspectRatio, Batch batch) {
         setAspectRatio(aspectRatio);
         stage = new Stage(new StretchViewport(WorldRenderer.VIEWPORT * aspectRatio, WorldRenderer.VIEWPORT), batch);
-
         skin = new Skin(Gdx.files.internal("data/uiskin.json"));
 //        BitmapFont bitmapFont = Assets.instance.fonts.defaultFont;
 
@@ -36,25 +34,32 @@ public class Gui {
         lblScore.setAlignment(Align.center);
         stage.addActor(lblScore);
 
-        TextButton button = new TextButton("Test", skin);
-        button.setPosition(300, 200);
-        button.setSize(80, 30);
-        button.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                Gui.this.level.spawnCreep();
-            }
-        });
-        stage.addActor(button);
+        testButton = new TextButton("", skin);
+        testButton.setPosition(0, 0);
+        testButton.setSize(80, 30);
+        testButton.setVisible(false);
+        testButton.addListener(new ChangeListener() {
+                                   @Override
+                                   public void changed(ChangeEvent event, Actor actor) {
+                                       if (level.getBuildStatus().equals("upgrade")) {
+                                           level.getTiles()[level.getRowTower()][level.getColTower()].getTower().upgrade();
+                                       } else if (level.getBuildStatus().equals("build")) {
+                                           level.buildTower(level.getColTower(), level.getRowTower());
+                                       }
+
+                                       testButton.setVisible(false);
+                                   }
+                               }
+        );
+
+        stage.addActor(testButton);
     }
 
     public InputProcessor getInputProcessor() {
         return stage;
     }
 
-    public void setAspectRatio(float aspectRatio) {
-        this.aspectRatio = aspectRatio;
-    }
+    public void setAspectRatio(float aspectRatio) { this.aspectRatio = aspectRatio; }
 
 //    public void update(float deltaTime) {
 //        stage.act(deltaTime);
@@ -63,5 +68,19 @@ public class Gui {
     public void render(Batch batch) {
         stage.act(Gdx.graphics.getDeltaTime());
         stage.draw();
+    }
+
+    public TextButton getTestButton() {
+        return testButton;
+    }
+
+    public Level getLevel() {
+        return level;
+    }
+
+    public void setLevel(Level level) {
+        if (level != null) {
+            this.level = level;
+        }
     }
 }
