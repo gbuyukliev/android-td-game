@@ -101,7 +101,7 @@ public class WorldRenderer implements Disposable {
         mapRenderer.setView(camera);
         mapRenderer.render();
 
-        level.render(batch);
+        level.render(batch, camera);
     }
 
     private void renderGui() {

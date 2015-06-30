@@ -4,12 +4,14 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
+import bg.ittalents.tower_defense.game.Level;
+
 public class Tower extends AbstractTower {
 
     private static final Texture PROJECTILE_TEXTURE = new Texture(Gdx.files.internal("projectile.png"));
 
-    public Tower(float positionX, float positionY, TextureRegion[] textures) {
-        super(positionX, positionY, textures);
+    public Tower(float positionX, float positionY, TextureRegion[] textures, Level level) {
+        super(positionX, positionY, textures, level);
 
         timeFromLastShot = Float.MAX_VALUE;
         damage = 10;

@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -46,8 +47,8 @@ public class Gui {
                                        } else if (level.getBuildStatus().equals("build")) {
                                            level.buildTower(level.getColTower(), level.getRowTower());
                                        }
-
                                        testButton.setVisible(false);
+                                       level.setIsClicked(false);
                                    }
                                }
         );

@@ -7,6 +7,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 
 import bg.ittalents.tower_defense.game.Assets;
+import bg.ittalents.tower_defense.game.Level;
 
 
 public abstract class AbstractTower extends AbstractObject {
@@ -22,9 +23,11 @@ public abstract class AbstractTower extends AbstractObject {
     float fireRate;
     float timeFromLastShot;
     int damage;
+    private Level level;
 
-    public AbstractTower(float positionX, float positionY, TextureRegion[] textures) {
+    public AbstractTower(float positionX, float positionY, TextureRegion[] textures, Level level) {
         super(positionX, positionY, textures[0]);
+        this.level = level;
         this.textures = textures;
         upgrade = -1;
         upgrade();
@@ -56,8 +59,10 @@ public abstract class AbstractTower extends AbstractObject {
             damage *= 1.33f;
             range *= 1.2f;
             fireRate *= 0.7f;
-        } else {
-            Gdx.app.debug(TAG, "can't upgrade tower");
+        }
+
+        if (textures.length <= upgrade + 1) {
+            level.getTiles()[level.getRowTower()][level.getColTower()].setBuildable(false);
         }
     }
     public boolean hasTarget() {

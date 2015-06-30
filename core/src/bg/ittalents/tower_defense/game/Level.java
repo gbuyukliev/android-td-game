@@ -1,6 +1,7 @@
 package bg.ittalents.tower_defense.game;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
@@ -38,6 +39,7 @@ public class Level implements Disposable {
     private float timeSinceSpawn;
     private float timeSinceLastWave;
     private boolean triggerCountTime;
+    private boolean isClicked;
     private String buildStatus;
     private Wave wave;
     private ShapeRenderer shapeRenderer;
@@ -76,17 +78,33 @@ public class Level implements Disposable {
         return buildStatus;
     }
 
+    public boolean isClicked() {
+        return isClicked;
+    }
+
+    public void setIsClicked(boolean isClicked) {
+        this.isClicked = isClicked;
+    }
+
     public class Tile {
-        boolean buildable;
+        private boolean buildable;
         private AbstractTower tower;
 
         Tile() {
-            buildable = false;
+            setBuildable(false);
             tower = null;
         }
 
         public AbstractTower getTower() {
             return tower;
+        }
+
+        public boolean isBuildable() {
+            return buildable;
+        }
+
+        public void setBuildable(boolean buildable) {
+            this.buildable = buildable;
         }
     }
 
@@ -97,7 +115,6 @@ public class Level implements Disposable {
     public Level(TiledMap tiledMap, Gui gui) {
         this.gui = gui;
         shapeRenderer = new ShapeRenderer();
-        buildStatus = "";
         money = STARTING_MONEY;
         lives = STARTING_LIVES;
         wave = new Wave();
@@ -106,6 +123,7 @@ public class Level implements Disposable {
         timeSinceSpawn = 0;
         timeSinceLastWave = 0;
         triggerCountTime = false;
+        setIsClicked(false);
 
         towers = new Array<AbstractTower>();
         creeps = new Array<AbstractCreep>();
@@ -127,7 +145,7 @@ public class Level implements Disposable {
                 getTiles()[row][col] = new Tile();
                 if (mapLayer.getCell(col, row) != null &&
                         mapLayer.getCell(col, row).getTile() != null) {
-                    getTiles()[row][col].buildable = true;
+                    getTiles()[row][col].setBuildable(true);
                 }
             }
         }
@@ -180,7 +198,7 @@ public class Level implements Disposable {
 
     public void buildTower(int col, int row) {
         Tower tower = new Tower((col + 0.5f) * tileWidth, (row + 0.5f) * tileHeight,
-                Assets.instance.towers.tower[0]);
+                Assets.instance.towers.tower[0], this);
         towers.add(tower);
         getTiles()[row][col].tower = tower;
     }
@@ -189,10 +207,11 @@ public class Level implements Disposable {
         int col = mapX / tileWidth;
         int row = mapY / tileHeight;
 
-        if (row >=0 && row < tileRows && col >= 0 && col < tileColumns) {
-            if (tiles[row][col].buildable) {
+        if (col >= 0 && col < tileWidth && row >= 0 && row < tileHeight) {
+            if (tiles[row][col].isBuildable()) {
                 colTower = col;
                 rowTower = row;
+                setIsClicked(true);
 
                 if (tiles[row][col].getTower() != null) {
                     buildStatus = "upgrade";
@@ -205,6 +224,7 @@ public class Level implements Disposable {
                 gui.getTestButton().setVisible(true);
             } else {
                 gui.getTestButton().setVisible(false);
+                setIsClicked(false);
             }
         }
     }
@@ -331,7 +351,7 @@ public class Level implements Disposable {
 
     public int getCurrentWave() { return currentWave; }
 
-    public void render(Batch batch) {
+    public void render(Batch batch, OrthographicCamera camera) {
         batch.begin();
 
         for (AbstractCreep creep : creeps) {
@@ -346,6 +366,16 @@ public class Level implements Disposable {
 
         batch.end();
 
+        if (isClicked()) {
+            int padding = 10;
+
+            camera.update();
+            shapeRenderer.setProjectionMatrix(camera.combined);
+            shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+            shapeRenderer.setColor(0, 1, 0, 1);
+            shapeRenderer.rect(colTower * tileWidth + padding / 2, rowTower * tileHeight + padding / 2, tileWidth - padding, tileHeight - padding);
+            shapeRenderer.end();
+        }
     }
 
     @Override
