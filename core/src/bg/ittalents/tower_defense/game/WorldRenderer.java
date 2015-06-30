@@ -29,6 +29,7 @@ public class WorldRenderer implements Disposable {
     private OrthographicCamera cameraGUI;
     private CameraHelper cameraHelper;
 
+    private Gui gui;
     private WorldController worldController;
     private Batch batch;
 
@@ -40,7 +41,9 @@ public class WorldRenderer implements Disposable {
         mapRenderer = new OrthogonalTiledMapRenderer(tiledMap, batch);
 
         aspectRatio = Gdx.graphics.getWidth() / (float) Gdx.graphics.getHeight();
-        level = new Level(tiledMap, aspectRatio, batch);
+        gui = new Gui(aspectRatio, batch);
+        level = new Level(tiledMap, gui);
+        gui.setLevel(level);
         background = new Background(level.getWidth(), level.getHeight());
         init();
     }
@@ -64,7 +67,7 @@ public class WorldRenderer implements Disposable {
 //        Gdx.graphics.setTitle("Tower Defense -- FPS: " + Gdx.graphics.getFramesPerSecond());
         renderWorld();
         renderGui();
-        level.getGui().render(batch);
+        gui.render(batch);
     }
 
     public void moveCamera(float x, float y) {
@@ -129,7 +132,7 @@ public class WorldRenderer implements Disposable {
     }
 
     public InputProcessor getInputProcessor() {
-        return level.getGui().getInputProcessor();
+        return gui.getInputProcessor();
     }
 
     private void renderGuiFpsCounter() {
@@ -169,7 +172,7 @@ public class WorldRenderer implements Disposable {
 
     public void resize(int width, int height) {
         aspectRatio = width / (float) height;
-        level.getGui().setAspectRatio(aspectRatio);
+        gui.setAspectRatio(aspectRatio);
         Gdx.app.debug("Aspect", "" + aspectRatio);
         camera.viewportWidth = (WorldRenderer.VIEWPORT * aspectRatio);
         camera.update();
