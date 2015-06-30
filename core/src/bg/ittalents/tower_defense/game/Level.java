@@ -345,6 +345,7 @@ public class Level implements Disposable {
         }
 
         batch.end();
+
     }
 
     @Override
