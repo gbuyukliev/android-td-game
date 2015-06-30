@@ -13,7 +13,6 @@ import java.util.Iterator;
 import bg.ittalents.tower_defense.game.objects.AbstractCreep;
 import bg.ittalents.tower_defense.game.objects.AbstractProjectile;
 import bg.ittalents.tower_defense.game.objects.AbstractTower;
-import bg.ittalents.tower_defense.game.Assets;
 import bg.ittalents.tower_defense.game.objects.CreepBasic;
 import bg.ittalents.tower_defense.game.objects.CreepBoss;
 import bg.ittalents.tower_defense.game.objects.CreepFlying;
@@ -158,7 +157,7 @@ public class Level implements Disposable {
         int col = mapX / tileWidth;
         int row = mapY / tileHeight;
 
-        if (col >= 0 && col < tileWidth && row >= 0 && row < tileHeight) {
+        if (row >=0 && row < tileRows && col >= 0 && col < tileColumns) {
             if (tiles[row][col].buildable) {
                 if (tiles[row][col].tower != null) {
                     tiles[row][col].tower.upgrade();
