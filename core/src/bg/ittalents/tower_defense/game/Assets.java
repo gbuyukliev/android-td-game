@@ -21,11 +21,17 @@ import bg.ittalents.tower_defense.game.WorldRenderer;
 
 public class Assets implements Disposable, AssetErrorListener {
     // Location of description file for texture atlas
-    public static final String TEXTURE_ATLAS_OBJECTS = "texture/texture.pack";
+    public static final String TEXTURE_ATLAS_OBJECTS;
 
-    public static final String TAG = Assets.class.getName();
+    public static final String TAG;
 
-    public static final Assets instance = new Assets();
+    public static final Assets instance;
+
+    static {
+        TEXTURE_ATLAS_OBJECTS = "texture/texture.pack";
+        TAG = Assets.class.getName();
+        instance = new Assets();
+    }
 
     private AssetManager assetManager;
 
@@ -145,6 +151,7 @@ public class Assets implements Disposable, AssetErrorListener {
 
     // singleton: prevent instantiation from other classes
     private Assets() {
+
     }
 
     public void init(AssetManager assetManager) {
