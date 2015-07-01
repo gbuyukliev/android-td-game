@@ -1,7 +1,5 @@
 package bg.ittalents.tower_defense.game.objects;
 
-import bg.ittalents.tower_defense.game.Level;
-
 public class Wave {
     private int number;
     private int numOfCreeps;
@@ -19,10 +17,10 @@ public class Wave {
             setNumOfCreeps(1);
             setTypeOfCreeps("boss");
         } else if (number % 7 == 0) {
-            setNumOfCreeps(8);
+            setNumOfCreeps(6);
             setTypeOfCreeps("flying");
         } else {
-            setNumOfCreeps(8);
+            setNumOfCreeps(6);
             setTypeOfCreeps("basic");
         }
     }

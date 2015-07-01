@@ -24,7 +24,7 @@ import bg.ittalents.tower_defense.game.objects.Wave;
 public class Level implements Disposable {
 
     public static final int STARTING_LIVES = 70;
-    public static final int STARTING_MONEY = 100;
+    public static final int STARTING_MONEY = 200;
 
     public static final String TAG = Level.class.getName();
 
@@ -40,6 +40,7 @@ public class Level implements Disposable {
     private float timeSinceLastWave;
     private boolean triggerCountTime;
     private boolean isClicked;
+    private boolean isEnoughMoney;
     private String buildStatus;
     private Wave wave;
     private ShapeRenderer shapeRenderer;
@@ -95,6 +96,10 @@ public class Level implements Disposable {
             tower = null;
         }
 
+        public void removeTower() {
+            tower = null;
+        }
+
         public AbstractTower getTower() {
             return tower;
         }
@@ -123,6 +128,7 @@ public class Level implements Disposable {
         timeSinceSpawn = 0;
         timeSinceLastWave = 0;
         triggerCountTime = false;
+        isEnoughMoney = true;
         setIsClicked(false);
 
         towers = new Array<AbstractTower>();
@@ -199,8 +205,20 @@ public class Level implements Disposable {
     public void buildTower(int col, int row) {
         Tower tower = new Tower((col + 0.5f) * tileWidth, (row + 0.5f) * tileHeight,
                 Assets.instance.towers.tower[0], this);
-        towers.add(tower);
-        getTiles()[row][col].tower = tower;
+
+        if (money >= tower.getPrice()) {
+            isEnoughMoney = true;
+            towers.add(tower);
+            getTiles()[row][col].tower = tower;
+            money -= tower.getPrice();
+        } else {
+            isEnoughMoney = false;
+        }
+    }
+
+    public void sellTower(AbstractTower tower) {
+        towers.removeValue(tower, true);
+        money += tower.getMoneyForSale();
     }
 
     public void handleTouch(int mapX, int mapY) {
@@ -208,22 +226,24 @@ public class Level implements Disposable {
         int row = mapY / tileHeight;
 
         if (col >= 0 && col < tileWidth && row >= 0 && row < tileHeight) {
-            if (tiles[row][col].isBuildable()) {
+            if (tiles[row][col].isBuildable() || !isEnoughMoney) {
                 colTower = col;
                 rowTower = row;
                 setIsClicked(true);
 
                 if (tiles[row][col].getTower() != null) {
                     buildStatus = "upgrade";
-                    gui.getTestButton().setText("Upgrade");
+                    gui.getTowerButton().setText("Upgrade");
+                    gui.getSellTowerButton().setVisible(true);
                 } else {
                     buildStatus = "build";
-                    gui.getTestButton().setText("Build");
+                    gui.getTowerButton().setText("Build");
                 }
 
-                gui.getTestButton().setVisible(true);
+                gui.getTowerButton().setVisible(true);
             } else {
-                gui.getTestButton().setVisible(false);
+                gui.getTowerButton().setVisible(false);
+                gui.getSellTowerButton().setVisible(false);
                 setIsClicked(false);
             }
         }
@@ -331,6 +351,12 @@ public class Level implements Disposable {
 
     public int getLives() {
         return lives;
+    }
+
+    public void setMoney (int money) {
+        if (money >= 0) {
+            this.money = money;
+        }
     }
 
     public int getMoney() {

@@ -1,10 +1,6 @@
 package bg.ittalents.tower_defense.game.objects;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.math.Vector2;
 
 import bg.ittalents.tower_defense.game.Assets;
 import bg.ittalents.tower_defense.game.Level;
@@ -23,6 +19,9 @@ public abstract class AbstractTower extends AbstractObject {
     float fireRate;
     float timeFromLastShot;
     int damage;
+    int price;
+    int upgradePrice;
+    int moneyForSale;
     private Level level;
 
     public AbstractTower(float positionX, float positionY, TextureRegion[] textures, Level level) {
@@ -54,17 +53,19 @@ public abstract class AbstractTower extends AbstractObject {
     }
 
     public void upgrade() {
-        if (textures != null && textures.length > upgrade + 1) {
+        if (textures != null && textures.length > upgrade + 1 && level.getMoney() >= upgradePrice) {
             texture = textures[++upgrade];
             damage *= 1.33f;
-            range *= 1.2f;
+//            range *= 1.2f;
             fireRate *= 0.7f;
+            level.setMoney(level.getMoney() - upgradePrice);
         }
 
         if (textures.length <= upgrade + 1) {
             level.getTiles()[level.getRowTower()][level.getColTower()].setBuildable(false);
         }
     }
+
     public boolean hasTarget() {
         return foe != null && isInRange(foe);
     }
@@ -81,5 +82,13 @@ public abstract class AbstractTower extends AbstractObject {
 
 //            Gdx.app.debug(TAG, "Rotation: " + angle);
         }
+    }
+
+    public int getPrice() {
+        return price;
+    }
+
+    public int getMoneyForSale() {
+        return moneyForSale;
     }
 }
