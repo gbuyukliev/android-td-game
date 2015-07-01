@@ -14,10 +14,13 @@ public class Tower extends AbstractTower {
         super(positionX, positionY, textures, level);
 
         timeFromLastShot = Float.MAX_VALUE;
-        damage = 10;
+        damage = 20;
         fireRate = 1f;
-        range = 90f;
+        range = 120f;
         rotationSpeed = 90f;
+        price = 50;
+        moneyForSale = price / 2;
+        upgradePrice = 30;
     }
 
     @Override
