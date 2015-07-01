@@ -19,6 +19,12 @@ import bg.ittalents.tower_defense.network.INetwork;
 
 public class LevelSelectorScreen extends AbstractGameScreen {
 
+    public static final float PADDING = 10f;
+    public static final float BUTTON_WIDTH = 100f;
+    public static final float SCREEN_WIDTH = 800f;
+    public static final float SCREEN_HEIGHT = 480f;
+    public static final float WINDOW_TRANSPARENCY = 0.7f;
+
     private Stage stage;
     private Skin skin;
     private Label lblStatus;
@@ -33,12 +39,11 @@ public class LevelSelectorScreen extends AbstractGameScreen {
 
     @Override
     public void show() {
-        stage = new Stage(new StretchViewport(800f, 480f));
+        stage = new Stage(new StretchViewport(SCREEN_WIDTH, SCREEN_HEIGHT));
         Gdx.input.setInputProcessor(stage);
         background = new Texture(Gdx.files.internal("menus_background.jpg"));
         batch = stage.getBatch();
         skin = new Skin(Gdx.files.internal("data/uiskin.json"));
-//        BitmapFont bitmapFont = Assets.instance.fonts.defaultFont;
 
         lblStatus = new Label("", skin);
         lblStatus.setColor(Color.RED);
@@ -50,7 +55,7 @@ public class LevelSelectorScreen extends AbstractGameScreen {
         TextButton btnPlay = new TextButton("Play", skin);
         btnPlay.setPosition(340, 210);
         btnPlay.setSize(120, 60);
-        btnPlay.setColor(255 / 255.0f, 255 / 255.0f, 255 / 255.0f, 150 / 255.0f);
+        btnPlay.setColor(1, 1, 1,WINDOW_TRANSPARENCY);
         btnPlay.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {

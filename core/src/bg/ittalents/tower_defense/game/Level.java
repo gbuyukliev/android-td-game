@@ -183,13 +183,13 @@ public class Level implements Disposable {
 
         if (wave.getTypeOfCreeps().equals("boss")) {
             creep = new CreepBoss(startPosition.x, startPosition.y,
-                    Assets.instance.creep.creep1red);
+                    Assets.instance.creep.get("red1"));
         } else if (wave.getTypeOfCreeps().equals("flying")) {
             creep = new CreepFlying(startPosition.x, startPosition.y,
-                    Assets.instance.creep.creep1yellow);
+                    Assets.instance.creep.get("yellow1"));
         } else {
             creep = new CreepBasic(startPosition.x, startPosition.y,
-                    Assets.instance.creep.creep1blue);
+                    Assets.instance.creep.get("blue1"));
         }
 
         creep.setWaypoints(wayponts);

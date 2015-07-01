@@ -14,6 +14,9 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.utils.Disposable;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import bg.ittalents.tower_defense.game.WorldRenderer;
 
 public class Assets implements Disposable, AssetErrorListener {
@@ -81,46 +84,48 @@ public class Assets implements Disposable, AssetErrorListener {
 
     public class AssetCreeps {
 
-        public final Animation creep1blue;
-        public final Animation creep1green;
-        public final Animation creep1red;
-        public final Animation creep1yellow;
+        private Map<String, Animation> creeps;
 
-        public final Animation creep2blue;
-        public final Animation creep2green;
-        public final Animation creep2red;
-        public final Animation creep2yellow;
-
-        public final Animation creep3blue;
-        public final Animation creep3green;
-        public final Animation creep3red;
-        public final Animation creep3yellow;
+//        public final Animation creep1blue;
+//        public final Animation creep1green;
+//        public final Animation creep1red;
+//        public final Animation creep1yellow;
+//
+//        public final Animation creep2blue;
+//        public final Animation creep2green;
+//        public final Animation creep2red;
+//        public final Animation creep2yellow;
+//
+//        public final Animation creep3blue;
+//        public final Animation creep3green;
+//        public final Animation creep3red;
+//        public final Animation creep3yellow;
 
         public AssetCreeps(TextureAtlas atlas) {
-            this.creep1blue = init(atlas, "blue", 1);
-            this.creep1green = init(atlas, "green", 1);
-            this.creep1red = init(atlas, "red", 1);
-            this.creep1yellow = init(atlas, "yellow", 1);
+            creeps = new HashMap<String, Animation>();
+            creeps.put("blue1", init(atlas, "blue", 1, 6));
+            creeps.put("red1", init(atlas, "red", 1, 6));
+            creeps.put("green1", init(atlas, "green", 1, 6));
+            creeps.put("yellow1", init(atlas, "yellow", 1, 6));
 
-            this.creep2blue = init(atlas, "blue", 3);
-            this.creep2green = init(atlas, "green", 3);
-            this.creep2red = init(atlas, "red", 3);
-            this.creep2yellow = init(atlas, "yellow", 3);
-
-            this.creep3blue = init(atlas, "blue", 3);
-            this.creep3green = init(atlas, "green", 3);
-            this.creep3red = init(atlas, "red", 3);
-            this.creep3yellow = init(atlas, "yellow", 3);
+//            this.creep1blue = init(atlas, "blue", 1, 6);
+//            this.creep1green = init(atlas, "green", 1, 6);
+//            this.creep1red = init(atlas, "red", 1, 6);
+//            this.creep1yellow = init(atlas, "yellow", 1, 6);
+//
+//            this.creep2blue = init(atlas, "blue", 3, 4);
+//            this.creep2green = init(atlas, "green", 3, 4);
+//            this.creep2red = init(atlas, "red", 3, 4);
+//            this.creep2yellow = init(atlas, "yellow", 3, 4);
+//
+//            this.creep3blue = init(atlas, "blue", 3, 4);
+//            this.creep3green = init(atlas, "green", 3, 4);
+//            this.creep3red = init(atlas, "red", 3, 4);
+//            this.creep3yellow = init(atlas, "yellow", 3, 4);
         }
 
-        private Animation init(TextureAtlas atlas, String creepColor, int creepNumber) {
+        private Animation init(TextureAtlas atlas, String creepColor, int creepNumber, int frameCount) {
             String path = "creep-" + creepNumber + "-" + creepColor + "/";
-
-            int frameCount = 4;
-
-            if (creepNumber == 1) {
-                frameCount = 6;
-            }
 
             TextureRegion[] frames = new TextureRegion[frameCount];
 
@@ -131,6 +136,10 @@ public class Assets implements Disposable, AssetErrorListener {
             Animation anim = new Animation(1f / frameCount, frames);
             anim.setPlayMode(PlayMode.LOOP);
             return anim;
+        }
+
+        public Animation get(String type) {
+            return creeps.get(type);
         }
     }
 

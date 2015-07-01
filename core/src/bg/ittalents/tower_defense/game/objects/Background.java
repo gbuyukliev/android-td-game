@@ -1,5 +1,7 @@
 package bg.ittalents.tower_defense.game.objects;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
@@ -13,6 +15,7 @@ public class Background {
 
     public Background(int levelWidth, int levelHeight) {
         texture = new TextureRegion(Assets.instance.background.background);
+//        texture = new TextureRegion(new Texture(Gdx.files.internal("menus_background.bak.jpg")));
         width = levelWidth;
         height = levelHeight;
     }

@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
@@ -36,6 +37,8 @@ public class LoginScreen extends AbstractGameScreen {
     public static final float SCREEN_WIDTH = 800f;
     public static final float SCREEN_HEIGHT = 480f;
     public static final float WINDOW_TRANSPARENCY = 0.7f;
+    public static final float STATUS_MESSAGE_DELAY = 5f;
+
     private Stage stage;
     private Skin skin;
     private TextField txtUsername;
@@ -124,11 +127,11 @@ public class LoginScreen extends AbstractGameScreen {
         btnRegister.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                Gdx.app.debug("Login", "Username: " + txtUsername.getText() + ", Password" + txtPassword.getText());
+                Gdx.app.debug("Login", "Username: " + txtUsernameReg.getText() + ", Password" + txtPasswordReg.getText());
                 if (txtPasswordReg.getText().equals(txtPasswordReg2.getText())) {
                     register();
                 } else {
-                    lblStatus.setText("Passwords do not match");
+                    setStatus("Passwords do not match");
                 }
             }
         });
@@ -229,6 +232,10 @@ public class LoginScreen extends AbstractGameScreen {
 
     private void login() {
         JsonObject json = new JsonObject();
+        if (txtUsername.getText().length() == 0 || txtUsername.getText().length() == 0) {
+            setStatus("Enter valid username and password!");
+            return;
+        }
         json.add("userName", new JsonPrimitive(txtUsername.getText()));
         json.add("password", new JsonPrimitive(txtPassword.getText()));
 
@@ -244,6 +251,7 @@ public class LoginScreen extends AbstractGameScreen {
             public void handleHttpResponse(final Net.HttpResponse httpResponse) {
                 if (httpResponse.getStatus().getStatusCode() == 200) {
                     Gdx.app.postRunnable(new Runnable() {
+
                         @Override
                         public void run() {
 //                            Gdx.app.debug("Login POST", "" + httpResponse.getHeader("Reason"));
@@ -252,7 +260,7 @@ public class LoginScreen extends AbstractGameScreen {
                         }
                     });
                 } else {
-                    lblStatus.setText(httpResponse.getHeader(null));
+                    setStatus(httpResponse.getHeader(null));
                     Gdx.app.debug("Login POST", "" + httpResponse.getHeader(null));
 //                    Gdx.net.cancelHttpRequest(httpRequest);
                 }
@@ -260,7 +268,7 @@ public class LoginScreen extends AbstractGameScreen {
 
             @Override
             public void failed(Throwable t) {
-                lblStatus.setText("Server is not responding");
+                setStatus("Server is not responding");
 //                Gdx.app.debug("Login POST", "FAILED" + t.getMessage());
             }
 
@@ -306,7 +314,7 @@ public class LoginScreen extends AbstractGameScreen {
                         }
                     });
                 } else {
-                    lblStatus.setText(httpResponse.getHeader(null));
+                    setStatus(httpResponse.getHeader(null));
 //                    Gdx.app.debug("Login POST", "" + httpResponse.getHeaders().toString());
 //                    Gdx.app.debug("Login POST", "" + httpResponse.getStatus().getStatusCode());
                 }
@@ -314,7 +322,7 @@ public class LoginScreen extends AbstractGameScreen {
 
             @Override
             public void failed(Throwable t) {
-                lblStatus.setText("Server is not responding");
+                setStatus("Server is not responding");
                 Gdx.app.debug("Login POST", "" + "FAILED");
             }
 
@@ -323,6 +331,17 @@ public class LoginScreen extends AbstractGameScreen {
                 Gdx.app.debug("Login POST", "" + "CANCELLED");
             }
         });
+    }
+
+    private void setStatus(String message) {
+        lblStatus.setText(message);
+        // clear status message after STATUS_MESSAGE_DELAY seconds
+        lblStatus.addAction(Actions.sequence(Actions.delay(STATUS_MESSAGE_DELAY), Actions.run(new Runnable() {
+            @Override
+            public void run() {
+                lblStatus.setText("");
+            }
+        })));
     }
 
     @Override
