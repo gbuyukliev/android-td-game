@@ -220,14 +220,14 @@ public class LoginScreen extends AbstractGameScreen {
     }
 
     private void offline() {
-        Json json = new Json();
-        json.setTypeName(null);
-        json.setUsePrototypes(false);
-        json.setIgnoreUnknownFields(true);
-        json.setOutputType(JsonWriter.OutputType.json);
-        LevelData levelData = json.fromJson(LevelData.class, new Offline().getLevelData(1));
+//        Json json = new Json();
+//        json.setTypeName(null);
+//        json.setUsePrototypes(false);
+//        json.setIgnoreUnknownFields(true);
+//        json.setOutputType(JsonWriter.OutputType.json);
+//        LevelData levelData = json.fromJson(LevelData.class, new Offline().getLevelData(1));
 
-        Gdx.app.debug("JSON", levelData.toString());
+//        Gdx.app.debug("JSON", levelData.toString());
 
         getGame().setScreen(new LevelSelectorScreen(getGame(), UserInfo.createGuessUser(), new Offline()));
     }

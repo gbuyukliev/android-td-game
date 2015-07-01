@@ -1,5 +1,7 @@
 package bg.ittalents.tower_defense.network;
 
+import bg.ittalents.tower_defense.game.waves.LevelData;
+
 public interface INetwork {
-    String getLevelData(int levelNumber);
+    LevelData getLevelData(int levelNumber);
 }

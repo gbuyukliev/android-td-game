@@ -4,9 +4,11 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Net;
 
+import bg.ittalents.tower_defense.game.waves.LevelData;
+
 public class Network implements INetwork {
 
-    public static final String URL = "http://192.168.7.43:8080/towerdefense/";
+    public static final String URL = "http://192.168.7.61:8080/towerdefense/";
 //    public static final String URL = "http://jsonstub.com/towerdefense/";
     public static final String LOGIN_MANAGER = "LoginManager";
     public static final String REGISTER_MANAGER = "RegisterManager";
@@ -24,29 +26,14 @@ public class Network implements INetwork {
     }
 
     @Override
-    public String getLevelData(int levelNumber) {
+    public LevelData getLevelData(int levelNumber) {
         return null;
     }
 
-    public void postLogin(String content) {
+    public static void postRequest(String content, Net.HttpResponseListener httpResponseListener, String manager) {
         Net.HttpRequest httpRequest = new Net.HttpRequest(Net.HttpMethods.POST);
-        httpRequest.setUrl(URL + LOGIN_MANAGER);
+        httpRequest.setUrl(URL + manager);
         httpRequest.setContent(content);
-        Gdx.net.sendHttpRequest(httpRequest, new Net.HttpResponseListener() {
-            @Override
-            public void handleHttpResponse(Net.HttpResponse httpResponse) {
-
-            }
-
-            @Override
-            public void failed(Throwable t) {
-
-            }
-
-            @Override
-            public void cancelled() {
-
-            }
-        });
+        Gdx.net.sendHttpRequest(httpRequest, httpResponseListener);
     }
 }
