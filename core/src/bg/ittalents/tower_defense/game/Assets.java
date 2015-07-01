@@ -54,7 +54,13 @@ public class Assets implements Disposable, AssetErrorListener {
         public AssetFonts() {
 
             // how much bigger is the real device screen, compared to the defined viewport
-            float scale = Gdx.graphics.getHeight() / WorldRenderer.VIEWPORT ;
+            float scale;
+
+            if (Gdx.graphics.getHeight() > Gdx.graphics.getWidth()) {
+                scale = Gdx.graphics.getWidth() / WorldRenderer.VIEWPORT ;
+            } else {
+                scale = Gdx.graphics.getHeight() / WorldRenderer.VIEWPORT ;
+            }
 
             // prevents unwanted downscale on devices with resolution SMALLER than 320x480
             if (scale < 1)
@@ -109,10 +115,21 @@ public class Assets implements Disposable, AssetErrorListener {
 
         public AssetCreeps(TextureAtlas atlas) {
             creeps = new HashMap<String, Animation>();
+
             creeps.put("blue1", init(atlas, "blue", 1, 6));
             creeps.put("red1", init(atlas, "red", 1, 6));
             creeps.put("green1", init(atlas, "green", 1, 6));
             creeps.put("yellow1", init(atlas, "yellow", 1, 6));
+
+            creeps.put("blue2", init(atlas, "blue", 2, 4));
+            creeps.put("red2", init(atlas, "red", 2, 4));
+            creeps.put("green2", init(atlas, "green", 2, 4));
+            creeps.put("yellow2", init(atlas, "yellow", 2, 4));
+
+            creeps.put("blue3", init(atlas, "blue", 3, 4));
+            creeps.put("red3", init(atlas, "red", 3, 4));
+            creeps.put("green3", init(atlas, "green", 3, 4));
+            creeps.put("yellow3", init(atlas, "yellow", 3, 4));
 
 //            this.creep1blue = init(atlas, "blue", 1, 6);
 //            this.creep1green = init(atlas, "green", 1, 6);

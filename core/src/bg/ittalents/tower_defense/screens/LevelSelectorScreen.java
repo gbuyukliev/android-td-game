@@ -16,6 +16,7 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 
 import bg.ittalents.tower_defense.network.INetwork;
+import bg.ittalents.tower_defense.network.UserInfo;
 
 public class LevelSelectorScreen extends AbstractGameScreen {
 
@@ -31,10 +32,14 @@ public class LevelSelectorScreen extends AbstractGameScreen {
     private Texture background;
     private Batch batch;
     private INetwork network;
+    private UserInfo userInfo;
 
-    public LevelSelectorScreen(Game game, INetwork network) {
+    public LevelSelectorScreen(Game game, UserInfo userInfo, INetwork network) {
         super(game);
         this.network = network;
+        this.userInfo = userInfo;
+
+        Gdx.app.log("UserInfo", userInfo.toString());
     }
 
     @Override
