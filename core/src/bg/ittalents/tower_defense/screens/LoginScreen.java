@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.net.HttpStatus;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
@@ -29,6 +30,7 @@ import com.google.gson.JsonPrimitive;
 import bg.ittalents.tower_defense.game.waves.LevelData;
 import bg.ittalents.tower_defense.network.Network;
 import bg.ittalents.tower_defense.network.Offline;
+import bg.ittalents.tower_defense.network.UserInfo;
 
 public class LoginScreen extends AbstractGameScreen {
 
@@ -227,7 +229,7 @@ public class LoginScreen extends AbstractGameScreen {
 
         Gdx.app.debug("JSON", levelData.toString());
 
-        getGame().setScreen(new LevelSelectorScreen(getGame(), new Offline()));
+        getGame().setScreen(new LevelSelectorScreen(getGame(), UserInfo.createGuessUser(), new Offline()));
     }
 
     private void login() {
@@ -249,19 +251,41 @@ public class LoginScreen extends AbstractGameScreen {
         Gdx.net.sendHttpRequest(httpRequest, new Net.HttpResponseListener() {
             @Override
             public void handleHttpResponse(final Net.HttpResponse httpResponse) {
-                if (httpResponse.getStatus().getStatusCode() == 200) {
+//                Gdx.app.debug("Login Result", httpResponse.getResultAsString() + httpResponse.getStatus().getStatusCode());
+//                Gdx.app.debug("Login Headers", httpResponse.getHeaders().toString());
+                if (httpResponse.getStatus().getStatusCode() == HttpStatus.SC_OK) {
+                    String result = httpResponse.getResultAsString();
+
+                    if (result == null) {
+                        setStatus("Incorrect data from server");
+                        return;
+                    }
+
+                    Json json = new Json();
+                    json.setTypeName(null);
+                    json.setUsePrototypes(false);
+                    json.setIgnoreUnknownFields(true);
+                    json.setOutputType(JsonWriter.OutputType.json);
+                    final UserInfo userInfo = json.fromJson(UserInfo.class, result);
+
+                    Gdx.app.debug("JSON", userInfo.toString());
+
                     Gdx.app.postRunnable(new Runnable() {
 
                         @Override
                         public void run() {
 //                            Gdx.app.debug("Login POST", "" + httpResponse.getHeader("Reason"));
 //                            Gdx.net.cancelHttpRequest(httpRequest);
-                            getGame().setScreen(new LevelSelectorScreen(getGame(), new Network(getGame())));
+                            getGame().setScreen(new LevelSelectorScreen(getGame(), userInfo, new Network(getGame())));
                         }
                     });
                 } else {
-                    setStatus(httpResponse.getHeader(null));
-                    Gdx.app.debug("Login POST", "" + httpResponse.getHeader(null));
+                    String errorMessage = httpResponse.getHeader("Error");
+                    if (errorMessage == null) {
+                        errorMessage = "Wrong username or password!";
+                    }
+                    setStatus(errorMessage);
+                    Gdx.app.debug("Login POST", "" + errorMessage);
 //                    Gdx.net.cancelHttpRequest(httpRequest);
                 }
             }
@@ -288,9 +312,9 @@ public class LoginScreen extends AbstractGameScreen {
 
     private void register() {
         JsonObject json = new JsonObject();
-        json.add("userName", new JsonPrimitive(txtUsername.getText()));
+        json.add("userName", new JsonPrimitive(txtUsernameReg.getText()));
         json.add("nickName", new JsonPrimitive(txtNickname.getText()));
-        json.add("password", new JsonPrimitive(txtPassword.getText()));
+        json.add("password", new JsonPrimitive(txtPasswordReg.getText()));
         json.add("email", new JsonPrimitive(txtEmail.getText()));
         json.add("spam", new JsonPrimitive(checkBox.isChecked()));
 
@@ -304,7 +328,7 @@ public class LoginScreen extends AbstractGameScreen {
         Gdx.net.sendHttpRequest(httpRequest, new Net.HttpResponseListener() {
             @Override
             public void handleHttpResponse(Net.HttpResponse httpResponse) {
-                if (httpResponse.getStatus().getStatusCode() == 200) {
+                if (httpResponse.getStatus().getStatusCode() == HttpStatus.SC_OK) {
                     Gdx.app.postRunnable(new Runnable() {
                         @Override
                         public void run() {

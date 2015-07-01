@@ -6,7 +6,7 @@ import com.badlogic.gdx.Net;
 
 public class Network implements INetwork {
 
-    public static final String URL = "http://192.168.7.61:8080/towerdefense/";
+    public static final String URL = "http://192.168.7.43:8080/towerdefense/";
 //    public static final String URL = "http://jsonstub.com/towerdefense/";
     public static final String LOGIN_MANAGER = "LoginManager";
     public static final String REGISTER_MANAGER = "RegisterManager";
