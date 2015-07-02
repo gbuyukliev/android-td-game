@@ -6,8 +6,8 @@ public class CreepFlying extends AbstractCreep {
 
     public CreepFlying(float positionX, float positionY, Animation animation) {
         super(positionX, positionY, animation);
-        reward = 25 * (int) getCoeff();
-        speed = 90f * getCoeff();
+        award = 25 * (int) getCoeff();
+        moveSpeed = 90f * getCoeff();
         health = 750f * getCoeff();
         maxHealth = 750f * getCoeff();
         isFlying = true;

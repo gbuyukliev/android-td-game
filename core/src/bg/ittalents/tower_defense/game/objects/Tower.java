@@ -19,7 +19,8 @@ public class Tower extends AbstractTower {
         range = 120f;
         rotationSpeed = 90f;
         price = 50;
-        moneyForSale = price / 2;
+        moneySpent = price;
+        isUpgradable = true;
         upgradePrice = 30;
     }
 

@@ -66,7 +66,7 @@ public class Assets implements Disposable, AssetErrorListener {
             if (scale < 1)
                 scale = 1;
 
-            FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("font/Roboto-Bold.ttf"));
+            FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("font/batmfa__.ttf"));
             FreeTypeFontGenerator.FreeTypeFontParameter fontParameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
             fontParameter.size = (int) (12 * scale);
             fontParameter.flip = true;

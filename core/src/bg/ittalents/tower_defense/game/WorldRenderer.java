@@ -122,12 +122,12 @@ public class WorldRenderer implements Disposable {
         float y = 5;
 
         fpsFont.draw(batch, "Wave: " + level.getCurrentWave(), 5, y);
-        fpsFont.draw(batch, "Money: " + level.getMoney(), screenWidth / 2 - 120 / scale, y);
-        fpsFont.draw(batch, "Score: " + level.getScore(), screenWidth / 2 + 80 / scale, y);
-        fpsFont.draw(batch, "Lives: " + level.getLives(), screenWidth - 60 / scale, y);
+        fpsFont.draw(batch, "Money: " + level.getMoney(), screenWidth / 2 - 130 / scale, y);
+        fpsFont.draw(batch, "Score: " + level.getScore(), screenWidth / 2 + 60 / scale, y);
+        fpsFont.draw(batch, "Lives: " + level.getLives(), screenWidth - 75 / scale, y);
 
         if (level.isTriggerCountTime()) {
-            fpsFont.draw(batch, "TIME TILL NEXT WAVE: " + (int) (Level.TIME_TILL_NEXT_WAVE - level.getTimeSinceLastWave()), screenWidth / 2 - 50 / scale, screenHeight / 2);
+            fpsFont.draw(batch, "TIME TILL NEXT WAVE: " + (int) (Level.TIME_TILL_NEXT_WAVE - level.getTimeSinceLastWave()), screenWidth / 2 - 70 / scale, screenHeight / 2);
         }
     }
 
@@ -139,7 +139,7 @@ public class WorldRenderer implements Disposable {
         int fps = Gdx.graphics.getFramesPerSecond();
         BitmapFont fpsFont = Assets.instance.fonts.defaultFont;
 
-        float x = cameraGUI.viewportWidth - 45 / scale;
+        float x = cameraGUI.viewportWidth - 60 / scale;
         float y = cameraGUI.viewportHeight - 10 / scale;
         if (fps >= 45) {
             // 45 or more FPS show up in green

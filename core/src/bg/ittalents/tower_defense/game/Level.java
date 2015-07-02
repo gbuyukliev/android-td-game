@@ -20,6 +20,7 @@ import bg.ittalents.tower_defense.game.objects.CreepBoss;
 import bg.ittalents.tower_defense.game.objects.CreepFlying;
 import bg.ittalents.tower_defense.game.objects.Tower;
 import bg.ittalents.tower_defense.game.objects.Wave;
+import bg.ittalents.tower_defense.network.Offline;
 
 public class Level implements Disposable {
 
@@ -31,30 +32,20 @@ public class Level implements Disposable {
     private static final int DEFAULT_CURRENT_CREEP = 1;
     public static final float TIME_TILL_NEXT_WAVE = 10f;
 
-    private int lives;
-    private int money;
-    private int score;
-    private int currentWave;
-    private int currentCreep;
-    private float timeSinceSpawn;
-    private float timeSinceLastWave;
-    private boolean triggerCountTime;
-    private boolean isClicked;
-    private boolean isEnoughMoney;
+    private Offline offline;
+    private int lives, money, score, currentWave, currentCreep;
+    private float timeSinceSpawn, timeSinceLastWave;
+    private boolean triggerCountTime, isClicked, isEnoughMoney;
     private String buildStatus;
     private Wave wave;
     private ShapeRenderer shapeRenderer;
 
     private Gui gui;
 
-    private int tileRows;
-    private int tileColumns;
-    private int tileWidth;
-    private int tileHeight;
+    private int tileRows, tileColumns, tileWidth, tileHeight;
     Vector2 startPosition;
 
-    private int colTower;
-    private int rowTower;
+    private int colTower, rowTower;
 
     private Array<AbstractTower> towers;
     private Array<AbstractCreep> creeps;
@@ -85,6 +76,10 @@ public class Level implements Disposable {
 
     public void setIsClicked(boolean isClicked) {
         this.isClicked = isClicked;
+    }
+
+    public Gui getGui() {
+        return gui;
     }
 
     public class Tile {
@@ -118,6 +113,7 @@ public class Level implements Disposable {
 //    private Batch batch;
 
     public Level(TiledMap tiledMap, Gui gui) {
+        offline = new Offline();
         this.gui = gui;
         shapeRenderer = new ShapeRenderer();
         money = STARTING_MONEY;
@@ -218,7 +214,7 @@ public class Level implements Disposable {
 
     public void sellTower(AbstractTower tower) {
         towers.removeValue(tower, true);
-        money += tower.getMoneyForSale();
+        money += tower.getMoneySpent() / 2;
     }
 
     public void handleTouch(int mapX, int mapY) {
@@ -226,25 +222,28 @@ public class Level implements Disposable {
         int row = mapY / tileHeight;
 
         if (col >= 0 && col < tileWidth && row >= 0 && row < tileHeight) {
-            if (tiles[row][col].isBuildable() || !isEnoughMoney) {
+            if (tiles[row][col].isBuildable()) {
                 colTower = col;
                 rowTower = row;
-                setIsClicked(true);
+                isClicked = true;
 
                 if (tiles[row][col].getTower() != null) {
-                    buildStatus = "upgrade";
-                    gui.getTowerButton().setText("Upgrade");
-                    gui.getSellTowerButton().setVisible(true);
-                } else {
-                    buildStatus = "build";
-                    gui.getTowerButton().setText("Build");
-                }
+                    if (!tiles[row][col].getTower().isUpgradable()) {
+                        gui.getUpgradeTowerButton().setDisabled(true);
+                    } else {
+                        gui.getUpgradeTowerButton().setDisabled(false);
+                    }
 
-                gui.getTowerButton().setVisible(true);
+                    gui.getTowerTable().setVisible(true);
+                    gui.getNoTowerTable().setVisible(false);
+                } else {
+                    gui.getNoTowerTable().setVisible(true);
+                    gui.getTowerTable().setVisible(false);
+                }
             } else {
-                gui.getTowerButton().setVisible(false);
-                gui.getSellTowerButton().setVisible(false);
-                setIsClicked(false);
+                gui.getTowerTable().setVisible(false);
+                gui.getNoTowerTable().setVisible(false);
+                isClicked = false;
             }
         }
     }
