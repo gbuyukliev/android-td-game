@@ -20,7 +20,8 @@ import bg.ittalents.tower_defense.game.objects.CreepBoss;
 import bg.ittalents.tower_defense.game.objects.CreepFlying;
 import bg.ittalents.tower_defense.game.objects.Tower;
 import bg.ittalents.tower_defense.game.objects.Wave;
-import bg.ittalents.tower_defense.network.Offline;
++import bg.ittalents.tower_defense.network.INetwork;
++import bg.ittalents.tower_defense.network.Network;
 
 public class Level implements Disposable {
 
@@ -32,11 +33,10 @@ public class Level implements Disposable {
     private static final int DEFAULT_CURRENT_CREEP = 1;
     public static final float TIME_TILL_NEXT_WAVE = 10f;
 
-    private Offline offline;
+    private INetwork offline;
     private int lives, money, score, currentWave, currentCreep;
     private float timeSinceSpawn, timeSinceLastWave;
-    private boolean triggerCountTime, isClicked, isEnoughMoney;
-    private String buildStatus;
+    private boolean triggerCountTime, isClicked;
     private Wave wave;
     private ShapeRenderer shapeRenderer;
 
@@ -50,37 +50,9 @@ public class Level implements Disposable {
     private Array<AbstractTower> towers;
     private Array<AbstractCreep> creeps;
     private Array<AbstractProjectile> projectiles;
-    private Array<Vector2> wayponts;
+    private Array<Vector2> waypoints;
 
     private Tile[][] tiles;
-
-    public int getColTower() {
-        return colTower;
-    }
-
-    public int getRowTower() {
-        return rowTower;
-    }
-
-    public Tile[][] getTiles() {
-        return tiles;
-    }
-
-    public String getBuildStatus() {
-        return buildStatus;
-    }
-
-    public boolean isClicked() {
-        return isClicked;
-    }
-
-    public void setIsClicked(boolean isClicked) {
-        this.isClicked = isClicked;
-    }
-
-    public Gui getGui() {
-        return gui;
-    }
 
     public class Tile {
         private boolean buildable;
@@ -113,7 +85,7 @@ public class Level implements Disposable {
 //    private Batch batch;
 
     public Level(TiledMap tiledMap, Gui gui) {
-        offline = new Offline();
+        offline = new Network.getInstance();
         this.gui = gui;
         shapeRenderer = new ShapeRenderer();
         money = STARTING_MONEY;
@@ -124,12 +96,11 @@ public class Level implements Disposable {
         timeSinceSpawn = 0;
         timeSinceLastWave = 0;
         triggerCountTime = false;
-        isEnoughMoney = true;
         setIsClicked(false);
 
         towers = new Array<AbstractTower>();
         creeps = new Array<AbstractCreep>();
-        wayponts = new Array<Vector2>();
+        waypoints = new Array<Vector2>();
         projectiles = new Array<AbstractProjectile>();
         startPosition = new Vector2();
 
@@ -168,15 +139,15 @@ public class Level implements Disposable {
         for(String waypoint : pathWaypoints) {
             String[] coordinates = waypoint.split(",");
             if (coordinates.length >= 2) {
-                this.wayponts.add(new Vector2(
+                this.waypoints.add(new Vector2(
                         Float.parseFloat(coordinates[0]) * tileWidth + tileWidth / 2,
                         Float.parseFloat(coordinates[1]) * tileHeight + tileWidth / 2));
-                Gdx.app.debug(TAG, "Waypoint(" + wayponts.get(wayponts.size - 1).toString() + ") added");
+                Gdx.app.debug(TAG, "Waypoint(" + waypoints.get(waypoints.size - 1).toString() + ") added");
             }
         }
 
-        if (wayponts.size > 0) {
-            startPosition = wayponts.first();
+        if (waypoints.size > 0) {
+            startPosition = waypoints.first();
         }
     }
 
@@ -194,7 +165,7 @@ public class Level implements Disposable {
                     Assets.instance.creep.get("blue1"));
         }
 
-        creep.setWaypoints(wayponts);
+        creep.setWaypoints(waypoints);
         creeps.add(creep);
     }
 
@@ -203,12 +174,9 @@ public class Level implements Disposable {
                 Assets.instance.towers.tower[0], this);
 
         if (money >= tower.getPrice()) {
-            isEnoughMoney = true;
             towers.add(tower);
             getTiles()[row][col].tower = tower;
             money -= tower.getPrice();
-        } else {
-            isEnoughMoney = false;
         }
     }
 
@@ -375,6 +343,26 @@ public class Level implements Disposable {
     }
 
     public int getCurrentWave() { return currentWave; }
+
+    public int getColTower() {
+        return colTower;
+    }
+
+    public int getRowTower() {
+        return rowTower;
+    }
+
+    public Tile[][] getTiles() {
+        return tiles;
+    }
+
+    public boolean isClicked() {
+        return isClicked;
+    }
+
+    public void setIsClicked(boolean isClicked) {
+        this.isClicked = isClicked;
+    }
 
     public void render(Batch batch, OrthographicCamera camera) {
         batch.begin();
