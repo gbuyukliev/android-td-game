@@ -6,13 +6,13 @@ import com.badlogic.gdx.utils.JsonWriter;
 
 import bg.ittalents.tower_defense.game.waves.LevelData;
 
-public class Offline implements INetwork {
+class Offline implements INetwork {
     private static final String PATH = "offline/";
     private static final String LEVEL_DATA_FILES = "LevelData";
     private static final String EXTENSION = ".json";
 
     @Override
-    public LevelData getLevelData(int levelNumber) {
+    public LevelData getLevelData(String username, int levelNumber) {
         String levelJSON = Gdx.files.internal(PATH + LEVEL_DATA_FILES + levelNumber + EXTENSION).readString();
 
         Json json = new Json();
@@ -23,5 +23,10 @@ public class Offline implements INetwork {
         LevelData levelData = json.fromJson(LevelData.class, levelJSON);
         return levelData;
 //        Gdx.app.debug("JSON", levelData.toString());
+    }
+
+    @Override
+    public void setListener(INetworkLevelListener networkLevelListener) {
+
     }
 }
