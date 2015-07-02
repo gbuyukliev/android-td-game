@@ -114,20 +114,20 @@ public class WorldRenderer implements Disposable {
 
 
     private void renderGuiScore() {
-        BitmapFont fpsFont = Assets.instance.fonts.defaultFont;
+        BitmapFont font = Assets.instance.fonts.defaultFont;
 
         float screenWidth = Gdx.graphics.getWidth();
         float screenHeight = Gdx.graphics.getHeight();
 
         float y = 5;
 
-        fpsFont.draw(batch, "Wave: " + level.getCurrentWave(), 5, y);
-        fpsFont.draw(batch, "Money: " + level.getMoney(), screenWidth / 2 - 130 / scale, y);
-        fpsFont.draw(batch, "Score: " + level.getScore(), screenWidth / 2 + 60 / scale, y);
-        fpsFont.draw(batch, "Lives: " + level.getLives(), screenWidth - 75 / scale, y);
+        font.draw(batch, "Wave: " + level.getCurrentWave(), 5, y);
+        font.draw(batch, "Money: " + level.getMoney(), screenWidth / 2 - 130 / scale, y);
+        font.draw(batch, "Score: " + level.getScore(), screenWidth / 2 + 60 / scale, y);
+        font.draw(batch, "Lives: " + level.getLives(), screenWidth - 75 / scale, y);
 
         if (level.isTriggerCountTime()) {
-            fpsFont.draw(batch, "TIME TILL NEXT WAVE: " + (int) (Level.TIME_TILL_NEXT_WAVE - level.getTimeSinceLastWave()), screenWidth / 2 - 70 / scale, screenHeight / 2);
+            font.draw(batch, "TIME TILL NEXT WAVE: " + (int) (Level.TIME_TILL_NEXT_WAVE - level.getTimeSinceLastWave()), screenWidth / 2 - 70 / scale, screenHeight / 2);
         }
     }
 
@@ -137,23 +137,23 @@ public class WorldRenderer implements Disposable {
 
     private void renderGuiFpsCounter() {
         int fps = Gdx.graphics.getFramesPerSecond();
-        BitmapFont fpsFont = Assets.instance.fonts.defaultFont;
+        BitmapFont font = Assets.instance.fonts.defaultFont;
 
         float x = cameraGUI.viewportWidth - 60 / scale;
-        float y = cameraGUI.viewportHeight - 10 / scale;
+        float y = cameraGUI.viewportHeight - 15 / scale;
         if (fps >= 45) {
             // 45 or more FPS show up in green
-            fpsFont.setColor(0, 1, 0, 1);
+            font.setColor(0, 1, 0, 1);
         } else if (fps >= 30) {
             // 30 or more FPS show up in yellow
-            fpsFont.setColor(1, 1, 0, 1);
+            font.setColor(1, 1, 0, 1);
         } else {
             // less than 30 FPS show up in red
-            fpsFont.setColor(1, 0, 0, 1);
+            font.setColor(1, 0, 0, 1);
         }
 
-        fpsFont.draw(batch, "FPS: " + fps, x, y);
-        fpsFont.setColor(1, 1, 1, 1); // white
+        font.draw(batch, "FPS: " + fps, x, y);
+        font.setColor(1, 1, 1, 1); // white
     }
 
     public void handleTouch(int screenX, int screenY) {
