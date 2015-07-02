@@ -176,6 +176,8 @@ public class WorldRenderer implements Disposable {
         Gdx.app.debug("Aspect", "" + aspectRatio);
         camera.viewportWidth = (WorldRenderer.VIEWPORT * aspectRatio);
         camera.update();
+        cameraGUI.viewportWidth = (WorldRenderer.VIEWPORT * aspectRatio);
+        camera.update();
         worldController.updateScale();
         scale = worldController.getScale();
     }

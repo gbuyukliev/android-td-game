@@ -6,12 +6,9 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.math.Interpolation;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Disposable;
 
 import bg.ittalents.tower_defense.screens.LoginScreen;
-import bg.ittalents.tower_defense.utils.CameraHelper;
 
 public class WorldController extends InputAdapter implements Disposable {
 

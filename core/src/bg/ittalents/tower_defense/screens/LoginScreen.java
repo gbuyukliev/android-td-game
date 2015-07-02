@@ -2,37 +2,29 @@ package bg.ittalents.tower_defense.screens;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Net;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.net.HttpStatus;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
-import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonWriter;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonPrimitive;
 
-import bg.ittalents.tower_defense.game.waves.LevelData;
 import bg.ittalents.tower_defense.network.Network;
-import bg.ittalents.tower_defense.network.Offline;
 import bg.ittalents.tower_defense.network.UserInfo;
+import bg.ittalents.tower_defense.screens.windows.*;
 
-public class LoginScreen extends AbstractGameScreen {
+public class LoginScreen extends AbstractGameScreen implements INetworkScreenListener {
 
     public static final float PADDING = 10f;
     public static final float BUTTON_WIDTH = 100f;
@@ -41,22 +33,20 @@ public class LoginScreen extends AbstractGameScreen {
     public static final float WINDOW_TRANSPARENCY = 0.7f;
     public static final float STATUS_MESSAGE_DELAY = 5f;
 
+
     private Stage stage;
     private Skin skin;
-    private TextField txtUsername;
-    private TextField txtPassword;
-    private TextField txtNickname;
-    private TextField txtUsernameReg;
-    private TextField txtPasswordReg;
-    private TextField txtPasswordReg2;
-    private TextField txtEmail;
-    private CheckBox checkBox;
     private Label lblStatus;
+    private Label lblLoggedStatus;
     private Table mainTable;
+    private Table loggedTable;
+    private Table loggedOutTable;
     private Window registerWindow;
     private Window loginWindow;
+    private Table levelSelector;
     private Texture background;
     private Batch batch;
+    private UserInfo userInfo;
 
     public LoginScreen(Game game) {
         super(game);
@@ -66,15 +56,7 @@ public class LoginScreen extends AbstractGameScreen {
     public void show() {
         background = new Texture(Gdx.files.internal("menus_background.jpg"));
         skin = new Skin(Gdx.files.internal("data/uiskin.json"));
-        stage = new Stage(new StretchViewport(SCREEN_WIDTH, SCREEN_HEIGHT));
-        Gdx.input.setInputProcessor(stage);
-        batch = stage.getBatch();
-        mainTable = new Table();
-        mainTable.setFillParent(true);
-        stage.addActor(mainTable);
-        buildStatusTable();
-        buildLoginWindow();
-        buildRegisterWindow();
+        buildStage();
     }
 
     private void buildStage() {
@@ -84,115 +66,25 @@ public class LoginScreen extends AbstractGameScreen {
         mainTable = new Table();
         mainTable.setFillParent(true);
         stage.addActor(mainTable);
+        loginWindow = new LoginWindow(skin, this);
+        registerWindow = new RegisterWindow(skin, this);
+        levelSelector = new bg.ittalents.tower_defense.screens.windows.LevelSelectorTable(skin, this);
         buildStatusTable();
-        buildLoginWindow();
-        buildRegisterWindow();
-    }
+//        mainTable.add(loginWindow).center();
 
-    private void buildRegisterWindow() {
-        registerWindow = new Window("Register", skin);
-        registerWindow.setColor(1, 1, 1, WINDOW_TRANSPARENCY);
-        registerWindow.center();
-        Table table = new Table();
-        ScrollPane scrollPane = new ScrollPane(table, skin);
-        registerWindow.add(scrollPane).colspan(2);
-
-        table.add(new Label("Nickname: ", skin)).pad(PADDING);
-        txtNickname = new TextField("", skin);
-        table.add(txtNickname).pad(PADDING);
-        table.row();
-        table.add(new Label("Username: ", skin)).pad(PADDING);
-        txtUsernameReg = new TextField("", skin);
-        table.add(txtUsernameReg).pad(PADDING);
-        table.row();
-        table.add(new Label("Password: ", skin));
-        txtPasswordReg = new TextField("", skin);
-        txtPasswordReg.setPasswordMode(true);
-        txtPasswordReg.setPasswordCharacter('*');
-        table.add(txtPasswordReg).pad(PADDING);
-        table.row();
-        table.add(new Label("Repeat Password: ", skin)).pad(PADDING);
-        txtPasswordReg2 = new TextField("", skin);
-        txtPasswordReg2.setPasswordMode(true);
-        txtPasswordReg2.setPasswordCharacter('*');
-        table.add(txtPasswordReg2).pad(PADDING);
-        table.row();
-        table.add(new Label("Email: ", skin)).pad(PADDING);
-        txtEmail = new TextField("", skin);
-        table.add(txtEmail).pad(PADDING);
-        table.row();
-        checkBox = new CheckBox("Send notification when\nsomeone beats your record! ", skin);
-        checkBox.setChecked(true);
-        table.add(checkBox).colspan(2).pad(PADDING);
-        registerWindow.row();
-        TextButton btnRegister = new TextButton("Register", skin);
-        btnRegister.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                Gdx.app.debug("Login", "Username: " + txtUsernameReg.getText() + ", Password" + txtPasswordReg.getText());
-                if (txtPasswordReg.getText().equals(txtPasswordReg2.getText())) {
-                    register();
-                } else {
-                    setStatus("Passwords do not match");
-                }
-            }
-        });
-        registerWindow.add(btnRegister).pad(PADDING).width(BUTTON_WIDTH);
-
-        TextButton btnCancel = new TextButton("Cancel", skin);
-        btnCancel.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                registerWindow.remove();
-                mainTable.add(loginWindow);
-            }
-        });
-        registerWindow.add(btnCancel).pad(PADDING).width(BUTTON_WIDTH);
-    }
-
-    private void buildLoginWindow() {
-        loginWindow = new Window("Login", skin);
-        // Make options window slightly transparent
-        loginWindow.setColor(1, 1, 1, WINDOW_TRANSPARENCY);
-        loginWindow.center();
-        loginWindow.add(new Label("Username: ", skin)).pad(PADDING);
-        txtUsername = new TextField("", skin);
-        loginWindow.add(txtUsername).pad(PADDING);
-        loginWindow.row();
-        loginWindow.add(new Label("Password: ", skin)).pad(PADDING);
-        txtPassword = new TextField("", skin);
-        txtPassword.setPasswordMode(true);
-        txtPassword.setPasswordCharacter('*');
-        loginWindow.add(txtPassword).pad(PADDING);
-        loginWindow.row();
-
-        TextButton btnLogin = new TextButton("Login", skin);
-        btnLogin.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                login();
-            }
-        });
-        loginWindow.add(btnLogin).width(BUTTON_WIDTH).pad(PADDING);
-
-        TextButton btnRegister = new TextButton("Register", skin);
-        btnRegister.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                loginWindow.remove();
-                mainTable.add(registerWindow);
-            }
-        });
-        loginWindow.add(btnRegister).width(BUTTON_WIDTH).pad(PADDING);
-        mainTable.add(loginWindow).center();
+        switchToWindow(SCREEN.LOGIN);
     }
 
     private void buildStatusTable() {
-        Table table = new Table();
-        table.setFillParent(true);
-        table.top();
-        table.setColor(1, 1, 1, WINDOW_TRANSPARENCY);
+        buildLoggedOutTable();
+        buildLoggedTable();
+    }
 
+    private void buildLoggedOutTable() {
+        loggedOutTable = new Table();
+        loggedOutTable.setFillParent(true);
+        loggedOutTable.top();
+        loggedOutTable.setColor(1, 1, 1, WINDOW_TRANSPARENCY);
         TextButton btnQuit = new TextButton("Quit", skin);
         btnQuit.addListener(new ChangeListener() {
             @Override
@@ -200,12 +92,12 @@ public class LoginScreen extends AbstractGameScreen {
                 Gdx.app.exit();
             }
         });
-        table.add(btnQuit).width(BUTTON_WIDTH).pad(PADDING).left();
+        loggedOutTable.add(btnQuit).width(BUTTON_WIDTH).pad(PADDING).left();
 
         lblStatus = new Label("", skin);
         lblStatus.setColor(Color.RED);
         lblStatus.setAlignment(Align.center);
-        table.add(lblStatus).expandX().pad(PADDING);
+        loggedOutTable.add(lblStatus).expandX().pad(PADDING);
 
         TextButton btnOffline = new TextButton("Play offline", skin);
         btnOffline.addListener(new ChangeListener() {
@@ -214,9 +106,38 @@ public class LoginScreen extends AbstractGameScreen {
                 offline();
             }
         });
-        table.add(btnOffline).width(BUTTON_WIDTH).pad(PADDING).right();
+        loggedOutTable.add(btnOffline).width(BUTTON_WIDTH).pad(PADDING).right();
 
-        stage.addActor(table);
+    }
+
+    private void buildLoggedTable() {
+        loggedTable = new Table();
+        loggedTable.setFillParent(true);
+        loggedTable.top();
+        loggedTable.setColor(1, 1, 1, WINDOW_TRANSPARENCY);
+
+        TextButton btnLogout = new TextButton("Logout", skin);
+        btnLogout.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                switchToWindow(SCREEN.LOGIN);
+            }
+        });
+        loggedTable.add(btnLogout).width(BUTTON_WIDTH).pad(PADDING).left();
+
+        lblLoggedStatus = new Label("", skin);
+        lblLoggedStatus.setColor(Color.RED);
+        lblLoggedStatus.setAlignment(Align.center);
+        loggedTable.add(lblLoggedStatus).expandX().pad(PADDING);
+
+        TextButton btnEditAccount = new TextButton("Edit Account", skin);
+        btnEditAccount.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                switchToWindow(SCREEN.ACCOUNT_INFO);
+            }
+        });
+        loggedTable.add(btnEditAccount).width(BUTTON_WIDTH).pad(PADDING).right();
     }
 
     private void offline() {
@@ -229,143 +150,68 @@ public class LoginScreen extends AbstractGameScreen {
 
 //        Gdx.app.debug("JSON", levelData.toString());
 
-        getGame().setScreen(new LevelSelectorScreen(getGame(), UserInfo.createGuessUser(), new Offline()));
+//        getGame().setScreen(new LevelSelectorScreen(getGame(), UserInfo.createGuessUser(), new Offline()));
+        Network.setOnline(false);
+
+        switchToWindow(SCREEN.LEVEL_SELECTOR);
     }
 
-    private void login() {
-        JsonObject json = new JsonObject();
-        if (txtUsername.getText().length() == 0 || txtUsername.getText().length() == 0) {
-            setStatus("Enter valid username and password!");
-            return;
+    @Override
+    public void switchToWindow(SCREEN window) {
+        mainTable.clearChildren();
+        loggedTable.remove();
+        loggedOutTable.remove();
+        switch (window) {
+            case REGISTER :
+                mainTable.add(registerWindow);
+                stage.addActor(loggedOutTable);
+                break;
+            case LEVEL_SELECTOR:
+                mainTable.add(levelSelector);
+                stage.addActor(loggedTable);
+                break;
+            case ACCOUNT_INFO:
+            case LOGIN :
+            default:
+                mainTable.add(loginWindow);
+                stage.addActor(loggedOutTable);
+                break;
         }
-        json.add("userName", new JsonPrimitive(txtUsername.getText()));
-        json.add("password", new JsonPrimitive(txtPassword.getText()));
-
-        Gdx.app.debug("URL", Network.URL + Network.LOGIN_MANAGER);
-        Gdx.app.debug("JSON", json.toString());
-
-        final Net.HttpRequest httpRequest = new Net.HttpRequest(Net.HttpMethods.POST);
-        httpRequest.setUrl(Network.URL + Network.LOGIN_MANAGER);
-        httpRequest.setHeader("Content-Type", "application/json");
-        httpRequest.setContent(json.toString());
-        Gdx.net.sendHttpRequest(httpRequest, new Net.HttpResponseListener() {
-            @Override
-            public void handleHttpResponse(final Net.HttpResponse httpResponse) {
-//                Gdx.app.debug("Login Result", httpResponse.getResultAsString() + httpResponse.getStatus().getStatusCode());
-//                Gdx.app.debug("Login Headers", httpResponse.getHeaders().toString());
-                if (httpResponse.getStatus().getStatusCode() == HttpStatus.SC_OK) {
-                    String result = httpResponse.getResultAsString();
-
-                    if (result == null) {
-                        setStatus("Incorrect data from server");
-                        return;
-                    }
-
-                    Json json = new Json();
-                    json.setTypeName(null);
-                    json.setUsePrototypes(false);
-                    json.setIgnoreUnknownFields(true);
-                    json.setOutputType(JsonWriter.OutputType.json);
-                    final UserInfo userInfo = json.fromJson(UserInfo.class, result);
-
-                    Gdx.app.debug("JSON", userInfo.toString());
-
-                    Gdx.app.postRunnable(new Runnable() {
-
-                        @Override
-                        public void run() {
-//                            Gdx.app.debug("Login POST", "" + httpResponse.getHeader("Reason"));
-//                            Gdx.net.cancelHttpRequest(httpRequest);
-                            getGame().setScreen(new LevelSelectorScreen(getGame(), userInfo, new Network(getGame())));
-                        }
-                    });
-                } else {
-                    String errorMessage = httpResponse.getHeader("Error");
-                    if (errorMessage == null) {
-                        errorMessage = "Wrong username or password!";
-                    }
-                    setStatus(errorMessage);
-                    Gdx.app.debug("Login POST", "" + errorMessage);
-//                    Gdx.net.cancelHttpRequest(httpRequest);
-                }
-            }
-
-            @Override
-            public void failed(Throwable t) {
-                setStatus("Server is not responding");
-//                Gdx.app.debug("Login POST", "FAILED" + t.getMessage());
-            }
-
-            @Override
-            public void cancelled() {
-                Gdx.app.postRunnable(new Runnable() {
-                    @Override
-                    public void run() {
-//                                btnLogin.setDisabled(false);
-//                                btnLogin.setTouchable(Touchable.enabled);
-                        Gdx.app.debug("Login POST", "CANCELLED");
-                    }
-                });
-            }
-        });
     }
 
-    private void register() {
-        JsonObject json = new JsonObject();
-        json.add("userName", new JsonPrimitive(txtUsernameReg.getText()));
-        json.add("nickName", new JsonPrimitive(txtNickname.getText()));
-        json.add("password", new JsonPrimitive(txtPasswordReg.getText()));
-        json.add("email", new JsonPrimitive(txtEmail.getText()));
-        json.add("spam", new JsonPrimitive(checkBox.isChecked()));
-
-        Gdx.app.debug("URL", Network.URL + Network.REGISTER_MANAGER);
-        Gdx.app.debug("JSON", json.toString());
-
-        final Net.HttpRequest httpRequest = new Net.HttpRequest(Net.HttpMethods.POST);
-        httpRequest.setUrl(Network.URL + Network.REGISTER_MANAGER);
-        httpRequest.setHeader("Content-Type", "application/json");
-        httpRequest.setContent(json.toString());
-        Gdx.net.sendHttpRequest(httpRequest, new Net.HttpResponseListener() {
-            @Override
-            public void handleHttpResponse(Net.HttpResponse httpResponse) {
-                if (httpResponse.getStatus().getStatusCode() == HttpStatus.SC_OK) {
-                    Gdx.app.postRunnable(new Runnable() {
-                        @Override
-                        public void run() {
-//                            Gdx.net.cancelHttpRequest(httpRequest);
-                            registerWindow.remove();
-                            mainTable.add(loginWindow);
-                        }
-                    });
-                } else {
-                    setStatus(httpResponse.getHeader(null));
-//                    Gdx.app.debug("Login POST", "" + httpResponse.getHeaders().toString());
-//                    Gdx.app.debug("Login POST", "" + httpResponse.getStatus().getStatusCode());
-                }
-            }
-
-            @Override
-            public void failed(Throwable t) {
-                setStatus("Server is not responding");
-                Gdx.app.debug("Login POST", "" + "FAILED");
-            }
-
-            @Override
-            public void cancelled() {
-                Gdx.app.debug("Login POST", "" + "CANCELLED");
-            }
-        });
+    @Override
+    public void setStatus(String message) {
+        setStatusToLabel(message, lblStatus);
+        setStatusToLabel(message, lblLoggedStatus);
     }
 
-    private void setStatus(String message) {
-        lblStatus.setText(message);
+    public static void setStatusToLabel(String message, final Label label) {
+        label.setText(message);
         // clear status message after STATUS_MESSAGE_DELAY seconds
-        lblStatus.addAction(Actions.sequence(Actions.delay(STATUS_MESSAGE_DELAY), Actions.run(new Runnable() {
+        label.addAction(Actions.sequence(Actions.delay(STATUS_MESSAGE_DELAY), Actions.run(new Runnable() {
             @Override
             public void run() {
-                lblStatus.setText("");
+                label.setText("");
             }
         })));
+    }
+
+    @Override
+    public void setPlayerInfo(String userInfoJSON) {
+
+        Json json = new Json();
+        json.setTypeName(null);
+        json.setUsePrototypes(false);
+        json.setIgnoreUnknownFields(true);
+        json.setOutputType(JsonWriter.OutputType.json);
+        userInfo = json.fromJson(UserInfo.class, userInfoJSON);
+
+        Gdx.app.debug("JSON", userInfo.toString());
+    }
+
+    @Override
+    public void play() {
+        getGame().setScreen(new GameScreen(getGame()));
     }
 
     @Override

@@ -20,8 +20,13 @@ import bg.ittalents.tower_defense.game.objects.CreepBoss;
 import bg.ittalents.tower_defense.game.objects.CreepFlying;
 import bg.ittalents.tower_defense.game.objects.Tower;
 import bg.ittalents.tower_defense.game.objects.Wave;
+<<<<<<< HEAD
 +import bg.ittalents.tower_defense.network.INetwork;
 +import bg.ittalents.tower_defense.network.Network;
+=======
+import bg.ittalents.tower_defense.network.INetwork;
+import bg.ittalents.tower_defense.network.Network;
+>>>>>>> fe4beaccdf82eca7ab5e05dd63f59d90fe2b2389
 
 public class Level implements Disposable {
 
@@ -85,7 +90,12 @@ public class Level implements Disposable {
 //    private Batch batch;
 
     public Level(TiledMap tiledMap, Gui gui) {
+<<<<<<< HEAD
         offline = new Network.getInstance();
+=======
+        //can use static Network class, to get instance
+        offline = Network.getInstance();
+>>>>>>> fe4beaccdf82eca7ab5e05dd63f59d90fe2b2389
         this.gui = gui;
         shapeRenderer = new ShapeRenderer();
         money = STARTING_MONEY;
