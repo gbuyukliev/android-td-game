@@ -20,7 +20,8 @@ import bg.ittalents.tower_defense.game.objects.CreepBoss;
 import bg.ittalents.tower_defense.game.objects.CreepFlying;
 import bg.ittalents.tower_defense.game.objects.Tower;
 import bg.ittalents.tower_defense.game.objects.Wave;
-import bg.ittalents.tower_defense.network.Offline;
+import bg.ittalents.tower_defense.network.INetwork;
+import bg.ittalents.tower_defense.network.Network;
 
 public class Level implements Disposable {
 
@@ -32,7 +33,7 @@ public class Level implements Disposable {
     private static final int DEFAULT_CURRENT_CREEP = 1;
     public static final float TIME_TILL_NEXT_WAVE = 10f;
 
-    private Offline offline;
+    private INetwork offline;
     private int lives, money, score, currentWave, currentCreep;
     private float timeSinceSpawn, timeSinceLastWave;
     private boolean triggerCountTime, isClicked, isEnoughMoney;
@@ -113,7 +114,8 @@ public class Level implements Disposable {
 //    private Batch batch;
 
     public Level(TiledMap tiledMap, Gui gui) {
-        offline = new Offline();
+        //can use static Network class, to get instance
+        offline = Network.getInstance();
         this.gui = gui;
         shapeRenderer = new ShapeRenderer();
         money = STARTING_MONEY;

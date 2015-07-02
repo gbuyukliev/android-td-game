@@ -8,9 +8,22 @@
  <tileset firstgid="1" name="tiles" tilewidth="46" tileheight="46" spacing="2" margin="2">
   <image source="tiles.png" width="128" height="256"/>
  </tileset>
+ <tileset firstgid="11" name="Portals" tilewidth="46" tileheight="46">
+  <tile id="0">
+   <image width="46" height="46" source="portal1.png"/>
+  </tile>
+  <tile id="1">
+   <image width="46" height="46" source="portal2.png"/>
+  </tile>
+ </tileset>
  <layer name="wall_layer" width="15" height="9">
   <data encoding="base64" compression="zlib">
    eJxjZmBgYCMDswIxOwN5gB1JLzMJ9qHrJdZ+ZPXoevHZT0gvIfuJ0YvLbhYK7EW2H10PEx470e0HAP8fAd0=
+  </data>
+ </layer>
+ <layer name="portals" width="15" height="9">
+  <data encoding="base64" compression="zlib">
+   eJxjYBgFwx3woNHEAgAG/AAZ
   </data>
  </layer>
 </map>
