@@ -2,8 +2,10 @@ package bg.ittalents.tower_defense.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -15,9 +17,11 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 
 import java.awt.Image;
+import java.awt.TextField;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -34,7 +38,7 @@ public class Gui {
     private Stage stage;
     private Skin skin;
     private float aspectRatio;
-    private Label lblScore;
+    private Label textField;
     private Table noTowerTable;
     private Table towerTable;
     private ImageButton upgradeTowerButton;
@@ -43,14 +47,6 @@ public class Gui {
         setAspectRatio(aspectRatio);
         stage = new Stage(new StretchViewport(WorldRenderer.VIEWPORT * aspectRatio, WorldRenderer.VIEWPORT), batch);
         skin = new Skin(Gdx.files.internal("data/uiskin.json"));
-//        BitmapFont bitmapFont = Assets.instance.fonts.defaultFont;
-
-//        lblScore = new Label("Test", skin);
-//        lblScore.setColor(Color.RED);
-//        lblScore.setPosition(100, 50);
-//        lblScore.setSize(80, 30);
-//        lblScore.setAlignment(Align.center);
-//        stage.addActor(lblScore);
 
         // A table with buttons which only appears if there is an empty tile selected
 
@@ -62,13 +58,13 @@ public class Gui {
 
         ImageButton buildTowerButton = new ImageButton(new SpriteDrawable(new Sprite(UPGRADE_TEXTURE)));
         buildTowerButton.addListener(new ChangeListener() {
-                                           @Override
-                                           public void changed(ChangeEvent event, Actor actor) {
-                                               level.buildTower(level.getColTower(), level.getRowTower());
-                                               noTowerTable.setVisible(false);
-                                               level.setIsClicked(false);
-                                           }
-                                       }
+                                         @Override
+                                         public void changed(ChangeEvent event, Actor actor) {
+                                             level.buildTower(level.getColTower(), level.getRowTower());
+                                             noTowerTable.setVisible(false);
+                                             level.setIsClicked(false);
+                                         }
+                                     }
         );
 
         noTowerTable.add(buildTowerButton);
@@ -112,6 +108,11 @@ public class Gui {
         );
 
         towerTable.add(sellTowerButton).padLeft(5);
+
+        textField = new Label("Not enough money", skin);
+        textField.setPosition(0, 50);
+//        textField.setSize(0, 0);
+        stage.addActor(textField);
     }
 
     public InputProcessor getInputProcessor() {
