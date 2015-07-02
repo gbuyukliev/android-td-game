@@ -27,12 +27,13 @@ public abstract class AbstractCreep extends AbstractObject {
     }
 
     Animation animation;
-    float speed;
-    int reward;
+    float moveSpeed;
+    int award;
     float health;
     float maxHealth;
     float stateTime;
     boolean isFlying;
+    String typeOfEnemy;
     HealthBar healthBar;
 
     int currentWaypoint;
@@ -105,7 +106,7 @@ public abstract class AbstractCreep extends AbstractObject {
     }
 
     public int getReward () {
-        return reward;
+        return award;
     }
 
     private boolean isWaypointReached() {
@@ -130,8 +131,8 @@ public abstract class AbstractCreep extends AbstractObject {
             }
             double radRotation = AbstractObject.countAngle(position, waypoints.get(currentWaypoint));
             angle = (float) Math.toDegrees(radRotation);
-            updatePosition(position.x + speed * deltaTime * (float)Math.cos(radRotation),
-                    position.y + speed * deltaTime * (float)Math.sin(radRotation));
+            updatePosition(position.x + moveSpeed * deltaTime * (float)Math.cos(radRotation),
+                    position.y + moveSpeed * deltaTime * (float)Math.sin(radRotation));
         }
     }
 

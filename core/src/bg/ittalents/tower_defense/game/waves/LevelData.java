@@ -8,29 +8,77 @@ public class LevelData {
     Array<TowerTypes> towers;
 
     public static class CreepTypes {
-        float moveSpeed;
-        float award;
-        int level;
-        String name;
-        float health;
-        String typeOfEnemy;
+        private float moveSpeed;
+        private float award;
+        private int level;
+        private float health;
+        private String typeOfEnemy;
 
         @Override
         public String toString() {
             return "CreepTypes{" +
-                    "moveSpeed=" + moveSpeed +
-                    ", award=" + award +
-                    ", level=" + level +
-                    ", name='" + name + '\'' +
-                    ", health=" + health +
-                    ", typeOfEnemy='" + typeOfEnemy + '\'' +
+                    "moveSpeed=" + getMoveSpeed() +
+                    ", award=" + getAward() +
+                    ", level=" + getLevel() +
+                    ", health=" + getHealth() +
+                    ", typeOfEnemy='" + getTypeOfEnemy() + '\'' +
                     '}';
+        }
+
+        public float getMoveSpeed() {
+            return moveSpeed;
+        }
+
+        public void setMoveSpeed(float moveSpeed) {
+            if (moveSpeed > 0) {
+                this.moveSpeed = moveSpeed;
+            }
+        }
+
+        public float getAward() {
+            return award;
+        }
+
+        public void setAward(float award) {
+            if (award > 0) {
+                this.award = award;
+            }
+        }
+
+        public int getLevel() {
+            return level;
+        }
+
+        public void setLevel(int level) {
+            if (level > 0) {
+                this.level = level;
+            }
+        }
+
+        public float getHealth() {
+            return health;
+        }
+
+        public void setHealth(float health) {
+            if (health > 0) {
+                this.health = health;
+            }
+        }
+
+        public String getTypeOfEnemy() {
+            return typeOfEnemy;
+        }
+
+        public void setTypeOfEnemy(String typeOfEnemy) {
+            if (typeOfEnemy != null) {
+                this.typeOfEnemy = typeOfEnemy;
+            }
         }
     }
 
     public static class CreepCount {
-        int count;
-        String typeOfEnemy;
+        private int count;
+        private String typeOfEnemy;
 
         public CreepCount() {
         }
@@ -47,15 +95,35 @@ public class LevelData {
                     ", typeOfEnemy='" + typeOfEnemy + '\'' +
                     '}';
         }
+
+        public int getCount() {
+            return count;
+        }
+
+        public void setCount(int count) {
+            if (count > 0) {
+                this.count = count;
+            }
+        }
+
+        public String getTypeOfEnemy() {
+            return typeOfEnemy;
+        }
+
+        public void setTypeOfEnemy(String typeOfEnemy) {
+            if (typeOfEnemy != null) {
+                this.typeOfEnemy = typeOfEnemy;
+            }
+        }
     }
 
     public static class TowerTypes {
-        float damage;
-        String typeOfTower;
-        float price;
-        float attackSpeed;
-        float range;
-        float sellPrice;
+        private float damage;
+        private String typeOfTower;
+        private float price;
+        private float attackSpeed;
+        private float range;
+        private float sellPrice;
 
         @Override
         public String toString() {
@@ -67,6 +135,66 @@ public class LevelData {
                     ", range=" + range +
                     ", sellPrice=" + sellPrice +
                     '}';
+        }
+
+        public float getDamage() {
+            return damage;
+        }
+
+        public void setDamage(float damage) {
+            if (damage > 0) {
+                this.damage = damage;
+            }
+        }
+
+        public String getTypeOfTower() {
+            return typeOfTower;
+        }
+
+        public void setTypeOfTower(String typeOfTower) {
+            if (typeOfTower != null) {
+                this.typeOfTower = typeOfTower;
+            }
+        }
+
+        public float getPrice() {
+            return price;
+        }
+
+        public void setPrice(float price) {
+            if (price > 0) {
+                this.price = price;
+            }
+        }
+
+        public float getAttackSpeed() {
+            return attackSpeed;
+        }
+
+        public void setAttackSpeed(float attackSpeed) {
+            if (attackSpeed > 0) {
+                this.attackSpeed = attackSpeed;
+            }
+        }
+
+        public float getRange() {
+            return range;
+        }
+
+        public void setRange(float range) {
+            if (range > 0) {
+                this.range = range;
+            }
+        }
+
+        public float getSellPrice() {
+            return sellPrice;
+        }
+
+        public void setSellPrice(float sellPrice) {
+            if (sellPrice > 0) {
+                this.sellPrice = sellPrice;
+            }
         }
     }
 

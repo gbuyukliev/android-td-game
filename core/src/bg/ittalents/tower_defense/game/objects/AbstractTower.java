@@ -13,7 +13,7 @@ public abstract class AbstractTower extends AbstractObject {
     int upgrade;
     AbstractCreep foe;
 
-    // rotation speed degrees per second
+    // rotation moveSpeed degrees per second
     float rotationSpeed;
     float range;
     float fireRate;
@@ -21,7 +21,8 @@ public abstract class AbstractTower extends AbstractObject {
     int damage;
     int price;
     int upgradePrice;
-    int moneyForSale;
+    int moneySpent;
+    boolean isUpgradable;
     private Level level;
 
     public AbstractTower(float positionX, float positionY, TextureRegion[] textures, Level level) {
@@ -58,11 +59,12 @@ public abstract class AbstractTower extends AbstractObject {
             damage *= 1.33f;
 //            range *= 1.2f;
             fireRate *= 0.7f;
+            moneySpent += upgradePrice;
             level.setMoney(level.getMoney() - upgradePrice);
         }
 
         if (textures.length <= upgrade + 1) {
-            level.getTiles()[level.getRowTower()][level.getColTower()].setBuildable(false);
+            isUpgradable = false;
         }
     }
 
@@ -88,7 +90,11 @@ public abstract class AbstractTower extends AbstractObject {
         return price;
     }
 
-    public int getMoneyForSale() {
-        return moneyForSale;
+    public boolean isUpgradable() {
+        return isUpgradable;
+    }
+
+    public int getMoneySpent() {
+        return moneySpent;
     }
 }

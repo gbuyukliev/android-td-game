@@ -3,7 +3,7 @@ package bg.ittalents.tower_defense.game.objects;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public abstract class AbstractProjectile extends AbstractObject {
-    float speed;
+    float moveSpeed;
     int damage;
     AbstractCreep target;
 
@@ -22,10 +22,10 @@ public abstract class AbstractProjectile extends AbstractObject {
         double radRotation = AbstractObject.countAngle(position, target.position);
         angle = (float) Math.toDegrees(radRotation);
 
-        updatePosition(position.x + speed * deltaTime * (float)Math.cos(radRotation),
-                position.y + speed * deltaTime * (float)Math.sin(radRotation));
-//        position.x += speed * deltaTime * Math.cos(radRotation);
-//        position.y += speed * deltaTime * Math.sin(radRotation);
+        updatePosition(position.x + moveSpeed * deltaTime * (float)Math.cos(radRotation),
+                position.y + moveSpeed * deltaTime * (float)Math.sin(radRotation));
+//        position.x += moveSpeed * deltaTime * Math.cos(radRotation);
+//        position.y += moveSpeed * deltaTime * Math.sin(radRotation);
 //        texturePosition.x = position.x - texture.getRegionWidth();
 //        texturePosition.y = position.y - texture.getRegionHeight();
 

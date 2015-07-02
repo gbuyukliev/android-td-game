@@ -2,23 +2,42 @@ package bg.ittalents.tower_defense.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 
+import java.awt.Image;
+import java.io.IOException;
+import java.io.InputStream;
+
 public class Gui {
+    private static final Texture UPGRADE_TEXTURE;
+    private static final Texture SELL_TEXTURE;
+
+    static {
+        UPGRADE_TEXTURE = new Texture("option_upgrade.png");
+        SELL_TEXTURE = new Texture("option_sell.png");
+    }
+
     private Level level;
     private Stage stage;
     private Skin skin;
     private float aspectRatio;
     private Label lblScore;
-    private TextButton towerButton;
-    private TextButton sellTowerButton;
+    private Table noTowerTable;
+    private Table towerTable;
+    private ImageButton upgradeTowerButton;
 
     public Gui(float aspectRatio, Batch batch) {
         setAspectRatio(aspectRatio);
@@ -33,45 +52,66 @@ public class Gui {
 //        lblScore.setAlignment(Align.center);
 //        stage.addActor(lblScore);
 
-        towerButton = new TextButton("", skin);
-        towerButton.setPosition(0, 0);
-        towerButton.setSize(80, 30);
-        towerButton.setVisible(false);
-        towerButton.addListener(new ChangeListener() {
-                                    @Override
-                                    public void changed(ChangeEvent event, Actor actor) {
-                                        if (level.getBuildStatus().equals("upgrade")) {
-                                            level.getTiles()[level.getRowTower()][level.getColTower()].getTower().upgrade();
-                                        } else if (level.getBuildStatus().equals("build")) {
-                                            level.buildTower(level.getColTower(), level.getRowTower());
+        // A table with buttons which only appears if there is an empty tile selected
+
+        noTowerTable = new Table();
+        noTowerTable.bottom().left();
+        noTowerTable.setFillParent(true);
+        noTowerTable.setVisible(false);
+        stage.addActor(noTowerTable);
+
+        ImageButton buildTowerButton = new ImageButton(new SpriteDrawable(new Sprite(UPGRADE_TEXTURE)));
+        buildTowerButton.addListener(new ChangeListener() {
+                                           @Override
+                                           public void changed(ChangeEvent event, Actor actor) {
+                                               level.buildTower(level.getColTower(), level.getRowTower());
+                                               noTowerTable.setVisible(false);
+                                               level.setIsClicked(false);
+                                           }
+                                       }
+        );
+
+        noTowerTable.add(buildTowerButton);
+
+        // A table with buttons which only appears if there is a tower selected
+
+        towerTable = new Table();
+        towerTable.bottom().left();
+        towerTable.setFillParent(true);
+        towerTable.setVisible(false);
+        stage.addActor(towerTable);
+
+        upgradeTowerButton = new ImageButton(new SpriteDrawable(new Sprite(UPGRADE_TEXTURE)));
+        upgradeTowerButton.addListener(new ChangeListener() {
+                                           @Override
+                                           public void changed(ChangeEvent event, Actor actor) {
+                                               Level.Tile tile = level.getTiles()[level.getRowTower()][level.getColTower()];
+
+                                               tile.getTower().upgrade();
+                                               towerTable.setVisible(false);
+                                               level.setIsClicked(false);
+                                           }
+                                       }
+        );
+
+        towerTable.add(upgradeTowerButton);
+
+        ImageButton sellTowerButton = new ImageButton(new SpriteDrawable(new Sprite(SELL_TEXTURE)));
+        sellTowerButton.addListener(new ChangeListener() {
+                                        @Override
+                                        public void changed(ChangeEvent event, Actor actor) {
+                                            Level.Tile tile = level.getTiles()[level.getRowTower()][level.getColTower()];
+
+                                            level.sellTower(tile.getTower());
+                                            tile.setBuildable(true);
+                                            tile.removeTower();
+                                            towerTable.setVisible(false);
+                                            level.setIsClicked(false);
                                         }
-                                        towerButton.setVisible(false);
-                                        sellTowerButton.setVisible(false);
-                                        level.setIsClicked(false);
                                     }
-                                }
         );
 
-        stage.addActor(towerButton);
-
-        sellTowerButton = new TextButton("Sell", skin);
-        getSellTowerButton().setPosition(90, 0);
-        getSellTowerButton().setSize(80, 30);
-        getSellTowerButton().setVisible(false);
-        getSellTowerButton().addListener(new ChangeListener() {
-                                             @Override
-                                             public void changed(ChangeEvent event, Actor actor) {
-                                                 level.sellTower(level.getTiles()[level.getRowTower()][level.getColTower()].getTower());
-                                                 level.getTiles()[level.getRowTower()][level.getColTower()].setBuildable(true);
-                                                 level.getTiles()[level.getRowTower()][level.getColTower()].removeTower();
-                                                 towerButton.setVisible(false);
-                                                 sellTowerButton.setVisible(false);
-                                                 level.setIsClicked(false);
-                                             }
-                                         }
-        );
-
-        stage.addActor(getSellTowerButton());
+        towerTable.add(sellTowerButton).padLeft(5);
     }
 
     public InputProcessor getInputProcessor() {
@@ -89,10 +129,6 @@ public class Gui {
         stage.draw();
     }
 
-    public TextButton getTowerButton() {
-        return towerButton;
-    }
-
     public Level getLevel() {
         return level;
     }
@@ -103,7 +139,15 @@ public class Gui {
         }
     }
 
-    public TextButton getSellTowerButton() {
-        return sellTowerButton;
+    public Table getTowerTable() {
+        return towerTable;
+    }
+
+    public Table getNoTowerTable() {
+        return noTowerTable;
+    }
+
+    public ImageButton getUpgradeTowerButton() {
+        return upgradeTowerButton;
     }
 }
