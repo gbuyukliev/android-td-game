@@ -28,7 +28,7 @@ import bg.ittalents.tower_defense.network.Network;
 
 public class Level implements Disposable {
 
-    public static final int STARTING_LIVES = 70;
+    public static final int STARTING_LIVES = 50;
     public static final int STARTING_MONEY = 200;
 
     public static final String TAG = Level.class.getName();

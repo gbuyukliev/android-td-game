@@ -52,7 +52,7 @@ public class Gui {
     }
 
     public void buildBuildTowerButton() {
-        buildTowerButton = new MyButton(Textures.UPGRADE_BUTTON, Textures.UPGRADE_BUTTON_CLICKED);
+        buildTowerButton = new MyButton(Textures.UPGRADE_BUTTON_BLUE, Textures.UPGRADE_BUTTON_CLICKED_BLUE);
         buildTowerButton.addListener(new ChangeListener() {
                                          @Override
                                          public void changed(ChangeEvent event, Actor actor) {
@@ -69,7 +69,7 @@ public class Gui {
                                      }
         );
 
-        noTowerTable.add(buildTowerButton).pad(5);
+        noTowerTable.add(buildTowerButton).size(40, 40).pad(5);
     }
 
     // A table with buttons which only appears if there is a tower selected
@@ -86,7 +86,7 @@ public class Gui {
 //        Drawable buttonUp = new SpriteDrawable(new Sprite(Textures.UPGRADE_BUTTON));
 //        Drawable buttonDown = new SpriteDrawable(new Sprite(Textures.UPGRADE_BUTTON_CLICKED));
 
-        upgradeTowerButton = new MyButton(Textures.UPGRADE_BUTTON, Textures.UPGRADE_BUTTON_CLICKED);
+        upgradeTowerButton = new MyButton(Textures.UPGRADE_BUTTON_BLUE, Textures.UPGRADE_BUTTON_CLICKED_BLUE);
 //        ImageButton.ImageButtonStyle style = new ImageButton.ImageButtonStyle();
 //        style.imageDisabled = buttonDown;
 //        upgradeTowerButton.setStyle(style);
@@ -109,11 +109,11 @@ public class Gui {
                                        }
         );
 
-        towerTable.add(upgradeTowerButton).pad(5);
+        towerTable.add(upgradeTowerButton).size(40, 40).pad(5);
     }
 
     public void buildSellTowerButton() {
-        sellTowerButton = new MyButton(Textures.SELL_BUTTON, Textures.SELL_BUTTON_CLICKED);
+        sellTowerButton = new MyButton(Textures.SELL_BUTTON_BLUE, Textures.SELL_BUTTON_CLICKED_BLUE);
         sellTowerButton.addListener(new ChangeListener() {
                                         @Override
                                         public void changed(ChangeEvent event, Actor actor) {
@@ -127,7 +127,7 @@ public class Gui {
                                     }
         );
 
-        towerTable.add(sellTowerButton);
+        towerTable.add(sellTowerButton).size(40, 40);
     }
 
     public void buildWarningTextField() {
