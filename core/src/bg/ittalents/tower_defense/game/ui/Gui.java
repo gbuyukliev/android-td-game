@@ -83,7 +83,14 @@ public class Gui {
     }
 
     public void buildUpgradeTowerButton() {
+//        Drawable buttonUp = new SpriteDrawable(new Sprite(Textures.UPGRADE_BUTTON));
+//        Drawable buttonDown = new SpriteDrawable(new Sprite(Textures.UPGRADE_BUTTON_CLICKED));
+
         upgradeTowerButton = new MyButton(Textures.UPGRADE_BUTTON, Textures.UPGRADE_BUTTON_CLICKED);
+//        ImageButton.ImageButtonStyle style = new ImageButton.ImageButtonStyle();
+//        style.imageDisabled = buttonDown;
+//        upgradeTowerButton.setStyle(style);
+
         upgradeTowerButton.addListener(new ChangeListener() {
                                            @Override
                                            public void changed(ChangeEvent event, Actor actor) {
@@ -124,13 +131,16 @@ public class Gui {
     }
 
     public void buildWarningTextField() {
+        Table warningTextTable = new Table();
+        warningTextTable.setFillParent(true);
+        warningTextTable.center();
         warningTextField = new Label("", skin);
-        warningTextField.setPosition(0, 70);
         warningTextField.setColor(Color.RED);
         warningTextField.setVisible(false);
         warningTextField.setSize((Gdx.graphics.getWidth() * 3) / 4, 0);
         warningTextField.setAlignment(Align.center);
-        stage.addActor(warningTextField);
+        warningTextTable.add(warningTextField).center().expandX().padTop(210);
+        stage.addActor(warningTextTable);
     }
 
     public Gui(float aspectRatio, Batch batch) {

@@ -192,19 +192,16 @@ public class Level implements Disposable {
     }
 
     public void handleTouch(int mapX, int mapY) {
-        int col = mapX / tileWidth;
-        int row = mapY / tileHeight;
+        colTower = mapX / tileWidth;
+        rowTower = mapY / tileHeight;
 
-        if (col >= 0 && col < tileWidth && row >= 0 && row < tileHeight) {
-            if (tiles[row][col].isBuildable()) {
-                colTower = col;
-                rowTower = row;
+        if (colTower >= 0 && colTower < tileWidth && rowTower >= 0 && rowTower < tileHeight) {
+            if (tiles[rowTower][colTower].isBuildable()) {
                 isClicked = true;
 
-                if (tiles[row][col].getTower() != null) {
-                    if (!tiles[row][col].getTower().isUpgradable()) {
+                if (tiles[rowTower][colTower].getTower() != null) {
+                    if (!tiles[rowTower][colTower].getTower().isUpgradable()) {
                         gui.getUpgradeTowerButton().setDisabled(true);
-
                     } else {
                         gui.getUpgradeTowerButton().setDisabled(false);
                     }
@@ -228,7 +225,10 @@ public class Level implements Disposable {
         updateCreeps(deltaTime);
         updateProjectiles(deltaTime);
         updateTowers(deltaTime);
+        updateWarningText(deltaTime);
+    }
 
+    private void updateWarningText(float deltaTime) {
         textTime += deltaTime;
 
         if (textTime > 3) {
@@ -256,7 +256,7 @@ public class Level implements Disposable {
         timeSinceLastWave += deltaTime;
 
         if (creeps.size == 0 && wave.getNumber() != 1 && wave.getNumber() % 10 == 1 && !isTriggerCountTime()) {
-            AbstractCreep.setCoeff(AbstractCreep.getCoeff() + 0.5f);
+            AbstractCreep.setCoeff(AbstractCreep.getCoeff() + 0.25f);
         }
 
         if (!isTriggerCountTime() && creeps.size == 0 && (currentCreep > wave.getNumOfCreeps() || wave.getNumber() == 0)) {

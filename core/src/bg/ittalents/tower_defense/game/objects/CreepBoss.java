@@ -6,10 +6,10 @@ public class CreepBoss extends AbstractCreep {
 
     public CreepBoss(float positionX, float positionY, Animation animation) {
         super(positionX, positionY, animation);
-        award = 150 * (int) getCoeff();
+        award = 100 * (int) getCoeff();
         moveSpeed = 30f * getCoeff();
-        health = 1500f * getCoeff();
-        maxHealth = 1500f * getCoeff();
+        health = 170f * getCoeff();
+        maxHealth = 170f * getCoeff();
         isFlying = false;
     }
 }
