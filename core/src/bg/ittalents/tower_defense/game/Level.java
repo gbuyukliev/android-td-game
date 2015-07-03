@@ -229,8 +229,6 @@ public class Level implements Disposable {
         updateProjectiles(deltaTime);
         updateTowers(deltaTime);
 
-        Gdx.app.log(TAG, getWidth() + "............" + getHeight());
-
         textTime += deltaTime;
 
         if (textTime > 3) {

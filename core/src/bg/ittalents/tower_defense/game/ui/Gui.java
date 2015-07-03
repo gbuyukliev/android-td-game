@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -112,7 +113,6 @@ public class Gui {
                                             Level.Tile tile = level.getTiles()[level.getRowTower()][level.getColTower()];
 
                                             level.sellTower(tile.getTower());
-                                            tile.setBuildable(true);
                                             tile.removeTower();
                                             towerTable.setVisible(false);
                                             level.setIsClicked(false);
