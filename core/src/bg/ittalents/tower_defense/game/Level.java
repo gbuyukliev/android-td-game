@@ -28,12 +28,10 @@ public class Level implements Disposable {
 
     public static final int STARTING_LIVES = 50;
     public static final int STARTING_MONEY = 200;
-
-    public static final String TAG = Level.class.getName();
-
     private static final int DEFAULT_CURRENT_CREEP = 1;
     public static final float TIME_TILL_NEXT_WAVE = 10f;
     public static final String BUILDABLE_LAYER = "buildable";
+    public static final String TAG = Level.class.getName();
 
     //    private INetwork offline;
     private int lives, money, score, currentWave, currentCreep, currentTowerPrice;
@@ -322,6 +320,68 @@ public class Level implements Disposable {
         }
     }
 
+    private void setShapeRenderer(OrthographicCamera camera) {
+        if (isClicked()) {
+            AbstractTower tower = tiles[rowTower][colTower].getTower();
+            int padding = 10;
+
+            camera.update();
+            shapeRenderer.setProjectionMatrix(camera.combined);
+
+            if (tower != null) {
+                Gdx.gl.glEnable(GL20.GL_BLEND);
+                Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+
+                shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+                shapeRenderer.setColor(0, 1, 0, 0.15f);
+                shapeRenderer.circle(colTower * tileWidth + tileWidth / 2, rowTower * tileHeight + tileHeight / 2, tower.getRange());
+                shapeRenderer.end();
+
+                Gdx.gl.glDisable(GL20.GL_BLEND);
+            } else {
+                shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+                shapeRenderer.setColor(0, 1, 0, 1);
+                shapeRenderer.rect(colTower * tileWidth + padding / 2, rowTower * tileHeight + padding / 2, tileWidth - padding, tileHeight - padding);
+                shapeRenderer.end();
+            }
+        }
+
+        if (isPaused) {
+            Gdx.gl.glEnable(GL20.GL_BLEND);
+            Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+
+            shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+            shapeRenderer.setColor(1, 1, 1, 0.20f);
+            shapeRenderer.rect(0, 0, getWidth(), getHeight());
+            shapeRenderer.end();
+
+            Gdx.gl.glDisable(GL20.GL_BLEND);
+        }
+    }
+
+    public void render(Batch batch, OrthographicCamera camera) {
+        batch.begin();
+
+        for (AbstractCreep creep : creeps) {
+            creep.render(batch);
+        }
+        for (AbstractTower tower : towers) {
+            tower.render(batch);
+        }
+        for (AbstractProjectile projectile : projectiles) {
+            projectile.render(batch);
+        }
+
+        batch.end();
+
+        setShapeRenderer(camera);
+    }
+
+    @Override
+    public void dispose() {
+        shapeRenderer.dispose();
+    }
+
     public int getWidth() {
         return tileColumns * tileWidth;
     }
@@ -402,67 +462,5 @@ public class Level implements Disposable {
 
     public int getCurrentTowerPrice() {
         return currentTowerPrice;
-    }
-
-    private void setShapeRenderer(OrthographicCamera camera) {
-        if (isClicked()) {
-            AbstractTower tower = tiles[rowTower][colTower].getTower();
-            int padding = 10;
-
-            camera.update();
-            shapeRenderer.setProjectionMatrix(camera.combined);
-
-            if (tower != null) {
-                Gdx.gl.glEnable(GL20.GL_BLEND);
-                Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
-
-                shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-                shapeRenderer.setColor(0, 1, 0, 0.15f);
-                shapeRenderer.circle(colTower * tileWidth + tileWidth / 2, rowTower * tileHeight + tileHeight / 2, tower.getRange());
-                shapeRenderer.end();
-
-                Gdx.gl.glDisable(GL20.GL_BLEND);
-            } else {
-                shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-                shapeRenderer.setColor(0, 1, 0, 1);
-                shapeRenderer.rect(colTower * tileWidth + padding / 2, rowTower * tileHeight + padding / 2, tileWidth - padding, tileHeight - padding);
-                shapeRenderer.end();
-            }
-        }
-
-        if (isPaused) {
-            Gdx.gl.glEnable(GL20.GL_BLEND);
-            Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
-
-            shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-            shapeRenderer.setColor(1, 1, 1, 0.20f);
-            shapeRenderer.rect(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-            shapeRenderer.end();
-
-            Gdx.gl.glDisable(GL20.GL_BLEND);
-        }
-    }
-
-    public void render(Batch batch, OrthographicCamera camera) {
-        batch.begin();
-
-        for (AbstractCreep creep : creeps) {
-            creep.render(batch);
-        }
-        for (AbstractTower tower : towers) {
-            tower.render(batch);
-        }
-        for (AbstractProjectile projectile : projectiles) {
-            projectile.render(batch);
-        }
-
-        batch.end();
-
-        setShapeRenderer(camera);
-    }
-
-    @Override
-    public void dispose() {
-        shapeRenderer.dispose();
     }
 }
