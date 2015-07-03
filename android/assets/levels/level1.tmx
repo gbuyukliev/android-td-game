@@ -1,21 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="left-up" width="15" height="9" tilewidth="46" tileheight="46" backgroundcolor="#000000" nextobjectid="14">
+<map version="1.0" orientation="orthogonal" renderorder="left-up" width="17" height="11" tilewidth="46" tileheight="46" nextobjectid="1">
  <properties>
-  <property name="starting_position" value="1,0"/>
-  <property name="target_position" value="3,0"/>
-  <property name="waypoints" value="1,0|1,7|13,7|13,1|5,1|5,3|11,3|11,5|3,5|3,0"/>
+  <property name="waypoints" value="2,2|2,8|14,8|14,2|6,2|6,4|12,4|12,6|4,6|4,2"/>
  </properties>
  <tileset firstgid="1" name="level_tiles" tilewidth="46" tileheight="46" spacing="2" margin="2">
   <image source="level_tiles.png" width="256" height="256"/>
  </tileset>
- <layer name="wall_layer" width="15" height="9">
+ <imagelayer name="backgraound" x="-766" y="-182">
+  <image source="../galaxy_background_4.jpg"/>
+ </imagelayer>
+ <layer name="buildable" width="17" height="11">
   <data encoding="base64" compression="zlib">
-   eJxjZ2Bg4CIDcwIxNwN5gBtJLzsJ9qHrJdZ+ZPXoevHZT0gvIfuJ0YvLbg4K7EW2H10PGx470e0HAE8dAxU=
+   eJxjYKAOYAdiLjIwJ5IZ3GTazY2FTax7OPGYQax7sKlHF8PnHmLNIOQeUszA5RYOKrgDXR8IsOGxEx/mYKAeAACZpAMn
   </data>
  </layer>
- <layer name="portals" width="15" height="9">
+ <layer name="unbuidable1" width="17" height="11">
   <data encoding="base64" compression="zlib">
-   eJxjYBgFwx2wQGkmEvUBAANcAAc=
+   eJxjYBgFo2BkAAAC7AAB
+  </data>
+ </layer>
+ <layer name="unbuildable2" width="17" height="11">
+  <data encoding="base64" compression="zlib">
+   eJxjYBgFo4AwYIHSTAPqCsoAAAd0AAc=
   </data>
  </layer>
 </map>
