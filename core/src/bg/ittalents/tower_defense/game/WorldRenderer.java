@@ -13,10 +13,13 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Disposable;
 
 import bg.ittalents.tower_defense.game.objects.Background;
+import bg.ittalents.tower_defense.network.UserInfo;
 import bg.ittalents.tower_defense.utils.CameraHelper;
 
 public class WorldRenderer implements Disposable {
     public static final float VIEWPORT = 400f;
+    public static final String LEVELS_PATH = "levels/level";
+    public static final String LEVELS_EXTENSION = ".tmx";
     private float scale;
     private float aspectRatio;
 
@@ -37,13 +40,15 @@ public class WorldRenderer implements Disposable {
         this.worldController = worldController;
         batch = new SpriteBatch();
 
-        tiledMap = new TmxMapLoader().load("levels/level1.tmx");
+        int levelNum = UserInfo.getInstance().getLevel();
+
+        tiledMap = new TmxMapLoader().load(LEVELS_PATH + levelNum + LEVELS_EXTENSION);
         mapRenderer = new OrthogonalTiledMapRenderer(tiledMap, batch);
 
         aspectRatio = Gdx.graphics.getWidth() / (float) Gdx.graphics.getHeight();
         gui = new bg.ittalents.tower_defense.game.ui.Gui(aspectRatio, batch);
-        level = new Level(tiledMap, gui);
-        gui.setLevel(level);
+        this.level = new Level(tiledMap, gui);
+        gui.setLevel(this.level);
 //        background = new Background(level.getWidth(), level.getHeight());
         init();
     }

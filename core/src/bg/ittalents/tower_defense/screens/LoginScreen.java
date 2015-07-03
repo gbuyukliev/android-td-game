@@ -16,8 +16,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
-import com.badlogic.gdx.utils.Json;
-import com.badlogic.gdx.utils.JsonWriter;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 
 import bg.ittalents.tower_defense.network.Network;
@@ -67,7 +65,7 @@ public class LoginScreen extends AbstractGameScreen implements INetworkScreenLis
         stage.addActor(mainTable);
         loginWindow = new LoginWindow(skin, this);
         registerWindow = new RegisterWindow(skin, this);
-        levelSelector = new bg.ittalents.tower_defense.screens.windows.LevelSelectorTable(skin, this);
+        levelSelector = new LevelSelectorWindow(skin, this);
         buildStatusTable();
 //        mainTable.add(loginWindow).center();
 
@@ -207,7 +205,8 @@ public class LoginScreen extends AbstractGameScreen implements INetworkScreenLis
     }
 
     @Override
-    public void play() {
+    public void play(int level) {
+        UserInfo.getInstance().setLevel(level);
         getGame().setScreen(new GameScreen(getGame()));
     }
 

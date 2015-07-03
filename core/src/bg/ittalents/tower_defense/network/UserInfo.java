@@ -11,6 +11,7 @@ public class UserInfo {
     private boolean spam;
     private String email;
     private int score;
+    private int level;
 
     @Override
     public String toString() {
@@ -53,5 +54,25 @@ public class UserInfo {
         instance.nickName = "Guess";
         instance.userName = "Guess";
         instance.email = "";
+    }
+
+    public int getLevel() {
+        return level;
+    }
+
+    public void setLevel(int level) {
+        this.level = level;
+    }
+
+    public int getScore() {
+        return score;
+    }
+
+    public void setScore(int score) {
+        this.score = score;
+    }
+
+    public String getNickName() {
+        return nickName;
     }
 }
