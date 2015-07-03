@@ -42,7 +42,7 @@ public abstract class AbstractTower extends AbstractObject {
     public boolean isInRange(AbstractCreep foe) {
         float dx = (foe.position.x - position.x);
         float dy = (foe.position.y - position.y);
-        return (range * range) > ((dx * dx) + (dy * dy));
+        return (getRange() * getRange()) > ((dx * dx) + (dy * dy));
     }
 
     public AbstractCreep getFoe() {
@@ -54,13 +54,13 @@ public abstract class AbstractTower extends AbstractObject {
     }
 
     public void upgrade() {
-        if (textures != null && textures.length > upgrade + 1 && level.getMoney() >= upgradePrice) {
+        if (textures != null && textures.length > upgrade + 1 && level.getMoney() >= getUpgradePrice()) {
             texture = textures[++upgrade];
             damage *= 1.33f;
 //            range *= 1.2f;
             fireRate *= 0.7f;
-            moneySpent += upgradePrice;
-            level.setMoney(level.getMoney() - upgradePrice);
+            moneySpent += getUpgradePrice();
+            level.setMoney(level.getMoney() - getUpgradePrice());
         }
 
         if (textures.length <= upgrade + 1) {
@@ -96,5 +96,13 @@ public abstract class AbstractTower extends AbstractObject {
 
     public int getMoneySpent() {
         return moneySpent;
+    }
+
+    public float getRange() {
+        return range;
+    }
+
+    public int getUpgradePrice() {
+        return upgradePrice;
     }
 }

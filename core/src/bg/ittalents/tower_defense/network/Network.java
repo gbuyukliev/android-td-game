@@ -17,13 +17,6 @@ public class Network {
 
     private static INetwork instance;
 
-    public static INetwork getInstance() {
-        if (instance == null) {
-            instance = new Offline();
-        }
-        return instance;
-    }
-
     public static void setListener(INetworkLevelListener networkLevelListener) {
         getInstance().setListener(networkLevelListener);
     }
@@ -41,5 +34,12 @@ public class Network {
         } else {
             new Offline();
         }
+    }
+
+    public static INetwork getInstance() {
+        if (instance == null) {
+            instance = new Offline();
+        }
+        return instance;
     }
 }

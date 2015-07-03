@@ -14,8 +14,7 @@ public class Background {
     private int height;
 
     public Background(int levelWidth, int levelHeight) {
-        texture = new TextureRegion(Assets.instance.background.background);
-//        texture = new TextureRegion(new Texture(Gdx.files.internal("menus_background.bak.jpg")));
+        texture = new TextureRegion(new Texture(Gdx.files.internal("galaxy_background_2.jpg")));
         width = levelWidth;
         height = levelHeight;
     }

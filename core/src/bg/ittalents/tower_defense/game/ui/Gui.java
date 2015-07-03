@@ -1,4 +1,4 @@
-package bg.ittalents.tower_defense.game;
+package bg.ittalents.tower_defense.game.ui;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
@@ -25,41 +25,42 @@ import java.awt.TextField;
 import java.io.IOException;
 import java.io.InputStream;
 
+import bg.ittalents.tower_defense.game.Level;
+import bg.ittalents.tower_defense.game.WorldRenderer;
+
 public class Gui {
-    private static final Texture UPGRADE_TEXTURE;
-    private static final Texture SELL_TEXTURE;
-
-    static {
-        UPGRADE_TEXTURE = new Texture("option_upgrade.png");
-        SELL_TEXTURE = new Texture("option_sell.png");
-    }
-
     private Level level;
     private Stage stage;
     private Skin skin;
     private float aspectRatio;
-    private Label textField;
+    private Label warningTextField;
     private Table noTowerTable;
     private Table towerTable;
     private ImageButton upgradeTowerButton;
+    private ImageButton buildTowerButton;
+    private ImageButton sellTowerButton;
 
-    public Gui(float aspectRatio, Batch batch) {
-        setAspectRatio(aspectRatio);
-        stage = new Stage(new StretchViewport(WorldRenderer.VIEWPORT * aspectRatio, WorldRenderer.VIEWPORT), batch);
-        skin = new Skin(Gdx.files.internal("data/uiskin.json"));
+    // A table with buttons which only appears if there is an empty tile selected
 
-        // A table with buttons which only appears if there is an empty tile selected
-
+    public void buildNoTowerTable() {
         noTowerTable = new Table();
         noTowerTable.bottom().left();
         noTowerTable.setFillParent(true);
         noTowerTable.setVisible(false);
         stage.addActor(noTowerTable);
+    }
 
-        ImageButton buildTowerButton = new ImageButton(new SpriteDrawable(new Sprite(UPGRADE_TEXTURE)));
+    public void buildBuildTowerButton() {
+        buildTowerButton = new MyButton(Textures.UPGRADE_BUTTON, Textures.UPGRADE_BUTTON_CLICKED);
         buildTowerButton.addListener(new ChangeListener() {
                                          @Override
                                          public void changed(ChangeEvent event, Actor actor) {
+                                             if (level.getMoney() < level.getCurrentTowerPrice()) {
+                                                 level.setTextTime(0);
+                                                 warningTextField.setText("Not enough money to buy a tower!");
+                                                 warningTextField.setVisible(true);
+                                             }
+
                                              level.buildTower(level.getColTower(), level.getRowTower());
                                              noTowerTable.setVisible(false);
                                              level.setIsClicked(false);
@@ -67,21 +68,31 @@ public class Gui {
                                      }
         );
 
-        noTowerTable.add(buildTowerButton);
+        noTowerTable.add(buildTowerButton).pad(5);
+    }
 
-        // A table with buttons which only appears if there is a tower selected
+    // A table with buttons which only appears if there is a tower selected
 
+    public void buildTowerTable() {
         towerTable = new Table();
         towerTable.bottom().left();
         towerTable.setFillParent(true);
         towerTable.setVisible(false);
         stage.addActor(towerTable);
+    }
 
-        upgradeTowerButton = new ImageButton(new SpriteDrawable(new Sprite(UPGRADE_TEXTURE)));
+    public void buildUpgradeTowerButton() {
+        upgradeTowerButton = new MyButton(Textures.UPGRADE_BUTTON, Textures.UPGRADE_BUTTON_CLICKED);
         upgradeTowerButton.addListener(new ChangeListener() {
                                            @Override
                                            public void changed(ChangeEvent event, Actor actor) {
                                                Level.Tile tile = level.getTiles()[level.getRowTower()][level.getColTower()];
+
+                                               if (level.getMoney() < tile.getTower().getUpgradePrice()) {
+                                                   level.setTextTime(0);
+                                                   warningTextField.setText("Not enough money for an upgrade!");
+                                                   warningTextField.setVisible(true);
+                                               }
 
                                                tile.getTower().upgrade();
                                                towerTable.setVisible(false);
@@ -90,9 +101,11 @@ public class Gui {
                                        }
         );
 
-        towerTable.add(upgradeTowerButton);
+        towerTable.add(upgradeTowerButton).pad(5);
+    }
 
-        ImageButton sellTowerButton = new ImageButton(new SpriteDrawable(new Sprite(SELL_TEXTURE)));
+    public void buildSellTowerButton() {
+        sellTowerButton = new MyButton(Textures.SELL_BUTTON, Textures.SELL_BUTTON_CLICKED);
         sellTowerButton.addListener(new ChangeListener() {
                                         @Override
                                         public void changed(ChangeEvent event, Actor actor) {
@@ -107,12 +120,30 @@ public class Gui {
                                     }
         );
 
-        towerTable.add(sellTowerButton).padLeft(5);
+        towerTable.add(sellTowerButton);
+    }
 
-        textField = new Label("Not enough money", skin);
-        textField.setPosition(0, 50);
-//        textField.setSize(0, 0);
-        stage.addActor(textField);
+    public void buildWarningTextField() {
+        warningTextField = new Label("", skin);
+        warningTextField.setPosition(0, 70);
+        warningTextField.setColor(Color.RED);
+        warningTextField.setVisible(false);
+        warningTextField.setSize((Gdx.graphics.getWidth() * 3) / 4, 0);
+        warningTextField.setAlignment(Align.center);
+        stage.addActor(warningTextField);
+    }
+
+    public Gui(float aspectRatio, Batch batch) {
+        setAspectRatio(aspectRatio);
+        stage = new Stage(new StretchViewport(WorldRenderer.VIEWPORT * aspectRatio, WorldRenderer.VIEWPORT), batch);
+        skin = new Skin(Gdx.files.internal("data/uiskin.json"));
+
+        buildNoTowerTable();
+        buildBuildTowerButton();
+        buildTowerTable();
+        buildUpgradeTowerButton();
+        buildSellTowerButton();
+        buildWarningTextField();
     }
 
     public InputProcessor getInputProcessor() {
@@ -150,5 +181,9 @@ public class Gui {
 
     public ImageButton getUpgradeTowerButton() {
         return upgradeTowerButton;
+    }
+
+    public Label getWarningTextField() {
+        return warningTextField;
     }
 }

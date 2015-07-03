@@ -1,6 +1,7 @@
 package bg.ittalents.tower_defense.game;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -21,6 +22,7 @@ import bg.ittalents.tower_defense.game.objects.CreepFlying;
 import bg.ittalents.tower_defense.game.objects.Tower;
 import bg.ittalents.tower_defense.game.objects.Wave;
 
+import bg.ittalents.tower_defense.game.ui.Gui;
 import bg.ittalents.tower_defense.network.INetwork;
 import bg.ittalents.tower_defense.network.Network;
 
@@ -35,8 +37,8 @@ public class Level implements Disposable {
     public static final float TIME_TILL_NEXT_WAVE = 10f;
 
     private INetwork offline;
-    private int lives, money, score, currentWave, currentCreep;
-    private float timeSinceSpawn, timeSinceLastWave;
+    private int lives, money, score, currentWave, currentCreep, currentTowerPrice;
+    private float timeSinceSpawn, timeSinceLastWave, textTime;
     private boolean triggerCountTime, isClicked;
     private Wave wave;
     private ShapeRenderer shapeRenderer;
@@ -86,8 +88,6 @@ public class Level implements Disposable {
 //    private Batch batch;
 
     public Level(TiledMap tiledMap, Gui gui) {
-
-        //offline = new Network.getInstance();
         //can use static Network class, to get instance
         offline = Network.getInstance();
 
@@ -179,6 +179,7 @@ public class Level implements Disposable {
                 Assets.instance.towers.tower[0], this);
 
         if (money >= tower.getPrice()) {
+            currentTowerPrice = tower.getPrice();
             towers.add(tower);
             getTiles()[row][col].tower = tower;
             money -= tower.getPrice();
@@ -203,6 +204,7 @@ public class Level implements Disposable {
                 if (tiles[row][col].getTower() != null) {
                     if (!tiles[row][col].getTower().isUpgradable()) {
                         gui.getUpgradeTowerButton().setDisabled(true);
+
                     } else {
                         gui.getUpgradeTowerButton().setDisabled(false);
                     }
@@ -227,7 +229,13 @@ public class Level implements Disposable {
         updateProjectiles(deltaTime);
         updateTowers(deltaTime);
 
-//        Gdx.app.debug(TAG, "Money: " + money + ", Score: " + score + ", Lives: " + lives);
+        Gdx.app.log(TAG, getWidth() + "............" + getHeight());
+
+        textTime += deltaTime;
+
+        if (textTime > 3) {
+            gui.getWarningTextField().setVisible(false);
+        }
     }
 
     private void spawnCreepInWave() {
@@ -361,12 +369,30 @@ public class Level implements Disposable {
         return tiles;
     }
 
+    public void setIsClicked(boolean isClicked) {
+        this.isClicked = isClicked;
+    }
+
+    public float getTextTime() {
+        return textTime;
+    }
+
+    public void setTextTime(float textTime) {
+        if (textTime >= 0) {
+            this.textTime = textTime;
+        }
+    }
+
     public boolean isClicked() {
         return isClicked;
     }
 
-    public void setIsClicked(boolean isClicked) {
-        this.isClicked = isClicked;
+    public Gui getGui() {
+        return gui;
+    }
+
+    public int getCurrentTowerPrice() {
+        return currentTowerPrice;
     }
 
     public void render(Batch batch, OrthographicCamera camera) {
@@ -385,14 +411,28 @@ public class Level implements Disposable {
         batch.end();
 
         if (isClicked()) {
+            AbstractTower tower = tiles[rowTower][colTower].getTower();
             int padding = 10;
 
             camera.update();
             shapeRenderer.setProjectionMatrix(camera.combined);
-            shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-            shapeRenderer.setColor(0, 1, 0, 1);
-            shapeRenderer.rect(colTower * tileWidth + padding / 2, rowTower * tileHeight + padding / 2, tileWidth - padding, tileHeight - padding);
-            shapeRenderer.end();
+
+            if (tower != null) {
+                Gdx.gl.glEnable(GL20.GL_BLEND);
+                Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+
+                shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+                shapeRenderer.setColor(0, 1, 0, 0.15f);
+                shapeRenderer.circle(colTower * tileWidth + tileWidth / 2, rowTower * tileHeight + tileHeight / 2, tower.getRange());
+                shapeRenderer.end();
+
+                Gdx.gl.glDisable(GL20.GL_BLEND);
+            } else {
+                shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+                shapeRenderer.setColor(0, 1, 0, 1);
+                shapeRenderer.rect(colTower * tileWidth + padding / 2, rowTower * tileHeight + padding / 2, tileWidth - padding, tileHeight - padding);
+                shapeRenderer.end();
+            }
         }
     }
 

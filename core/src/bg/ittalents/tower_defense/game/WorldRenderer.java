@@ -29,7 +29,7 @@ public class WorldRenderer implements Disposable {
     private OrthographicCamera cameraGUI;
     private CameraHelper cameraHelper;
 
-    private Gui gui;
+    private bg.ittalents.tower_defense.game.ui.Gui gui;
     private WorldController worldController;
     private Batch batch;
 
@@ -41,7 +41,7 @@ public class WorldRenderer implements Disposable {
         mapRenderer = new OrthogonalTiledMapRenderer(tiledMap, batch);
 
         aspectRatio = Gdx.graphics.getWidth() / (float) Gdx.graphics.getHeight();
-        gui = new Gui(aspectRatio, batch);
+        gui = new bg.ittalents.tower_defense.game.ui.Gui(aspectRatio, batch);
         level = new Level(tiledMap, gui);
         gui.setLevel(level);
         background = new Background(level.getWidth(), level.getHeight());
@@ -127,7 +127,7 @@ public class WorldRenderer implements Disposable {
         font.draw(batch, "Lives: " + level.getLives(), screenWidth - 75 / scale, y);
 
         if (level.isTriggerCountTime()) {
-            font.draw(batch, "TIME TILL NEXT WAVE: " + (int) (Level.TIME_TILL_NEXT_WAVE - level.getTimeSinceLastWave()), screenWidth / 2 - 70 / scale, screenHeight / 2);
+            font.draw(batch, "TIME TILL NEXT WAVE: " + (int) (Level.TIME_TILL_NEXT_WAVE - level.getTimeSinceLastWave()), screenWidth / 2 - 80 / scale, screenHeight / 2);
         }
     }
 
@@ -175,8 +175,6 @@ public class WorldRenderer implements Disposable {
         gui.setAspectRatio(aspectRatio);
         Gdx.app.debug("Aspect", "" + aspectRatio);
         camera.viewportWidth = (WorldRenderer.VIEWPORT * aspectRatio);
-        camera.update();
-        cameraGUI.viewportWidth = (WorldRenderer.VIEWPORT * aspectRatio);
         camera.update();
         worldController.updateScale();
         scale = worldController.getScale();
