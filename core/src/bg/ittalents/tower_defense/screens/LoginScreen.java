@@ -54,7 +54,7 @@ public class LoginScreen extends AbstractGameScreen implements INetworkScreenLis
 
     @Override
     public void show() {
-        background = new Texture(Gdx.files.internal("menus_background.jpg"));
+        background = new Texture(Gdx.files.internal("menus_background.png"));
         skin = new Skin(Gdx.files.internal("data/uiskin.json"));
         buildStage();
     }
@@ -158,6 +158,7 @@ public class LoginScreen extends AbstractGameScreen implements INetworkScreenLis
 
     @Override
     public void switchToWindow(SCREEN window) {
+        clearStatus();
         mainTable.clearChildren();
         loggedTable.remove();
         loggedOutTable.remove();
@@ -172,7 +173,6 @@ public class LoginScreen extends AbstractGameScreen implements INetworkScreenLis
                 break;
             case ACCOUNT_INFO:
             case LOGIN :
-            default:
                 mainTable.add(loginWindow);
                 stage.addActor(loggedOutTable);
                 break;
@@ -183,6 +183,11 @@ public class LoginScreen extends AbstractGameScreen implements INetworkScreenLis
     public void setStatus(String message) {
         setStatusToLabel(message, lblStatus);
         setStatusToLabel(message, lblLoggedStatus);
+    }
+
+    public void clearStatus() {
+        lblStatus.setText("");
+        lblLoggedStatus.setText("");
     }
 
     public static void setStatusToLabel(String message, final Label label) {
@@ -197,15 +202,8 @@ public class LoginScreen extends AbstractGameScreen implements INetworkScreenLis
     }
 
     @Override
-    public void setPlayerInfo(String userInfoJSON) {
-
-        Json json = new Json();
-        json.setTypeName(null);
-        json.setUsePrototypes(false);
-        json.setIgnoreUnknownFields(true);
-        json.setOutputType(JsonWriter.OutputType.json);
-        userInfo = json.fromJson(UserInfo.class, userInfoJSON);
-
+    public void setPlayerInfo(String userJson) {
+        UserInfo.logAs(userJson);
         Gdx.app.debug("JSON", userInfo.toString());
     }
 

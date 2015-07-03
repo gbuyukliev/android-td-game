@@ -1,6 +1,11 @@
 package bg.ittalents.tower_defense.network;
 
+import com.badlogic.gdx.utils.Json;
+import com.badlogic.gdx.utils.JsonWriter;
+
 public class UserInfo {
+    private static UserInfo instance;
+
     private String nickName;
     private String userName;
     private boolean spam;
@@ -17,13 +22,28 @@ public class UserInfo {
                 '}';
     }
 
-    public static UserInfo createGuessUser() {
-        UserInfo userInfo = new UserInfo();
+    public static void logAs(String userJson) {
+        Json json = new Json();
+        json.setTypeName(null);
+        json.setUsePrototypes(false);
+        json.setIgnoreUnknownFields(true);
+        json.setOutputType(JsonWriter.OutputType.json);
+        instance = json.fromJson(UserInfo.class, userJson);
+    }
 
-        userInfo.nickName = "Guess";
-        userInfo.userName = "Guess";
-        userInfo.email = "";
+    public static void logOff() {
+        instance = null;
+    }
 
-        return userInfo;
+    public static boolean isLogged() {
+        return instance != null;
+    }
+
+    public static void logAsGuess() {
+        instance = new UserInfo();
+
+        instance.nickName = "Guess";
+        instance.userName = "Guess";
+        instance.email = "";
     }
 }

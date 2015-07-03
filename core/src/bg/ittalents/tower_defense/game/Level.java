@@ -23,6 +23,7 @@ import bg.ittalents.tower_defense.game.objects.Tower;
 import bg.ittalents.tower_defense.game.objects.Wave;
 
 import bg.ittalents.tower_defense.game.ui.Gui;
+import bg.ittalents.tower_defense.game.waves.LevelData;
 import bg.ittalents.tower_defense.network.INetwork;
 import bg.ittalents.tower_defense.network.Network;
 
@@ -36,7 +37,7 @@ public class Level implements Disposable {
     private static final int DEFAULT_CURRENT_CREEP = 1;
     public static final float TIME_TILL_NEXT_WAVE = 10f;
 
-    private INetwork offline;
+//    private INetwork offline;
     private int lives, money, score, currentWave, currentCreep, currentTowerPrice;
     private float timeSinceSpawn, timeSinceLastWave, textTime;
     private boolean triggerCountTime, isClicked;
@@ -83,13 +84,11 @@ public class Level implements Disposable {
         }
     }
 
-
-
 //    private Batch batch;
 
     public Level(TiledMap tiledMap, Gui gui) {
         //can use static Network class, to get instance
-        offline = Network.getInstance();
+        Network.getInstance().getLevelData("123", 1);
 
         this.gui = gui;
         shapeRenderer = new ShapeRenderer();
@@ -436,5 +435,6 @@ public class Level implements Disposable {
 
     @Override
     public void dispose() {
+        shapeRenderer.dispose();
     }
 }
