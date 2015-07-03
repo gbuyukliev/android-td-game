@@ -8,14 +8,22 @@
  <tileset firstgid="1" name="level_tiles" tilewidth="46" tileheight="46" spacing="2" margin="2">
   <image source="level_tiles.png" width="256" height="256"/>
  </tileset>
+ <tileset firstgid="26" name="turret_base" tilewidth="46" tileheight="46">
+  <tile id="0">
+   <image width="46" height="46" source="turret-base.png"/>
+  </tile>
+ </tileset>
+ <imagelayer name="Image Layer 1" x="-818" y="5">
+  <image source="../galaxy_background_4.jpg"/>
+ </imagelayer>
  <layer name="wall_layer" width="15" height="9">
   <data encoding="base64" compression="zlib">
-   eJxjZ2Bg4CIDcwIxNwN5gBtJLzsJ9qHrJdZ+ZPXoevHZT0gvIfuJ0YvLbg4K7EW2H10PGx470e0HAE8dAxU=
+   eJxjZ2Bg4CIDcwIxNwN5gBtJLzsJ9qHrJdZ+ZPXoevHZT0gvIfuJ0YvLbg4K7EW3Hx0QE94g+wFJRQL5
   </data>
  </layer>
  <layer name="portals" width="15" height="9">
   <data encoding="base64" compression="zlib">
-   eJxjYBgFwx2wQGkmEvUBAANcAAc=
+   eJyTYmBgkKIAkwOQ9ZJqFzqbWPtw6SXGPnx6KbGXWPtJtRfZfm4gZoHSTEDMRsBOZAwAgQQHwQ==
   </data>
  </layer>
 </map>
