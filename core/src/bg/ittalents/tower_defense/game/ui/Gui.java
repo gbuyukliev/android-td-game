@@ -3,29 +3,21 @@ package bg.ittalents.tower_defense.game.ui;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 
-import java.awt.Image;
-import java.awt.TextField;
-import java.io.IOException;
-import java.io.InputStream;
-
+import bg.ittalents.tower_defense.game.Assets;
 import bg.ittalents.tower_defense.game.Level;
 import bg.ittalents.tower_defense.game.WorldRenderer;
 
@@ -40,6 +32,7 @@ public class Gui {
     private ImageButton upgradeTowerButton;
     private ImageButton buildTowerButton;
     private ImageButton sellTowerButton;
+    private ImageButton pauseButton;
 
     // A table with buttons which only appears if there is an empty tile selected
 
@@ -52,7 +45,7 @@ public class Gui {
     }
 
     public void buildBuildTowerButton() {
-        buildTowerButton = new MyButton(Textures.UPGRADE_BUTTON_BLUE, Textures.UPGRADE_BUTTON_CLICKED_BLUE);
+        buildTowerButton = new MyButton(Assets.UPGRADE_BUTTON_BLUE, Assets.UPGRADE_BUTTON_CLICKED_BLUE);
         buildTowerButton.addListener(new ChangeListener() {
                                          @Override
                                          public void changed(ChangeEvent event, Actor actor) {
@@ -83,10 +76,10 @@ public class Gui {
     }
 
     public void buildUpgradeTowerButton() {
-//        Drawable buttonUp = new SpriteDrawable(new Sprite(Textures.UPGRADE_BUTTON));
-//        Drawable buttonDown = new SpriteDrawable(new Sprite(Textures.UPGRADE_BUTTON_CLICKED));
+//        Drawable buttonUp = new SpriteDrawable(new Sprite(Assets.UPGRADE_BUTTON));
+//        Drawable buttonDown = new SpriteDrawable(new Sprite(Assets.UPGRADE_BUTTON_CLICKED));
 
-        upgradeTowerButton = new MyButton(Textures.UPGRADE_BUTTON_BLUE, Textures.UPGRADE_BUTTON_CLICKED_BLUE);
+        upgradeTowerButton = new MyButton(Assets.UPGRADE_BUTTON_BLUE, Assets.UPGRADE_BUTTON_CLICKED_BLUE);
 //        ImageButton.ImageButtonStyle style = new ImageButton.ImageButtonStyle();
 //        style.imageDisabled = buttonDown;
 //        upgradeTowerButton.setStyle(style);
@@ -113,7 +106,7 @@ public class Gui {
     }
 
     public void buildSellTowerButton() {
-        sellTowerButton = new MyButton(Textures.SELL_BUTTON_BLUE, Textures.SELL_BUTTON_CLICKED_BLUE);
+        sellTowerButton = new MyButton(Assets.SELL_BUTTON_BLUE, Assets.SELL_BUTTON_CLICKED_BLUE);
         sellTowerButton.addListener(new ChangeListener() {
                                         @Override
                                         public void changed(ChangeEvent event, Actor actor) {
@@ -137,10 +130,46 @@ public class Gui {
         warningTextField = new Label("", skin);
         warningTextField.setColor(Color.RED);
         warningTextField.setVisible(false);
-        warningTextField.setSize((Gdx.graphics.getWidth() * 3) / 4, 0);
         warningTextField.setAlignment(Align.center);
         warningTextTable.add(warningTextField).center().expandX().padTop(210);
         stage.addActor(warningTextTable);
+    }
+
+    public void buildPause() {
+        Drawable buttonUp1 = new SpriteDrawable(new Sprite(Assets.PAUSE_BUTTON));
+        Drawable buttonDown1 = new SpriteDrawable(new Sprite(Assets.PAUSE_BUTTON_CLICKED));
+
+        Drawable buttonUp2 = new SpriteDrawable(new Sprite(Assets.RESUME_BUTTON));
+        Drawable buttonDown2 = new SpriteDrawable(new Sprite(Assets.RESUME_BUTTON_CLICKED));
+
+        final ImageButton.ImageButtonStyle style1 = new ImageButton.ImageButtonStyle();
+        style1.imageUp = buttonUp1;
+        style1.imageDown = buttonDown1;
+
+        final ImageButton.ImageButtonStyle style2 = new ImageButton.ImageButtonStyle();
+        style2.imageUp = buttonUp2;
+        style2.imageDown = buttonDown2;
+
+        Table pauseTable = new Table();
+        pauseTable.setFillParent(true);
+        pauseTable.bottom().right();
+        pauseButton = new ImageButton(style1);
+        pauseButton.addListener(new ChangeListener() {
+                                    @Override
+                                    public void changed(ChangeEvent event, Actor actor) {
+                                        if (level.isPaused() == false) {
+                                            pauseButton.setStyle(style2);
+                                            level.setIsPaused(true);
+                                        } else {
+                                            pauseButton.setStyle(style1);
+                                            level.setIsPaused(false);
+                                        }
+                                    }
+                                }
+        );
+
+        pauseTable.add(pauseButton).size(40, 40).pad(5);
+        stage.addActor(pauseTable);
     }
 
     public Gui(float aspectRatio, Batch batch) {
@@ -154,6 +183,7 @@ public class Gui {
         buildUpgradeTowerButton();
         buildSellTowerButton();
         buildWarningTextField();
+        buildPause();
     }
 
     public InputProcessor getInputProcessor() {

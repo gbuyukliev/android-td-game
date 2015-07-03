@@ -51,7 +51,7 @@ public class WorldRenderer implements Disposable {
     private void init() {
         camera = new OrthographicCamera(WorldRenderer.VIEWPORT * aspectRatio,
                 WorldRenderer.VIEWPORT);
-        camera.position.set(0, 0, 0);
+        camera.position.set(50, 0, 0);
         camera.update();
 
         cameraGUI = new OrthographicCamera(WorldRenderer.VIEWPORT * aspectRatio,
@@ -139,7 +139,7 @@ public class WorldRenderer implements Disposable {
         int fps = Gdx.graphics.getFramesPerSecond();
         BitmapFont font = Assets.instance.fonts.defaultFont;
 
-        float x = cameraGUI.viewportWidth - 60 / scale;
+        float x = cameraGUI.viewportWidth / 2 - 30 / scale;
         float y = cameraGUI.viewportHeight - 15 / scale;
         if (fps >= 45) {
             // 45 or more FPS show up in green

@@ -21,10 +21,7 @@ import bg.ittalents.tower_defense.game.objects.CreepBoss;
 import bg.ittalents.tower_defense.game.objects.CreepFlying;
 import bg.ittalents.tower_defense.game.objects.Tower;
 import bg.ittalents.tower_defense.game.objects.Wave;
-
 import bg.ittalents.tower_defense.game.ui.Gui;
-import bg.ittalents.tower_defense.game.waves.LevelData;
-import bg.ittalents.tower_defense.network.INetwork;
 import bg.ittalents.tower_defense.network.Network;
 
 public class Level implements Disposable {
@@ -41,7 +38,9 @@ public class Level implements Disposable {
     //    private INetwork offline;
     private int lives, money, score, currentWave, currentCreep, currentTowerPrice;
     private float timeSinceSpawn, timeSinceLastWave, textTime;
-    private boolean triggerCountTime, isClicked;
+    private boolean triggerCountTime;
+    private boolean isClicked;
+    private boolean isPaused;
     private Wave wave;
     private ShapeRenderer shapeRenderer;
 
@@ -101,7 +100,8 @@ public class Level implements Disposable {
         timeSinceSpawn = 0;
         timeSinceLastWave = 0;
         triggerCountTime = false;
-        setIsClicked(false);
+        isPaused = false;
+        isClicked = false;
 
         towers = new Array<AbstractTower>();
         creeps = new Array<AbstractCreep>();
@@ -221,10 +221,13 @@ public class Level implements Disposable {
     }
 
     public void update(float deltaTime) {
-        updateWave(deltaTime);
-        updateCreeps(deltaTime);
-        updateProjectiles(deltaTime);
-        updateTowers(deltaTime);
+        if (!isPaused) {
+            updateWave(deltaTime);
+            updateCreeps(deltaTime);
+            updateProjectiles(deltaTime);
+            updateTowers(deltaTime);
+        }
+
         updateWarningText(deltaTime);
     }
 
@@ -385,6 +388,14 @@ public class Level implements Disposable {
         return isClicked;
     }
 
+    public boolean isPaused() {
+        return isPaused;
+    }
+
+    public void setIsPaused(boolean isPaused) {
+        this.isPaused = isPaused;
+    }
+
     public Gui getGui() {
         return gui;
     }
@@ -393,21 +404,7 @@ public class Level implements Disposable {
         return currentTowerPrice;
     }
 
-    public void render(Batch batch, OrthographicCamera camera) {
-        batch.begin();
-
-        for (AbstractCreep creep : creeps) {
-            creep.render(batch);
-        }
-        for (AbstractTower tower : towers) {
-            tower.render(batch);
-        }
-        for (AbstractProjectile projectile : projectiles) {
-            projectile.render(batch);
-        }
-
-        batch.end();
-
+    private void setShapeRenderer(OrthographicCamera camera) {
         if (isClicked()) {
             AbstractTower tower = tiles[rowTower][colTower].getTower();
             int padding = 10;
@@ -432,6 +429,36 @@ public class Level implements Disposable {
                 shapeRenderer.end();
             }
         }
+
+        if (isPaused) {
+            Gdx.gl.glEnable(GL20.GL_BLEND);
+            Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+
+            shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+            shapeRenderer.setColor(1, 1, 1, 0.20f);
+            shapeRenderer.rect(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+            shapeRenderer.end();
+
+            Gdx.gl.glDisable(GL20.GL_BLEND);
+        }
+    }
+
+    public void render(Batch batch, OrthographicCamera camera) {
+        batch.begin();
+
+        for (AbstractCreep creep : creeps) {
+            creep.render(batch);
+        }
+        for (AbstractTower tower : towers) {
+            tower.render(batch);
+        }
+        for (AbstractProjectile projectile : projectiles) {
+            projectile.render(batch);
+        }
+
+        batch.end();
+
+        setShapeRenderer(camera);
     }
 
     @Override
