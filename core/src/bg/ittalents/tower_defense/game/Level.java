@@ -36,8 +36,9 @@ public class Level implements Disposable {
 
     private static final int DEFAULT_CURRENT_CREEP = 1;
     public static final float TIME_TILL_NEXT_WAVE = 10f;
+    public static final String BUILDABLE_LAYER = "buildable";
 
-//    private INetwork offline;
+    //    private INetwork offline;
     private int lives, money, score, currentWave, currentCreep, currentTowerPrice;
     private float timeSinceSpawn, timeSinceLastWave, textTime;
     private boolean triggerCountTime, isClicked;
@@ -115,7 +116,7 @@ public class Level implements Disposable {
 
     private void initTiles(TiledMap tiledMap) {
         tiles = new Tile[tileRows][tileColumns];
-        TiledMapTileLayer mapLayer = (TiledMapTileLayer) tiledMap.getLayers().get("wall_layer");
+        TiledMapTileLayer mapLayer = (TiledMapTileLayer) tiledMap.getLayers().get(BUILDABLE_LAYER);
 
         for (int row = 0; row < tileRows; row++) {
             for (int col = 0; col < tileColumns; col++) {
