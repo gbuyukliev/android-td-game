@@ -12,7 +12,7 @@ class Offline implements INetwork {
     private static final String EXTENSION = ".json";
 
     @Override
-    public LevelData getLevelData(String username, int levelNumber) {
+    public void getLevelData(String username, int levelNumber) {
         String levelJSON = Gdx.files.internal(PATH + LEVEL_DATA_FILES + levelNumber + EXTENSION).readString();
 
         Json json = new Json();
@@ -21,7 +21,7 @@ class Offline implements INetwork {
         json.setIgnoreUnknownFields(true);
         json.setOutputType(JsonWriter.OutputType.json);
         LevelData levelData = json.fromJson(LevelData.class, levelJSON);
-        return levelData;
+//        return levelData;
 //        Gdx.app.debug("JSON", levelData.toString());
     }
 

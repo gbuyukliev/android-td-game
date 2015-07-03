@@ -4,7 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Net;
 
 public class Network {
-    public static final String URL = "http://192.168.7.61:8080/towerdefense/";
+    public static final String URL = "http://192.168.1.103:8080/towerdefense/";
     //    public static final String URL = "http://jsonstub.com/towerdefense/";
     public static final String LOGIN_MANAGER = "LoginManager";
     public static final String REGISTER_MANAGER = "RegisterManager";

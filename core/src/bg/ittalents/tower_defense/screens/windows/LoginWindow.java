@@ -85,7 +85,7 @@ public class LoginWindow extends Window {
     }
 
     private boolean validateFields() {
-        if (txtUsername.getText().length() == 0 || txtUsername.getText().length() == 0) {
+        if (txtUsername.getText().length() == 0 || txtPassword.getText().length() == 0) {
             networkScreen.setStatus("Enter valid username and password!");
             return false;
         }
@@ -114,6 +114,8 @@ public class LoginWindow extends Window {
                                 return;
                             }
 
+                            Network.setOnline(true);
+                            networkScreen.setPlayerInfo(result);
                             networkScreen.switchToWindow(INetworkScreenListener.SCREEN.LEVEL_SELECTOR);
 //                            Gdx.app.debug("Login POST", "" + httpResponse.getHeader("Reason"));
 //                            Gdx.net.cancelHttpRequest(httpRequest);

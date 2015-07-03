@@ -1,52 +1,80 @@
-tiles.png
+level_tiles.png
 format: RGBA8888
 filter: Linear,Linear
 repeat: none
-tile-1-center
+portal.blue.horizontal
   rotate: false
   xy: 2, 2
   size: 46, 46
   orig: 46, 46
   offset: 0, 0
   index: -1
-tile-1-corner-left-bottom
+portal.blue.vertical
   rotate: false
   xy: 50, 2
   size: 46, 46
   orig: 46, 46
   offset: 0, 0
   index: -1
-tile-1-corner-left-top
+portal.red.horizontal
+  rotate: false
+  xy: 98, 2
+  size: 46, 46
+  orig: 46, 46
+  offset: 0, 0
+  index: -1
+portal.red.vertical
+  rotate: false
+  xy: 146, 2
+  size: 46, 46
+  orig: 46, 46
+  offset: 0, 0
+  index: -1
+tile-1-center
+  rotate: false
+  xy: 194, 2
+  size: 46, 46
+  orig: 46, 46
+  offset: 0, 0
+  index: -1
+tile-1-corner-left-bottom
   rotate: false
   xy: 2, 50
   size: 46, 46
   orig: 46, 46
   offset: 0, 0
   index: -1
-tile-1-corner-right-bottom
+tile-1-corner-left-top
   rotate: false
   xy: 50, 50
   size: 46, 46
   orig: 46, 46
   offset: 0, 0
   index: -1
+tile-1-corner-right-bottom
+  rotate: false
+  xy: 98, 50
+  size: 46, 46
+  orig: 46, 46
+  offset: 0, 0
+  index: -1
 tile-1-corner-right-top
   rotate: false
-  xy: 2, 98
+  xy: 146, 50
   size: 46, 46
   orig: 46, 46
   offset: 0, 0
   index: -1
 tile-1-horizontal
   rotate: false
-  xy: 50, 98
+  xy: 194, 50
   size: 46, 46
   orig: 46, 46
   offset: 0, 0
   index: -1
 tile-1-vertical
   rotate: false
-  xy: 2, 146
+  xy: 2, 98
   size: 46, 46
   orig: 46, 46
   offset: 0, 0
