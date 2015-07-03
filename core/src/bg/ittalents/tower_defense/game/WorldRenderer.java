@@ -51,7 +51,7 @@ public class WorldRenderer implements Disposable {
     private void init() {
         camera = new OrthographicCamera(WorldRenderer.VIEWPORT * aspectRatio,
                 WorldRenderer.VIEWPORT);
-        camera.position.set(0, 0, 0);
+        camera.position.set(50, 0, 0);
         camera.update();
 
         cameraGUI = new OrthographicCamera(WorldRenderer.VIEWPORT * aspectRatio,

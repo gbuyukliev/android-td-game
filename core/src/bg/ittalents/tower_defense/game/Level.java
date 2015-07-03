@@ -404,21 +404,7 @@ public class Level implements Disposable {
         return currentTowerPrice;
     }
 
-    public void render(Batch batch, OrthographicCamera camera) {
-        batch.begin();
-
-        for (AbstractCreep creep : creeps) {
-            creep.render(batch);
-        }
-        for (AbstractTower tower : towers) {
-            tower.render(batch);
-        }
-        for (AbstractProjectile projectile : projectiles) {
-            projectile.render(batch);
-        }
-
-        batch.end();
-
+    private void setShapeRenderer(OrthographicCamera camera) {
         if (isClicked()) {
             AbstractTower tower = tiles[rowTower][colTower].getTower();
             int padding = 10;
@@ -443,6 +429,36 @@ public class Level implements Disposable {
                 shapeRenderer.end();
             }
         }
+
+        if (isPaused) {
+            Gdx.gl.glEnable(GL20.GL_BLEND);
+            Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+
+            shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+            shapeRenderer.setColor(1, 1, 1, 0.20f);
+            shapeRenderer.rect(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+            shapeRenderer.end();
+
+            Gdx.gl.glDisable(GL20.GL_BLEND);
+        }
+    }
+
+    public void render(Batch batch, OrthographicCamera camera) {
+        batch.begin();
+
+        for (AbstractCreep creep : creeps) {
+            creep.render(batch);
+        }
+        for (AbstractTower tower : towers) {
+            tower.render(batch);
+        }
+        for (AbstractProjectile projectile : projectiles) {
+            projectile.render(batch);
+        }
+
+        batch.end();
+
+        setShapeRenderer(camera);
     }
 
     @Override

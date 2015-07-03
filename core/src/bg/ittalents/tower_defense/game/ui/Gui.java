@@ -11,13 +11,13 @@ import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 
+import bg.ittalents.tower_defense.game.Assets;
 import bg.ittalents.tower_defense.game.Level;
 import bg.ittalents.tower_defense.game.WorldRenderer;
 
@@ -45,7 +45,7 @@ public class Gui {
     }
 
     public void buildBuildTowerButton() {
-        buildTowerButton = new MyButton(Textures.UPGRADE_BUTTON_BLUE, Textures.UPGRADE_BUTTON_CLICKED_BLUE);
+        buildTowerButton = new MyButton(Assets.UPGRADE_BUTTON_BLUE, Assets.UPGRADE_BUTTON_CLICKED_BLUE);
         buildTowerButton.addListener(new ChangeListener() {
                                          @Override
                                          public void changed(ChangeEvent event, Actor actor) {
@@ -76,10 +76,10 @@ public class Gui {
     }
 
     public void buildUpgradeTowerButton() {
-//        Drawable buttonUp = new SpriteDrawable(new Sprite(Textures.UPGRADE_BUTTON));
-//        Drawable buttonDown = new SpriteDrawable(new Sprite(Textures.UPGRADE_BUTTON_CLICKED));
+//        Drawable buttonUp = new SpriteDrawable(new Sprite(Assets.UPGRADE_BUTTON));
+//        Drawable buttonDown = new SpriteDrawable(new Sprite(Assets.UPGRADE_BUTTON_CLICKED));
 
-        upgradeTowerButton = new MyButton(Textures.UPGRADE_BUTTON_BLUE, Textures.UPGRADE_BUTTON_CLICKED_BLUE);
+        upgradeTowerButton = new MyButton(Assets.UPGRADE_BUTTON_BLUE, Assets.UPGRADE_BUTTON_CLICKED_BLUE);
 //        ImageButton.ImageButtonStyle style = new ImageButton.ImageButtonStyle();
 //        style.imageDisabled = buttonDown;
 //        upgradeTowerButton.setStyle(style);
@@ -106,7 +106,7 @@ public class Gui {
     }
 
     public void buildSellTowerButton() {
-        sellTowerButton = new MyButton(Textures.SELL_BUTTON_BLUE, Textures.SELL_BUTTON_CLICKED_BLUE);
+        sellTowerButton = new MyButton(Assets.SELL_BUTTON_BLUE, Assets.SELL_BUTTON_CLICKED_BLUE);
         sellTowerButton.addListener(new ChangeListener() {
                                         @Override
                                         public void changed(ChangeEvent event, Actor actor) {
@@ -136,11 +136,11 @@ public class Gui {
     }
 
     public void buildPause() {
-        Drawable buttonUp1 = new SpriteDrawable(new Sprite(Textures.PAUSE_BUTTON));
-        Drawable buttonDown1 = new SpriteDrawable(new Sprite(Textures.PAUSE_BUTTON_CLICKED));
+        Drawable buttonUp1 = new SpriteDrawable(new Sprite(Assets.PAUSE_BUTTON));
+        Drawable buttonDown1 = new SpriteDrawable(new Sprite(Assets.PAUSE_BUTTON_CLICKED));
 
-        Drawable buttonUp2 = new SpriteDrawable(new Sprite(Textures.RESUME_BUTTON));
-        Drawable buttonDown2 = new SpriteDrawable(new Sprite(Textures.RESUME_BUTTON_CLICKED));
+        Drawable buttonUp2 = new SpriteDrawable(new Sprite(Assets.RESUME_BUTTON));
+        Drawable buttonDown2 = new SpriteDrawable(new Sprite(Assets.RESUME_BUTTON_CLICKED));
 
         final ImageButton.ImageButtonStyle style1 = new ImageButton.ImageButtonStyle();
         style1.imageUp = buttonUp1;
