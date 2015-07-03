@@ -76,13 +76,15 @@ public class Gui {
     }
 
     public void buildUpgradeTowerButton() {
-//        Drawable buttonUp = new SpriteDrawable(new Sprite(Assets.UPGRADE_BUTTON));
-//        Drawable buttonDown = new SpriteDrawable(new Sprite(Assets.UPGRADE_BUTTON_CLICKED));
+        Drawable buttonUp = new SpriteDrawable(new Sprite(Assets.UPGRADE_BUTTON_BLUE));
+        Drawable buttonDown = new SpriteDrawable(new Sprite(Assets.UPGRADE_BUTTON_CLICKED_BLUE));
 
-        upgradeTowerButton = new MyButton(Assets.UPGRADE_BUTTON_BLUE, Assets.UPGRADE_BUTTON_CLICKED_BLUE);
-//        ImageButton.ImageButtonStyle style = new ImageButton.ImageButtonStyle();
-//        style.imageDisabled = buttonDown;
-//        upgradeTowerButton.setStyle(style);
+        ImageButton.ImageButtonStyle style = new ImageButton.ImageButtonStyle();
+        style.imageUp = buttonUp;
+        style.imageDown = buttonDown;
+        style.imageDisabled = buttonDown;
+
+        upgradeTowerButton = new ImageButton(style);
 
         upgradeTowerButton.addListener(new ChangeListener() {
                                            @Override
