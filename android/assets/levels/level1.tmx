@@ -11,17 +11,17 @@
  </imagelayer>
  <layer name="buildable" width="17" height="11">
   <data encoding="base64" compression="zlib">
-   eJxjYKAOYAdiLjIwJ5IZ3GTazY2FTax7OPGYQax7sKlHF8PnHmLNIOQeUszA5RYOKrgDXR8IsOGxEx/mYKAeAACZpAMn
+   eJxjYKAOYAdiLjIwJ5IZ3GTazY2FTax7OPGYQax7sKlHF8PnHmLNIOQeUszA5RYOIu0iBhAyg5j44cCpm3QAAGq8Atg=
   </data>
  </layer>
  <layer name="unbuidable1" width="17" height="11">
   <data encoding="base64" compression="zlib">
-   eJxjYBgFo2BkAAAC7AAB
+   eJxjYBgFowA/4MZBkwLYgJgLDdMbAAAx1ABQ
   </data>
  </layer>
  <layer name="unbuildable2" width="17" height="11">
   <data encoding="base64" compression="zlib">
-   eJxjYBgFo4AwYIHSTAPqCsoAAAd0AAc=
+   eJxjYBgFowA/4AFiFijNBKXJMQMd0xsAAD+EAGc=
   </data>
  </layer>
 </map>

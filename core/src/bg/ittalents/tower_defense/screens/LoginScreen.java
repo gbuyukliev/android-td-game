@@ -46,7 +46,6 @@ public class LoginScreen extends AbstractGameScreen implements INetworkScreenLis
     private Table levelSelector;
     private Texture background;
     private Batch batch;
-    private UserInfo userInfo;
 
     public LoginScreen(Game game) {
         super(game);
@@ -204,7 +203,7 @@ public class LoginScreen extends AbstractGameScreen implements INetworkScreenLis
     @Override
     public void setPlayerInfo(String userJson) {
         UserInfo.logAs(userJson);
-        Gdx.app.debug("JSON", userInfo.toString());
+        Gdx.app.debug("JSON", UserInfo.getInstance().toString());
     }
 
     @Override

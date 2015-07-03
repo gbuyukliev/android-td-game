@@ -3,23 +3,19 @@ package bg.ittalents.tower_defense.game;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.utils.Disposable;
 
 import bg.ittalents.tower_defense.screens.LoginScreen;
 
-public class WorldController extends InputAdapter implements Disposable {
+public class WorldController extends GestureDetector.GestureAdapter implements Disposable {
 
     private Level level;
     private Game game;
 
     private float scale;
-    private int lastPointerPositionX;
-    private int lastPointerPositionY;
-    private int touchedPositionX;
-    private int touchedPositionY;
 
     private WorldRenderer worldRenderer;
 
@@ -29,7 +25,7 @@ public class WorldController extends InputAdapter implements Disposable {
 
         InputMultiplexer inputMultiplexer = new InputMultiplexer();
         inputMultiplexer.addProcessor(worldRenderer.getInputProcessor());
-        inputMultiplexer.addProcessor(this);
+        inputMultiplexer.addProcessor(new GestureDetector(this));
 
         Gdx.input.setInputProcessor(inputMultiplexer);
         level = worldRenderer.getLevel();
@@ -45,41 +41,37 @@ public class WorldController extends InputAdapter implements Disposable {
         scale = WorldRenderer.VIEWPORT / Gdx.graphics.getHeight();
     }
 
-    @Override
-    public boolean keyUp (int keycode) {
-        if (keycode == Input.Keys.ESCAPE || keycode == Input.Keys.BACK) {
-            // switch to menu screen
-            game.setScreen(new LoginScreen(game));
-        }
-        return false;
-    }
+//    @Override
+//    public boolean keyUp (int keycode) {
+//        if (keycode == Input.Keys.ESCAPE || keycode == Input.Keys.BACK) {
+//            // switch to menu screen
+//            game.setScreen(new LoginScreen(game));
+//        }
+//        return false;
+//    }
+
+//    @Override
+//    public boolean zoom (float originalDistance, float currentDistance){
+//        float zoomLevel = WorldRenderer.VIEWPORT + (currentDistance - originalDistance) / scale;
+////        if (zoomLevel > 350f && zoomLevel < 450f) {
+////            WorldRenderer.VIEWPORT = zoomLevel;
+////        }
+////        worldRenderer.updateCamera();
+//
+//        Gdx.app.debug("Zoom", ""+zoomLevel);
+//
+//        return true;
+//    }
 
     @Override
-    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        lastPointerPositionX = screenX;
-        lastPointerPositionY = screenY;
-
-        touchedPositionX = screenX;
-        touchedPositionY = screenY;
+    public boolean tap(float x, float y, int count, int button) {
+        worldRenderer.handleTouch(x, y);
         return true;
     }
 
     @Override
-    public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-        if (screenX == touchedPositionX && screenY == touchedPositionY) {
-//            level.spawnCreep();
-            worldRenderer.handleTouch(screenX, screenY);
-        }
-        return true;
-    }
-
-    @Override
-    public boolean touchDragged(int screenX, int screenY, int pointer) {
-        int dX = lastPointerPositionX - screenX;
-        int dY = screenY - lastPointerPositionY;
-        worldRenderer.moveCamera(dX * scale, dY * scale);
-        lastPointerPositionX = screenX;
-        lastPointerPositionY = screenY;
+    public boolean pan(float x, float y, float deltaX, float deltaY) {
+        worldRenderer.moveCamera(-deltaX * scale, deltaY * scale);
         return true;
     }
 
@@ -88,6 +80,11 @@ public class WorldController extends InputAdapter implements Disposable {
     }
 
     public void render() {
+        if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE) || Gdx.input.isKeyPressed(Input.Keys.BACK)) {
+            // switch to menu screen
+            game.setScreen(new LoginScreen(game));
+        }
+
         Gdx.gl.glClearColor(0, 0, 0, 0);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         worldRenderer.render();

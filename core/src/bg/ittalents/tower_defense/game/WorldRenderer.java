@@ -16,13 +16,13 @@ import bg.ittalents.tower_defense.game.objects.Background;
 import bg.ittalents.tower_defense.utils.CameraHelper;
 
 public class WorldRenderer implements Disposable {
-    public static final float VIEWPORT = 350f;
+    public static final float VIEWPORT = 400f;
     private float scale;
     private float aspectRatio;
 
     private TiledMap tiledMap;
     private OrthogonalTiledMapRenderer mapRenderer;
-    private Background background;
+//    private Background background;
 
     private Level level;
     private OrthographicCamera camera;
@@ -44,7 +44,7 @@ public class WorldRenderer implements Disposable {
         gui = new bg.ittalents.tower_defense.game.ui.Gui(aspectRatio, batch);
         level = new Level(tiledMap, gui);
         gui.setLevel(level);
-        background = new Background(level.getWidth(), level.getHeight());
+//        background = new Background(level.getWidth(), level.getHeight());
         init();
     }
 
@@ -60,7 +60,7 @@ public class WorldRenderer implements Disposable {
         cameraGUI.setToOrtho(true); // flip y-axis
         cameraGUI.update();
 
-        cameraHelper = new CameraHelper(new Vector2(camera.viewportWidth / 2, camera.viewportHeight / 2));
+        cameraHelper = new CameraHelper(new Vector2(level.getWidth() / 2, level.getHeight() / 2));
     }
 
     public void render() {
@@ -93,10 +93,10 @@ public class WorldRenderer implements Disposable {
     private void renderWorld() {
         cameraHelper.applyTo(camera);
         batch.setProjectionMatrix(camera.combined);
-
-        batch.begin();
-        background.render(batch);
-        batch.end();
+//
+//        batch.begin();
+//        background.render(batch);
+//        batch.end();
 
         mapRenderer.setView(camera);
         mapRenderer.render();
@@ -156,12 +156,17 @@ public class WorldRenderer implements Disposable {
         font.setColor(1, 1, 1, 1); // white
     }
 
-    public void handleTouch(int screenX, int screenY) {
+    public void handleTouch(float screenX, float screenY) {
         int mapX = (int) (screenX * scale + camera.position.x - (camera.viewportWidth / 2));
         int mapY = (int) ((Gdx.graphics.getHeight() - screenY) * scale +
                 camera.position.y - (camera.viewportHeight / 2));
 
-        level.handleTouch(mapX, mapY);
+        if (mapX < 0 || mapX > level.getWidth() || mapY < 0 || mapY > level.getHeight()) {
+            return;
+        }
+        else {
+            level.handleTouch(mapX, mapY);
+        }
 
 //        Gdx.app.debug("Touch coordinates", x + ", " + y);
 //        Gdx.app.debug("Level size", level.getWidth() + ", " + level.getHeight());

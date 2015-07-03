@@ -31,6 +31,14 @@ public class UserInfo {
         instance = json.fromJson(UserInfo.class, userJson);
     }
 
+    public static UserInfo getInstance() {
+        if (instance == null) {
+            logAsGuess();
+        }
+
+        return instance;
+    }
+
     public static void logOff() {
         instance = null;
     }
