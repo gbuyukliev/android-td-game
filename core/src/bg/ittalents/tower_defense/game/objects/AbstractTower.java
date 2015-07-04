@@ -29,7 +29,7 @@ public abstract class AbstractTower extends AbstractObject {
 
     protected float timeFromLastShot;
     protected int moneySpent;
-    protected static Level level;
+    protected Level level;
 
     private Sound sound;
 
@@ -43,7 +43,7 @@ public abstract class AbstractTower extends AbstractObject {
         sound = Assets.instance.getSound(Assets.SOUND_LASER);
     }
 
-    public static AbstractTower createTower(float col, float row, String type) {
+    public static AbstractTower createTower(float col, float row, String type, Level level) {
         switch(type) {
             case "basicTower":
                 return new TowerBasic(col, row, Assets.instance.getTower(Assets.TOWER_TYPE_BASIC), level);
