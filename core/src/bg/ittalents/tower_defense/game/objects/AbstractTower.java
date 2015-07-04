@@ -8,6 +8,8 @@ import bg.ittalents.tower_defense.game.Level;
 
 public abstract class AbstractTower extends AbstractObject {
     public static final String TAG = Assets.class.getName();
+    public static final float UPGRADE_DAAMAGE_COEFF = 1.20f;
+    public static final float UPGRADE_FIRE_RATE_COEFF = 0.8f;
 
     TextureRegion[] textures;
     int upgrade;
@@ -56,9 +58,8 @@ public abstract class AbstractTower extends AbstractObject {
     public void upgrade() {
         if (textures != null && textures.length > upgrade + 1 && level.getMoney() >= getUpgradePrice()) {
             texture = textures[++upgrade];
-            damage *= 1.33f;
-//            range *= 1.2f;
-            fireRate *= 0.7f;
+            damage *= UPGRADE_DAAMAGE_COEFF;
+            fireRate *= UPGRADE_FIRE_RATE_COEFF;
             moneySpent += getUpgradePrice();
             level.setMoney(level.getMoney() - getUpgradePrice());
         }

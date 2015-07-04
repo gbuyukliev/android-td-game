@@ -27,8 +27,8 @@ import bg.ittalents.tower_defense.network.UserInfo;
 
 public class Level implements Disposable {
 
-    public static final int STARTING_LIVES = 50;
-    public static final int STARTING_MONEY = 200;
+    public static final int STARTING_LIVES = 30;
+    public static final int STARTING_MONEY = 210;
     private static final int DEFAULT_CURRENT_CREEP = 1;
     public static final float TIME_TILL_NEXT_WAVE = 10f;
     public static final String BUILDABLE_LAYER = "buildable";
@@ -171,6 +171,9 @@ public class Level implements Disposable {
         if (wave.getTypeOfCreeps().equals("boss")) {
             creep = new CreepBoss(currentPath.first().x, currentPath.first().y,
                     Assets.instance.creep.get("red1"));
+        } else if (wave.getTypeOfCreeps().equals("slow")) {
+            creep = new CreepBoss(startPosition.x, startPosition.y,
+                    Assets.instance.creep.get("green1"));
         } else if (wave.getTypeOfCreeps().equals("flying")) {
             creep = new CreepFlying(currentPath.first().x, currentPath.first().y,
                     Assets.instance.creep.get("yellow1"));
@@ -281,8 +284,12 @@ public class Level implements Disposable {
             triggerCountTime = false;
         }
 
-        if (currentCreep <= wave.getNumOfCreeps() && timeSinceSpawn > 1f && !isTriggerCountTime()) {
-            spawnCreepInWave();
+        if (currentCreep <= wave.getNumOfCreeps() && !isTriggerCountTime()) {
+            if (wave.getTypeOfCreeps().equals("slow") && timeSinceSpawn > 1.5f) {
+                spawnCreepInWave();
+            } else if (!wave.getTypeOfCreeps().equals("slow") && timeSinceSpawn > 1f) {
+                spawnCreepInWave();
+            }
         }
     }
 
