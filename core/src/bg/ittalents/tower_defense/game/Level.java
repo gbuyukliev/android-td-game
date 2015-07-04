@@ -176,7 +176,7 @@ public class Level implements Disposable {
 
         if (wave.getTypeOfCreeps().equals("boss")) {
             creep = new CreepBoss(currentPath.first().x, currentPath.first().y,
-                    Assets.instance.creep.get("red3"));
+                    Assets.instance.creep.get("boss"));
         } else if (wave.getTypeOfCreeps().equals("slow")) {
             creep = new CreepSlow(currentPath.first().x, currentPath.first().y,
                     Assets.instance.creep.get("green2"));

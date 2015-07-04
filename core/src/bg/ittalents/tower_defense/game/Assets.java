@@ -144,7 +144,7 @@ public class Assets implements Disposable, AssetErrorListener {
         }
 
         private Animation initBoss(TextureAtlas atlas) {
-            String path = "boss";
+            String path = "boss-";
             int frameCount = 4;
 
             TextureRegion[] frames = new TextureRegion[frameCount];
