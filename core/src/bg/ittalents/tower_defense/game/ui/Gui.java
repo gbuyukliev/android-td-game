@@ -48,20 +48,19 @@ public class Gui {
     public void buildBuildTowerButton() {
         buildTowerButton = new MyButton(Assets.UPGRADE_BUTTON_BLUE, Assets.UPGRADE_BUTTON_CLICKED_BLUE);
         buildTowerButton.addListener(new ChangeListener() {
-                                         @Override
-                                         public void changed(ChangeEvent event, Actor actor) {
-                                             if (level.getMoney() < level.getCurrentTowerPrice()) {
-                                                 level.setTextTime(0);
-                                                 warningTextField.setText("Not enough money to buy a tower!");
-                                                 warningTextField.setVisible(true);
-                                             }
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                if (level.getMoney() < level.getCurrentTowerPrice()) {
+                    level.setTextTime(0);
+                    warningTextField.setText("Not enough money to buy a tower!");
+                    warningTextField.setVisible(true);
+                }
 
-                                             level.buildTower(level.getColTower(), level.getRowTower());
-                                             noTowerTable.setVisible(false);
-                                             level.setIsClicked(false);
-                                         }
-                                     }
-        );
+                level.buildTower(level.getColTower(), level.getRowTower());
+                noTowerTable.setVisible(false);
+                level.setIsClicked(false);
+            }
+        });
 
         noTowerTable.add(buildTowerButton).size(40, 40).pad(5);
     }
@@ -88,22 +87,21 @@ public class Gui {
         upgradeTowerButton = new ImageButton(style);
 
         upgradeTowerButton.addListener(new ChangeListener() {
-                                           @Override
-                                           public void changed(ChangeEvent event, Actor actor) {
-                                               Level.Tile tile = level.getTiles()[level.getRowTower()][level.getColTower()];
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                Level.Tile tile = level.getTiles()[level.getRowTower()][level.getColTower()];
 
-                                               if (level.getMoney() < tile.getTower().getUpgradePrice()) {
-                                                   level.setTextTime(0);
-                                                   warningTextField.setText("Not enough money for an upgrade!");
-                                                   warningTextField.setVisible(true);
-                                               }
+                if (level.getMoney() < tile.getTower().getUpgradePrice()) {
+                    level.setTextTime(0);
+                    warningTextField.setText("Not enough money for an upgrade!");
+                    warningTextField.setVisible(true);
+                }
 
-                                               tile.getTower().upgrade();
-                                               towerTable.setVisible(false);
-                                               level.setIsClicked(false);
-                                           }
-                                       }
-        );
+                tile.getTower().upgrade();
+                towerTable.setVisible(false);
+                level.setIsClicked(false);
+            }
+        });
 
         towerTable.add(upgradeTowerButton).size(40, 40).pad(5);
     }
@@ -111,17 +109,16 @@ public class Gui {
     public void buildSellTowerButton() {
         sellTowerButton = new MyButton(Assets.SELL_BUTTON_BLUE, Assets.SELL_BUTTON_CLICKED_BLUE);
         sellTowerButton.addListener(new ChangeListener() {
-                                        @Override
-                                        public void changed(ChangeEvent event, Actor actor) {
-                                            Level.Tile tile = level.getTiles()[level.getRowTower()][level.getColTower()];
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                Level.Tile tile = level.getTiles()[level.getRowTower()][level.getColTower()];
 
-                                            level.sellTower(tile.getTower());
-                                            tile.removeTower();
-                                            towerTable.setVisible(false);
-                                            level.setIsClicked(false);
-                                        }
-                                    }
-        );
+                level.sellTower(tile.getTower());
+                tile.removeTower();
+                towerTable.setVisible(false);
+                level.setIsClicked(false);
+            }
+        });
 
         towerTable.add(sellTowerButton).size(40, 40);
     }
@@ -170,18 +167,17 @@ public class Gui {
 
         pauseButton = new ImageButton(style1);
         pauseButton.addListener(new ChangeListener() {
-                                    @Override
-                                    public void changed(ChangeEvent event, Actor actor) {
-                                        if (level.isPaused() == false) {
-                                            pauseButton.setStyle(style2);
-                                            level.setIsPaused(true);
-                                        } else {
-                                            pauseButton.setStyle(style1);
-                                            level.setIsPaused(false);
-                                        }
-                                    }
-                                }
-        );
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                if (level.isPaused() == false) {
+                    pauseButton.setStyle(style2);
+                    level.setIsPaused(true);
+                } else {
+                    pauseButton.setStyle(style1);
+                    level.setIsPaused(false);
+                }
+            }
+        });
 
         pauseTable.add(pauseButton).size(40, 40);
         stage.addActor(pauseTable);
@@ -240,9 +236,5 @@ public class Gui {
 
     public Label getWarningTextField() {
         return warningTextField;
-    }
-
-    public ImageButton getFastForwardButton() {
-        return fastForwardButton;
     }
 }
