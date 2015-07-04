@@ -3,12 +3,13 @@ package bg.ittalents.tower_defense.game.objects;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public abstract class AbstractProjectile extends AbstractObject {
-    private float moveSpeed;
-    int damage;
-    AbstractCreep target;
+    protected float moveSpeed;
+    protected AbstractCreep target;
+    protected AbstractTower tower;
 
-    public AbstractProjectile(float positionX, float positionY, TextureRegion texture) {
+    public AbstractProjectile(float positionX, float positionY, TextureRegion texture, AbstractTower tower) {
         super(positionX, positionY, texture);
+        this.tower = tower;
     }
 
     public void setTarget(AbstractCreep target) {
@@ -30,7 +31,12 @@ public abstract class AbstractProjectile extends AbstractObject {
 //        texturePosition.y = position.y - texture.getRegionHeight();
 
         if (isVisible() && position.dst(target.position) < texture.getRegionWidth()) {
-            target.reciveDamage(damage);
+            target.receiveDamage(tower.getDamage());
+
+            if (tower.getEffect().equals("slow")) {
+                target.getSlowed();
+            }
+
             setVisible(false);
         }
     }

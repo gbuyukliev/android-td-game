@@ -5,9 +5,8 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class Projectile extends AbstractProjectile {
 
-    public Projectile(float positionX, float positionY, int damage, TextureRegion texture) {
-        super(positionX, positionY, texture);
-        this.damage = damage;
+    public Projectile(float positionX, float positionY, TextureRegion texture, AbstractTower tower) {
+        super(positionX, positionY, texture, tower);
         setMoveSpeed(250f);
     }
 

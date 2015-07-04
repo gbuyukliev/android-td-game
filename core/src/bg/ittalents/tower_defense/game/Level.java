@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
@@ -18,9 +19,10 @@ import bg.ittalents.tower_defense.game.objects.AbstractProjectile;
 import bg.ittalents.tower_defense.game.objects.AbstractTower;
 import bg.ittalents.tower_defense.game.objects.CreepBasic;
 import bg.ittalents.tower_defense.game.objects.CreepBoss;
-import bg.ittalents.tower_defense.game.objects.CreepFlying;
+import bg.ittalents.tower_defense.game.objects.CreepSpecial;
 import bg.ittalents.tower_defense.game.objects.CreepSlow;
 import bg.ittalents.tower_defense.game.objects.Tower;
+import bg.ittalents.tower_defense.game.objects.TowerSlow;
 import bg.ittalents.tower_defense.game.objects.Wave;
 import bg.ittalents.tower_defense.game.ui.Gui;
 import bg.ittalents.tower_defense.network.Network;
@@ -180,8 +182,8 @@ public class Level implements Disposable {
         } else if (wave.getTypeOfCreeps().equals("slow")) {
             creep = new CreepSlow(currentPath.first().x, currentPath.first().y,
                     Assets.instance.getCreep(Assets.CREEP_GREEN_2));
-        } else if (wave.getTypeOfCreeps().equals("flying")) {
-            creep = new CreepFlying(currentPath.first().x, currentPath.first().y,
+        } else if (wave.getTypeOfCreeps().equals("special")) {
+            creep = new CreepSpecial(currentPath.first().x, currentPath.first().y,
                     Assets.instance.getCreep(Assets.CREEP_YELLOW_3));
         } else {
             creep = new CreepBasic(currentPath.first().x, currentPath.first().y,
@@ -192,9 +194,9 @@ public class Level implements Disposable {
         creeps.add(creep);
     }
 
-    public void buildTower(int col, int row) {
-        Tower tower = new Tower((col + 0.5f) * tileWidth, (row + 0.5f) * tileHeight,
-                Assets.instance.getTower(Assets.TOWER_TYPE_2), this);
+    public void buildTower(int col, int row, TextureRegion[] textures) {
+        AbstractTower tower = new Tower((col + 0.5f) * tileWidth, (row + 0.5f) * tileHeight,
+                textures, this);
 
         if (money >= tower.getPrice()) {
             currentTowerPrice = tower.getPrice();

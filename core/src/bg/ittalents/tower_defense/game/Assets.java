@@ -38,6 +38,7 @@ public class Assets implements Disposable, AssetErrorListener {
     public static final String SPLASH_TURRET = "splash_turret_btn";
     public static final String SPLASH_TURRET_CLICKED = "splash_turret_btn_clicked";
 
+
     public static final String HEALTH_BAR_BACKGROUND = "enemyhealthbg";
     public static final String HEALTH_BAR = "enemyhealth";
     public static final String PROJECTILE = "projectile";
@@ -57,11 +58,11 @@ public class Assets implements Disposable, AssetErrorListener {
     public static final String CREEP_YELLOW_3 = "yellow3";
     public static final String CREEP_BOSS = "boss";
 
-    public static final int TOWER_TYPE_1 = 0;
-    public static final int TOWER_TYPE_2 = 1;
+    public static final int TOWER_TYPE_SLOW = 0;
+    public static final int TOWER_TYPE_BASIC = 1;
     public static final int TOWER_TYPE_3 = 2;
-    public static final int TOWER_TYPE_4 = 3;
-    public static final int TOWER_TYPE_5 = 4;
+    public static final int TOWER_TYPE_SIEGE = 3;
+    public static final int TOWER_TYPE_SPECIAL = 4;
     public static final int TOWER_TYPE_6 = 5;
     public static final int TOWER_TYPE_7 = 6;
 
