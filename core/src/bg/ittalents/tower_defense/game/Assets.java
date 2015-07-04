@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetDescriptor;
 import com.badlogic.gdx.assets.AssetErrorListener;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Animation.PlayMode;
@@ -72,6 +73,7 @@ public class Assets implements Disposable, AssetErrorListener {
     public static final String TEXTURE_ATLAS_OBJECTS;
     public static final String TAG;
     public static final Assets instance;
+    public static final String SOUND_LASER = "laser";
 
     static {
         UPGRADE_BUTTON_BLUE ="upgrade_button_blue";
@@ -91,6 +93,8 @@ public class Assets implements Disposable, AssetErrorListener {
     }
 
     private AssetManager assetManager;
+
+    private AssetSounds sounds;
 
     private AssetsTexture texture;
     private AssetCreeps creep;
@@ -241,6 +245,31 @@ public class Assets implements Disposable, AssetErrorListener {
         }
     }
 
+    public class AssetSounds implements Disposable {
+
+        private Map<String, Sound> sounds;
+
+        public AssetSounds() {
+            sounds = new HashMap<String, Sound>();
+            assetManager.load("sounds/laser.wav", Sound.class);
+
+            assetManager.finishLoading();
+
+            sounds.put(SOUND_LASER, assetManager.get("sounds/laser.wav", Sound.class));
+        }
+
+        public Sound get(String key) {
+            return sounds.get(key);
+        }
+
+        @Override
+        public void dispose() {
+            for (String key : sounds.keySet()) {
+                sounds.get(key).dispose();
+            }
+        }
+    }
+
     // singleton: prevent instantiation from other classes
     private Assets() {
 
@@ -256,6 +285,10 @@ public class Assets implements Disposable, AssetErrorListener {
 
     public TextureRegion getTexture(String type) {
         return texture.get(type);
+    }
+
+    public Sound getSound(String name) {
+        return sounds.get(name);
     }
 
 
@@ -288,12 +321,14 @@ public class Assets implements Disposable, AssetErrorListener {
         fonts = new AssetFonts();
         creep = new AssetCreeps(atlas);
         towers = new AssetTower(atlas);
+        sounds = new AssetSounds();
     }
 
     @Override
     public void dispose() {
         assetManager.dispose();
         fonts.defaultFont.dispose();
+        sounds.dispose();
     }
 
     @Override

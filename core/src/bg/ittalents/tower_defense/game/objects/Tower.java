@@ -1,11 +1,14 @@
 package bg.ittalents.tower_defense.game.objects;
 
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import bg.ittalents.tower_defense.game.Assets;
 import bg.ittalents.tower_defense.game.Level;
 
 public class Tower extends AbstractTower {
+
+    private Sound sound;
 
     public Tower(float positionX, float positionY, TextureRegion[] textures, Level level) {
         super(positionX, positionY, textures, level);
@@ -19,6 +22,8 @@ public class Tower extends AbstractTower {
         moneySpent = price;
         isUpgradable = true;
         upgradePrice = 30;
+
+        sound = Assets.instance.getSound(Assets.SOUND_LASER);
     }
 
     @Override
@@ -28,6 +33,7 @@ public class Tower extends AbstractTower {
                 Assets.instance.getTexture(Assets.PROJECTILE));
         projectile.setMoveSpeed(projectile.getMoveSpeed() * Level.getCoeff());
         projectile.setTarget(foe);
+        sound.play();
         return projectile;
     }
 }
