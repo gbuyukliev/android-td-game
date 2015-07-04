@@ -122,21 +122,6 @@ public class Assets implements Disposable, AssetErrorListener {
 
         private Map<String, Animation> creeps;
 
-//        public final Animation creep1blue;
-//        public final Animation creep1green;
-//        public final Animation creep1red;
-//        public final Animation creep1yellow;
-//
-//        public final Animation creep2blue;
-//        public final Animation creep2green;
-//        public final Animation creep2red;
-//        public final Animation creep2yellow;
-//
-//        public final Animation creep3blue;
-//        public final Animation creep3green;
-//        public final Animation creep3red;
-//        public final Animation creep3yellow;
-
         public AssetCreeps(TextureAtlas atlas) {
             creeps = new HashMap<String, Animation>();
 
@@ -155,20 +140,22 @@ public class Assets implements Disposable, AssetErrorListener {
             creeps.put("green3", init(atlas, "green", 3, 4));
             creeps.put("yellow3", init(atlas, "yellow", 3, 4));
 
-//            this.creep1blue = init(atlas, "blue", 1, 6);
-//            this.creep1green = init(atlas, "green", 1, 6);
-//            this.creep1red = init(atlas, "red", 1, 6);
-//            this.creep1yellow = init(atlas, "yellow", 1, 6);
-//
-//            this.creep2blue = init(atlas, "blue", 3, 4);
-//            this.creep2green = init(atlas, "green", 3, 4);
-//            this.creep2red = init(atlas, "red", 3, 4);
-//            this.creep2yellow = init(atlas, "yellow", 3, 4);
-//
-//            this.creep3blue = init(atlas, "blue", 3, 4);
-//            this.creep3green = init(atlas, "green", 3, 4);
-//            this.creep3red = init(atlas, "red", 3, 4);
-//            this.creep3yellow = init(atlas, "yellow", 3, 4);
+            creeps.put("boss", initBoss(atlas));
+        }
+
+        private Animation initBoss(TextureAtlas atlas) {
+            String path = "boss";
+            int frameCount = 4;
+
+            TextureRegion[] frames = new TextureRegion[frameCount];
+
+            for (int frameIndex = 1; frameIndex <= frameCount; frameIndex++) {
+                frames[frameIndex - 1] = atlas.findRegion(path + frameIndex);
+            }
+
+            Animation anim = new Animation(1f / frameCount, frames);
+            anim.setPlayMode(PlayMode.LOOP);
+            return anim;
         }
 
         private Animation init(TextureAtlas atlas, String creepColor, int creepNumber, int frameCount) {

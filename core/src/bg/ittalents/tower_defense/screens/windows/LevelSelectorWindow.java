@@ -11,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 
 public class LevelSelectorWindow extends Window {
@@ -33,10 +34,10 @@ public class LevelSelectorWindow extends Window {
         super("Pick a level", skin);
         this.networkScreen = networkScreen;
         buttons = new Array<ImageButton>();
-        show();
+        build();
     }
 
-    public void show() {
+    public void build() {
         this.setColor(1, 1, 1, WINDOW_TRANSPARENCY);
 
         int levelCounter = 1;
