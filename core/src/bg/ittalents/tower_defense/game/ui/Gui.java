@@ -5,6 +5,7 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
@@ -41,14 +42,15 @@ public class Gui implements Disposable {
     public void buildNoTowerTable() {
         noTowerTable = new Table();
         noTowerTable.bottom().left();
+        noTowerTable.pad(5);
         noTowerTable.setFillParent(true);
         noTowerTable.setVisible(false);
         stage.addActor(noTowerTable);
     }
 
-    public void buildTowerButtons() {
-        buildTowerButton = new MyButton(Assets.instance.getTexture(Assets.BASIC_TURRET),
-                Assets.instance.getTexture(Assets.BASIC_TURRET_CLICKED));
+    public void buildTowerBtn(TextureRegion up, TextureRegion down, final String type) {
+        buildTowerButton = new MyButton(up, down);
+
         buildTowerButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -58,13 +60,20 @@ public class Gui implements Disposable {
                     warningTextField.setVisible(true);
                 }
 
-                level.buildTower(level.getColTower(), level.getRowTower(), Assets.instance.getTower(Assets.TOWER_TYPE_BASIC));
+                level.buildTower(level.getColTower(), level.getRowTower(), type);
                 noTowerTable.setVisible(false);
                 level.setIsClicked(false);
             }
         });
 
-        noTowerTable.add(buildTowerButton).size(40, 40).pad(5);
+        noTowerTable.add(buildTowerButton).size(40, 40).padRight(5);
+    }
+
+    public void buildTowerButtons() {
+        buildTowerBtn(Assets.instance.getTexture(Assets.BASIC_TURRET), Assets.instance.getTexture(Assets.BASIC_TURRET_CLICKED), "basicTower");
+        buildTowerBtn(Assets.instance.getTexture(Assets.BASIC_TURRET), Assets.instance.getTexture(Assets.BASIC_TURRET_CLICKED), "basicTower");
+        buildTowerBtn(Assets.instance.getTexture(Assets.BASIC_TURRET), Assets.instance.getTexture(Assets.BASIC_TURRET_CLICKED), "basicTower");
+        buildTowerBtn(Assets.instance.getTexture(Assets.BASIC_TURRET), Assets.instance.getTexture(Assets.BASIC_TURRET_CLICKED), "basicTower");
     }
 
     // A table with buttons which only appears if there is a tower selected

@@ -21,8 +21,7 @@ import bg.ittalents.tower_defense.game.objects.CreepBasic;
 import bg.ittalents.tower_defense.game.objects.CreepBoss;
 import bg.ittalents.tower_defense.game.objects.CreepSpecial;
 import bg.ittalents.tower_defense.game.objects.CreepSlow;
-import bg.ittalents.tower_defense.game.objects.Tower;
-import bg.ittalents.tower_defense.game.objects.TowerSlow;
+import bg.ittalents.tower_defense.game.objects.TowerBasic;
 import bg.ittalents.tower_defense.game.objects.Wave;
 import bg.ittalents.tower_defense.game.ui.Gui;
 import bg.ittalents.tower_defense.network.Network;
@@ -194,9 +193,8 @@ public class Level implements Disposable {
         creeps.add(creep);
     }
 
-    public void buildTower(int col, int row, TextureRegion[] textures) {
-        AbstractTower tower = new Tower((col + 0.5f) * tileWidth, (row + 0.5f) * tileHeight,
-                textures, this);
+    public void buildTower(int col, int row, String type) {
+        AbstractTower tower = AbstractTower.createTower((col + 0.5f) * tileWidth, (row + 0.5f) * tileHeight, type);
 
         if (money >= tower.getPrice()) {
             currentTowerPrice = tower.getPrice();
