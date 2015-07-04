@@ -266,16 +266,16 @@ public class Level implements Disposable {
         currentCreep = DEFAULT_CURRENT_CREEP;
         money += MONEY_FOR_COMPLETING_LEVEL;
 
+        if(wave.getNumber() != 1 && wave.getNumber() % 10 == 1) {
+            AbstractCreep.setCoeff(AbstractCreep.getCoeff() + 0.25f);
+        }
+
         spawnCreepInWave();
     }
 
     private void updateWave(float deltaTime) {
         timeSinceSpawn += deltaTime;
         timeSinceLastWave += deltaTime;
-
-        if (creeps.size == 0 && wave.getNumber() != 1 && wave.getNumber() % 10 == 1 && !isTriggerCountTime()) {
-            AbstractCreep.setCoeff(AbstractCreep.getCoeff() + 0.25f);
-        }
 
         if (!isTriggerCountTime() && creeps.size == 0 && (currentCreep > wave.getNumOfCreeps() || wave.getNumber() == 0)) {
             timeSinceLastWave = 0;
