@@ -186,7 +186,7 @@ public class Gui {
             }
         });
 
-        pauseTable.add(pauseButton).size(40, 40);
+        pauseTable.add(pauseButton).size(40, 40).padRight(5);
         stage.addActor(pauseTable);
     }
 
