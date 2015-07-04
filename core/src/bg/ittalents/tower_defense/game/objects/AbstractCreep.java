@@ -16,6 +16,7 @@ public abstract class AbstractCreep extends AbstractObject {
     private static final Texture ENEMY_BG_TEXTURE;
     private static final Texture ENEMY_FG_TEXTURE;
     private static final Texture ENEMY_FG;
+    public static final float WAYPOINT_TOLERANCE = 3f;
 
     private static float waveCoeff;
 
@@ -62,10 +63,10 @@ public abstract class AbstractCreep extends AbstractObject {
         }
 
         private void setPosition() {
-            healthBarBG.setX(texturePosition.x + BUFFER_X);
-            healthBarBG.setY(texturePosition.y + BUFFER_Y);
-            healthBarFG.setX(texturePosition.x + BUFFER_X);
-            healthBarFG.setY(texturePosition.y + BUFFER_Y);
+            healthBarBG.setX(getTextureX() + BUFFER_X);
+            healthBarBG.setY(getTextureY() + BUFFER_Y);
+            healthBarFG.setX(getTextureX() + BUFFER_X);
+            healthBarFG.setY(getTextureY() + BUFFER_Y);
         }
 
         public void update() {
@@ -75,7 +76,7 @@ public abstract class AbstractCreep extends AbstractObject {
 
         public void render(Batch batch) {
             healthBarBG.draw(batch);
-            health.draw(batch, texturePosition.x + BUFFER_X, texturePosition.y + BUFFER_Y, owner.health / owner.maxHealth * 40f, 5f);
+            health.draw(batch, getTextureX() + BUFFER_X, getTextureY() + BUFFER_Y, owner.health / owner.maxHealth * 40f, 5f);
 //            healthBarFG.draw(batch);
         }
     }
@@ -110,8 +111,8 @@ public abstract class AbstractCreep extends AbstractObject {
     }
 
     private boolean isWaypointReached() {
-        if (MathUtils.isEqual(position.x, waypoints.get(currentWaypoint).x, 1f) &&
-                MathUtils.isEqual(position.y, waypoints.get(currentWaypoint).y, 1f)) {
+        if (MathUtils.isEqual(position.x, waypoints.get(currentWaypoint).x, WAYPOINT_TOLERANCE) &&
+                MathUtils.isEqual(position.y, waypoints.get(currentWaypoint).y, WAYPOINT_TOLERANCE)) {
             position.x = waypoints.get(currentWaypoint).x;
             position.y = waypoints.get(currentWaypoint).y;
             return true;
