@@ -173,7 +173,7 @@ public class WorldRenderer implements Disposable {
 
     public void resize(int width, int height) {
         aspectRatio = width / (float) height;
-        gui.setAspectRatio(aspectRatio);
+        gui.resize(width, height);
         Gdx.app.debug("Aspect", "" + aspectRatio);
         camera.viewportWidth = (WorldRenderer.VIEWPORT * aspectRatio);
         camera.update();
@@ -186,6 +186,7 @@ public class WorldRenderer implements Disposable {
         mapRenderer.dispose();
         tiledMap.dispose();
         level.dispose();
+        gui.dispose();
     }
 
     public Level getLevel() {

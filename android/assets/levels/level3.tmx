@@ -15,7 +15,17 @@
  </imagelayer>
  <layer name="buildable" width="17" height="15">
   <data encoding="base64" compression="zlib">
-   eJytUgkKwDAIk7Gj3d6x4/8vnIMKEnQVqhAiTaqFlCinNsbOeIARqFc142DMjUkxltYn8OFdYXlf7fj+tCjrfm17i+P1dOzJOO/pX11k57AAI+7kd0Rz8HTLO5JLNAdvxug/lX0nMAL1Qnn1AsSVBdY=
+   eJxjYKAN0ABiLixYgwQzuEkUR5ZDp9mh9nMSUIdPjlgamc0GtZcDh1pc8uhsBizixISPGgP2eGCFyrPikFensjuIjQdc8tjUUhIvxMYDIT/ik8OnBx2oMmCPB1USzCAVAADLuARg
+  </data>
+ </layer>
+ <layer name="unbuildable1" width="17" height="15">
+  <data encoding="base64" compression="zlib">
+   eJxjYKAOYAdiLiDWgNL4ALI6TiRxbiBmgdLEAJA6JhLUjwJUQCieRgF2QI10ysYACX9VBuLyC0wdB0kuxQ8A/MoBdw==
+  </data>
+ </layer>
+ <layer name="unbuildable2" width="17" height="15">
+  <data encoding="base64" compression="zlib">
+   eJxjYKAO4EHD5KjlQaOJsZMU9aMAFYyGG3mAGumUGvmFUgAAXBoBLQ==
   </data>
  </layer>
 </map>
