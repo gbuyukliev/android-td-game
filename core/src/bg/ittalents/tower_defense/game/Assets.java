@@ -46,7 +46,7 @@ public class Assets implements Disposable, AssetErrorListener {
         PAUSE_BUTTON = new Texture("pause.png");
         PAUSE_BUTTON_CLICKED = new Texture("pause_clicked.png");
 
-        TEXTURE_ATLAS_OBJECTS = "texture/texture.pack";
+        TEXTURE_ATLAS_OBJECTS = "texture/texture_atlas.txt";
         TAG = Assets.class.getName();
         instance = new Assets();
     }
@@ -138,7 +138,7 @@ public class Assets implements Disposable, AssetErrorListener {
         }
 
         private Animation initBoss(TextureAtlas atlas) {
-            String path = "boss";
+            String path = "boss-";
             int frameCount = 4;
 
             TextureRegion[] frames = new TextureRegion[frameCount];

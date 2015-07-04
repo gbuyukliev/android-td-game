@@ -68,7 +68,7 @@ class Online implements INetwork {
     @Override
     public void getTopPlayers() {
         Net.HttpRequest httpRequest = new Net.HttpRequest(Net.HttpMethods.GET);
-        httpRequest.setUrl(Network.URL + Network.LEVEL_MANAGER);
+        httpRequest.setUrl(Network.URL + Network.ALL_HIGH_SCORE_MANAGER);
         httpRequest.setContent("");
         Gdx.net.sendHttpRequest(httpRequest, new Net.HttpResponseListener() {
             @Override

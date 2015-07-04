@@ -93,7 +93,7 @@ public class LoginWindow extends Window {
     }
 
     private void login() {
-        final Net.HttpRequest httpRequest = new Net.HttpRequest(Net.HttpMethods.POST);
+        Net.HttpRequest httpRequest = new Net.HttpRequest(Net.HttpMethods.POST);
         httpRequest.setUrl(Network.URL + Network.LOGIN_MANAGER);
         httpRequest.setHeader("Content-Type", "application/json");
         httpRequest.setContent(getJsonAsString());

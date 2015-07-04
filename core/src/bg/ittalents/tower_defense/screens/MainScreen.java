@@ -13,7 +13,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
@@ -40,9 +39,10 @@ public class MainScreen extends AbstractGameScreen implements INetworkScreenList
     private Table mainTable;
     private Table loggedTable;
     private Table loggedOutTable;
-    private Window registerWindow;
-    private Window loginWindow;
-    private Table levelSelector;
+    private Table registerWindow;
+    private Table loginWindow;
+    private Table levelSelectorWindow;
+    private Table topPlaersWindow;
     private Texture background;
     private Batch batch;
 
@@ -66,7 +66,8 @@ public class MainScreen extends AbstractGameScreen implements INetworkScreenList
         stage.addActor(mainTable);
         loginWindow = new LoginWindow(skin, this);
         registerWindow = new RegisterWindow(skin, this);
-        levelSelector = new LevelSelectorWindow(skin, this);
+        levelSelectorWindow = new LevelSelectorWindow(skin, this);
+        topPlaersWindow = new TopPlayersWindow(skin, this);
         buildStatusTable();
 //        mainTable.add(loginWindow).center();
 
@@ -151,7 +152,7 @@ public class MainScreen extends AbstractGameScreen implements INetworkScreenList
         topPlayers.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                switchToWindow(SCREEN.ACCOUNT_INFO);
+                switchToWindow(SCREEN.TOP_PLAYERS);
             }
         });
         loggedTable.add(topPlayers).width(BUTTON_WIDTH).pad(PADDING).right();
@@ -186,11 +187,14 @@ public class MainScreen extends AbstractGameScreen implements INetworkScreenList
                 break;
             case LEVEL_SELECTOR:
                 lblLogged.setText("Welcome " + UserInfo.getNickName());
-                mainTable.add(levelSelector);
+                mainTable.add(levelSelectorWindow);
+                stage.addActor(loggedTable);
+                break;
+            case TOP_PLAYERS:
+                mainTable.add(topPlaersWindow);
                 stage.addActor(loggedTable);
                 break;
             case ACCOUNT_INFO:
-            case TOP_PLAYERS:
             case LOGIN :
                 mainTable.add(loginWindow);
                 stage.addActor(loggedOutTable);

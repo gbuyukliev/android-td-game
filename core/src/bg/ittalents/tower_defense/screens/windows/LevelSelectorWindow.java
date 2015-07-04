@@ -26,14 +26,12 @@ public class LevelSelectorWindow extends Window {
     public static final String LEVELS_PNG_EXTENSION = ".png";
     public static final int LEVELS_PER_ROW = 4;
 
-    private Array<ImageButton> buttons;
     private Array<Label> score;
     private INetworkScreenListener networkScreen;
 
     public LevelSelectorWindow(Skin skin, INetworkScreenListener networkScreen) {
         super("Pick a level", skin);
         this.networkScreen = networkScreen;
-        buttons = new Array<ImageButton>();
         build();
     }
 
@@ -73,10 +71,9 @@ public class LevelSelectorWindow extends Window {
                                            networkScreen.play(level);
                                        }
         });
-        buttons.add(levelSelection);
         table.add(levelSelection).width(IMAGE_WIDTH).height(IMAGE_HEIGHT).pad(PADDING);
-        table.row();
-        table.add(new Label("Test", getSkin())).pad(PADDING);
+//        table.row();
+//        table.add(new Label("Test", getSkin())).pad(PADDING);
         this.add(table);
     }
 }
