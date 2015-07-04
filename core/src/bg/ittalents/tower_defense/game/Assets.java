@@ -18,7 +18,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Assets implements Disposable, AssetErrorListener {
-    //textures types
+    //buttons types
     public static final String UPGRADE_BUTTON_BLUE;
     public static final String UPGRADE_BUTTON_CLICKED_BLUE;
     public static final String SELL_BUTTON_BLUE;
@@ -29,6 +29,14 @@ public class Assets implements Disposable, AssetErrorListener {
     public static final String PAUSE_BUTTON_CLICKED;
     public static final String FAST_FORWARD_BUTTON;
     public static final String FAST_FORWARD_BUTTON_CLICKED;
+
+    //tower button types
+    public static final String BASIC_TURRET = "basic_turret_btn";
+    public static final String BASIC_TURRET_CLICKED = "basic_turret_btn_clicked";
+    public static final String SLOW_TURRET = "slow_turret_btn";
+    public static final String SLOW_TURRET_CLICKED = "slow_turret_btn_clicked";
+    public static final String SPLASH_TURRET = "splash_turret_btn";
+    public static final String SPLASH_TURRET_CLICKED = "splash_turret_btn_clicked";
 
     public static final String HEALTH_BAR_BACKGROUND = "enemyhealthbg";
     public static final String HEALTH_BAR = "enemyhealth";
@@ -103,6 +111,13 @@ public class Assets implements Disposable, AssetErrorListener {
             textures.put(PAUSE_BUTTON_CLICKED, atlas.findRegion(PAUSE_BUTTON_CLICKED));
             textures.put(FAST_FORWARD_BUTTON, atlas.findRegion(FAST_FORWARD_BUTTON));
             textures.put(FAST_FORWARD_BUTTON_CLICKED, atlas.findRegion(FAST_FORWARD_BUTTON_CLICKED));
+
+            textures.put(BASIC_TURRET, atlas.findRegion(BASIC_TURRET));
+            textures.put(BASIC_TURRET_CLICKED, atlas.findRegion(FAST_FORWARD_BUTTON_CLICKED));
+            textures.put(SLOW_TURRET, atlas.findRegion(BASIC_TURRET_CLICKED));
+            textures.put(SLOW_TURRET_CLICKED, atlas.findRegion(SLOW_TURRET_CLICKED));
+            textures.put(SPLASH_TURRET, atlas.findRegion(SPLASH_TURRET));
+            textures.put(SPLASH_TURRET_CLICKED, atlas.findRegion(SPLASH_TURRET_CLICKED));
 
             textures.put(HEALTH_BAR_BACKGROUND, atlas.findRegion(HEALTH_BAR_BACKGROUND));
             textures.put(HEALTH_BAR, atlas.findRegion(HEALTH_BAR));
