@@ -12,7 +12,7 @@ public class Projectile extends AbstractProjectile {
     }
 
     public void render(SpriteBatch batch) {
-        batch.draw(texture, texturePosition.x, texturePosition.y,
+        batch.draw(texture, position.x - texture.getRegionWidth() / 2, position.y - texture.getRegionHeight() / 2,
                 texture.getRegionWidth() / 2, texture.getRegionWidth() / 2,
                 texture.getRegionWidth(), texture.getRegionHeight(), 1f, 1f, angle);
     }
