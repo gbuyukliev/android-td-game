@@ -194,7 +194,7 @@ public class Level implements Disposable {
     }
 
     public void buildTower(int col, int row, String type) {
-        AbstractTower tower = AbstractTower.createTower((col + 0.5f) * tileWidth, (row + 0.5f) * tileHeight, type);
+        AbstractTower tower = AbstractTower.createTower((col + 0.5f) * tileWidth, (row + 0.5f) * tileHeight, type, this);
 
         if (money >= tower.getPrice()) {
             currentTowerPrice = tower.getPrice();
