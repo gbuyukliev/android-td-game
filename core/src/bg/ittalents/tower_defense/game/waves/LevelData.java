@@ -9,7 +9,7 @@ public class LevelData {
 
     public static class CreepTypes {
         private float moveSpeed;
-        private float award;
+        private float reward;
         private int level;
         private float health;
         private String typeOfEnemy;
@@ -18,7 +18,7 @@ public class LevelData {
         public String toString() {
             return "CreepTypes{" +
                     "moveSpeed=" + getMoveSpeed() +
-                    ", award=" + getAward() +
+                    ", award=" + getReward() +
                     ", level=" + getLevel() +
                     ", health=" + getHealth() +
                     ", typeOfEnemy='" + getTypeOfEnemy() + '\'' +
@@ -35,13 +35,13 @@ public class LevelData {
             }
         }
 
-        public float getAward() {
-            return award;
+        public float getReward() {
+            return reward;
         }
 
-        public void setAward(float award) {
-            if (award > 0) {
-                this.award = award;
+        public void setReward(float reward) {
+            if (reward > 0) {
+                this.reward = reward;
             }
         }
 

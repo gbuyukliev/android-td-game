@@ -1,0 +1,69 @@
+{
+  "waveTypes": [
+    {
+      "typeOfWave": "basicWave",
+      "typeOfCreeps": "basicCreep",
+      "numOfOccurrence": 1,
+      "numOfCreeps": 6
+    },
+    {
+      "typeOfWave": "slowWave",
+      "typeOfCreeps": "slowCreep",
+      "numOfOccurrence": 5,
+      "numOfCreeps": 3
+    },
+    {
+      "typeOfWave": "specialWave",
+      "typeOfCreeps": "specialCreep",
+      "numOfOccurrence": 7,
+      "numOfCreeps": 6
+    },
+    {
+      "typeOfWave": "bossWave",
+      "typeOfCreeps": "bossCreep",
+      "numOfOccurrence": 10,
+      "numOfCreeps": 1
+    }
+  ],
+  "creeps": [
+    {
+      "typeOfCreep": "basicCreep",
+      "reward": 25,
+      "moveSpeed": 50,
+      "health": 180,
+      "isSpecial": false
+    },
+    {
+      "typeOfCreep": "slowCreep",
+      "reward": 60,
+      "moveSpeed": 40,
+      "health": 600,
+      "isSpecial": false
+    },
+    {
+      "typeOfCreep": "specialCreep",
+      "reward": 40,
+      "moveSpeed": 80,
+      "health": 140,
+      "isSpecial": true
+    },
+    {
+      "typeOfCreep": "bossCreep",
+      "reward": 200,
+      "moveSpeed": 30,
+      "health": 2000,
+      "isSpecial": false
+    }
+  ],
+  "towers": [
+    {
+      "typeOfTower": "basicTower",
+      "damage": 20,
+      "attackSpeed": 1,
+      "range": 120,
+      "price": 50,
+      "isUpgradable": true,
+      "upgradePrice": 30
+    }
+  ]
+}

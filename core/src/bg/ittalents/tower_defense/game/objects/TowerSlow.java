@@ -1,15 +1,12 @@
 package bg.ittalents.tower_defense.game.objects;
 
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
-import bg.ittalents.tower_defense.game.Assets;
 import bg.ittalents.tower_defense.game.Level;
 
-public class Tower extends AbstractTower {
+public class TowerSlow extends AbstractTower {
 
-
-    public Tower(float positionX, float positionY, TextureRegion[] textures, Level level) {
+    public TowerSlow(float positionX, float positionY, TextureRegion[] textures, Level level) {
         super(positionX, positionY, textures, level);
 
         timeFromLastShot = Float.MAX_VALUE;
@@ -21,10 +18,6 @@ public class Tower extends AbstractTower {
         moneySpent = price;
         isUpgradable = true;
         upgradePrice = 30;
-
-        effect = "basic";
+        effect = "slow";
     }
-
-
-
 }

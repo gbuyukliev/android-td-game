@@ -2,7 +2,9 @@ package bg.ittalents.tower_defense.game.objects;
 
 public class Wave {
     private int number;
+
     private int numOfCreeps;
+    private int numOfOccurance;
     private String typeOfCreeps;
 
     public Wave() {
@@ -21,7 +23,7 @@ public class Wave {
             setTypeOfCreeps("slow");
         } else if (number % 7 == 0) {
             setNumOfCreeps(6);
-            setTypeOfCreeps("flying");
+            setTypeOfCreeps("special");
         } else {
             setNumOfCreeps(6);
             setTypeOfCreeps("basic");

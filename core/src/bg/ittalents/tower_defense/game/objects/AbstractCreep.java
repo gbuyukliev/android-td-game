@@ -19,15 +19,19 @@ public abstract class AbstractCreep extends AbstractObject {
         WAYPOINT_TOLERANCE = 5f;
     }
 
+    private float timeSlowed;
+
     Animation animation;
-    float moveSpeed;
-    int award;
-    float health;
-    float maxHealth;
-    float stateTime;
-    boolean isFlying;
-    String typeOfEnemy;
-    HealthBar healthBar;
+    protected String typeOfCreep;
+    protected int reward;
+    protected float moveSpeed;
+    protected boolean isSpecial;
+    protected float health;
+    protected float maxHealth;
+    protected float stateTime;
+    protected HealthBar healthBar;
+    protected boolean isSlowed;
+    protected float savedMoveSpeed;
 
     int currentWaypoint;
     Array<Vector2> waypoints;
@@ -69,6 +73,8 @@ public abstract class AbstractCreep extends AbstractObject {
         super(positionX, positionY, animation.getKeyFrames()[0]);
         this.animation = animation;
         angle = 90f;
+        timeSlowed = 0;
+        isSlowed = false;
         currentWaypoint = -1;
 
         healthBar = new HealthBar();
@@ -90,7 +96,7 @@ public abstract class AbstractCreep extends AbstractObject {
     }
 
     public int getReward () {
-        return award;
+        return reward;
     }
 
     private boolean isWaypointReached() {
@@ -115,19 +121,41 @@ public abstract class AbstractCreep extends AbstractObject {
             }
             double radRotation = AbstractObject.countAngle(position, waypoints.get(currentWaypoint));
             angle = (float) Math.toDegrees(radRotation);
-            updatePosition(position.x + moveSpeed * deltaTime * (float)Math.cos(radRotation),
-                    position.y + moveSpeed * deltaTime * (float)Math.sin(radRotation));
+            updatePosition(position.x + moveSpeed * deltaTime * (float) Math.cos(radRotation),
+                    position.y + moveSpeed * deltaTime * (float) Math.sin(radRotation));
         }
     }
 
-    public void reciveDamage(float damage) {
+    public void receiveDamage(float damage) {
         health -= damage;
         if (health <= 0) {
             setVisible(false);
         }
     }
 
+    public void getSlowed() {
+        if (!isSlowed) {
+            savedMoveSpeed = moveSpeed;
+            moveSpeed /= 2;
+            isSlowed = true;
+        }
+    }
+
+    public void updateTimeSlowed(float deltaTime) {
+        timeSlowed += deltaTime;
+
+        if (!isSlowed) {
+            moveSpeed = savedMoveSpeed;
+            timeSlowed = 0;
+        }
+
+        if (timeSlowed >= 3f) {
+            isSlowed = false;
+        }
+    }
+
     public void update(float deltaTime) {
+        updateTimeSlowed(deltaTime);
         updatePosition(deltaTime);
         stateTime += deltaTime;
         texture = animation.getKeyFrame(stateTime);

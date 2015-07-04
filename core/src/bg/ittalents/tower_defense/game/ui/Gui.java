@@ -45,9 +45,9 @@ public class Gui {
         stage.addActor(noTowerTable);
     }
 
-    public void buildBuildTowerButton() {
-        buildTowerButton = new MyButton(Assets.instance.getTexture(Assets.UPGRADE_BUTTON_BLUE),
-                Assets.instance.getTexture(Assets.UPGRADE_BUTTON_CLICKED_BLUE));
+    public void buildTowerButtons() {
+        buildTowerButton = new MyButton(Assets.instance.getTexture(Assets.BASIC_TURRET),
+                Assets.instance.getTexture(Assets.BASIC_TURRET_CLICKED));
         buildTowerButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -57,7 +57,7 @@ public class Gui {
                     warningTextField.setVisible(true);
                 }
 
-                level.buildTower(level.getColTower(), level.getRowTower());
+                level.buildTower(level.getColTower(), level.getRowTower(), Assets.instance.getTower(Assets.TOWER_TYPE_BASIC));
                 noTowerTable.setVisible(false);
                 level.setIsClicked(false);
             }
@@ -198,7 +198,7 @@ public class Gui {
         skin = new Skin(Gdx.files.internal("data/uiskin.json"));
 
         buildNoTowerTable();
-        buildBuildTowerButton();
+        buildTowerButtons();
         buildTowerTable();
         buildUpgradeTowerButton();
         buildSellTowerButton();

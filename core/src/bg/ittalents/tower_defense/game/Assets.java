@@ -41,6 +41,7 @@ public class Assets implements Disposable, AssetErrorListener {
     public static final String SPECIAL_TURRET = "special_turret_btn";
     public static final String SPECIAL_TURRET_CLICKED = "special_turret_btn_clicked";
 
+
     public static final String HEALTH_BAR_BACKGROUND = "enemyhealthbg";
     public static final String HEALTH_BAR = "enemyhealth";
     public static final String PROJECTILE = "projectile";
@@ -60,11 +61,11 @@ public class Assets implements Disposable, AssetErrorListener {
     public static final String CREEP_YELLOW_3 = "yellow3";
     public static final String CREEP_BOSS = "boss";
 
-    public static final int TOWER_TYPE_1 = 0;
-    public static final int TOWER_TYPE_2 = 1;
+    public static final int TOWER_TYPE_SLOW = 0;
+    public static final int TOWER_TYPE_BASIC = 1;
     public static final int TOWER_TYPE_3 = 2;
-    public static final int TOWER_TYPE_4 = 3;
-    public static final int TOWER_TYPE_5 = 4;
+    public static final int TOWER_TYPE_SIEGE = 3;
+    public static final int TOWER_TYPE_SPECIAL = 4;
     public static final int TOWER_TYPE_6 = 5;
     public static final int TOWER_TYPE_7 = 6;
 
@@ -119,8 +120,8 @@ public class Assets implements Disposable, AssetErrorListener {
             textures.put(FAST_FORWARD_BUTTON_CLICKED, atlas.findRegion(FAST_FORWARD_BUTTON_CLICKED));
 
             textures.put(BASIC_TURRET, atlas.findRegion(BASIC_TURRET));
-            textures.put(BASIC_TURRET_CLICKED, atlas.findRegion(FAST_FORWARD_BUTTON_CLICKED));
-            textures.put(SLOW_TURRET, atlas.findRegion(BASIC_TURRET_CLICKED));
+            textures.put(BASIC_TURRET_CLICKED, atlas.findRegion(BASIC_TURRET_CLICKED));
+            textures.put(SLOW_TURRET, atlas.findRegion(SLOW_TURRET));
             textures.put(SLOW_TURRET_CLICKED, atlas.findRegion(SLOW_TURRET_CLICKED));
             textures.put(SPLASH_TURRET, atlas.findRegion(SPLASH_TURRET));
             textures.put(SPLASH_TURRET_CLICKED, atlas.findRegion(SPLASH_TURRET_CLICKED));

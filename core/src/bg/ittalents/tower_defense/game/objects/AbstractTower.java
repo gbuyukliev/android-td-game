@@ -1,5 +1,6 @@
 package bg.ittalents.tower_defense.game.objects;
 
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import bg.ittalents.tower_defense.game.Assets;
@@ -16,16 +17,22 @@ public abstract class AbstractTower extends AbstractObject {
     AbstractCreep foe;
 
     // rotation moveSpeed degrees per second
-    float rotationSpeed;
-    float range;
-    float fireRate;
-    float timeFromLastShot;
-    int damage;
-    int price;
-    int upgradePrice;
-    int moneySpent;
-    boolean isUpgradable;
-    private Level level;
+    protected float rotationSpeed;
+
+    protected String typeOfTower;
+    protected int damage;
+    protected float attackSpeed;
+    protected float range;
+    protected int price;
+    protected boolean isUpgradable;
+    protected int upgradePrice;
+    protected String effect;
+
+    protected float timeFromLastShot;
+    protected int moneySpent;
+    protected Level level;
+
+    private Sound sound;
 
     public AbstractTower(float positionX, float positionY, TextureRegion[] textures, Level level) {
         super(positionX, positionY, textures[0]);
@@ -33,12 +40,23 @@ public abstract class AbstractTower extends AbstractObject {
         this.textures = textures;
         upgrade = -1;
         upgrade();
+
+        sound = Assets.instance.getSound(Assets.SOUND_LASER);
     }
 
-    public abstract AbstractProjectile shoot();
+    public AbstractProjectile shoot() {
+        timeFromLastShot = 0f;
+        Projectile projectile = new Projectile(position.x, position.y,
+                Assets.instance.getTexture(Assets.PROJECTILE), this);
+        projectile.setMoveSpeed(projectile.getMoveSpeed() * Level.getCoeff());
+        projectile.setTarget(foe);
+
+        sound.play();
+        return projectile;
+    }
 
     public boolean isReadyToShoot() {
-        return timeFromLastShot > fireRate;
+        return timeFromLastShot > attackSpeed;
     }
 
     public boolean isInRange(AbstractCreep foe) {
@@ -59,7 +77,7 @@ public abstract class AbstractTower extends AbstractObject {
         if (textures != null && textures.length > upgrade + 1 && level.getMoney() >= getUpgradePrice()) {
             texture = textures[++upgrade];
             damage *= UPGRADE_DAAMAGE_COEFF;
-            fireRate *= UPGRADE_FIRE_RATE_COEFF;
+            attackSpeed *= UPGRADE_FIRE_RATE_COEFF;
             moneySpent += getUpgradePrice();
             level.setMoney(level.getMoney() - getUpgradePrice());
         }
@@ -105,5 +123,15 @@ public abstract class AbstractTower extends AbstractObject {
 
     public int getUpgradePrice() {
         return upgradePrice;
+    }
+
+    public String getTypeOfTower() {
+        return typeOfTower;
+    }
+
+    public int getDamage() { return damage; }
+
+    public String getEffect() {
+        return effect;
     }
 }
