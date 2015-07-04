@@ -65,7 +65,7 @@ public abstract class AbstractTower extends AbstractObject {
         projectile.setMoveSpeed(projectile.getMoveSpeed() * Level.getCoeff());
         projectile.setTarget(foe);
 
-        sound.play();
+        sound.play(0.3f);
         return projectile;
     }
 

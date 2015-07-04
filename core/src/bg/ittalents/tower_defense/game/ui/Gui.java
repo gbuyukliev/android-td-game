@@ -16,17 +16,18 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 
 import bg.ittalents.tower_defense.game.Assets;
 import bg.ittalents.tower_defense.game.Level;
 import bg.ittalents.tower_defense.game.WorldRenderer;
 
-public class Gui {
+public class Gui implements Disposable {
     private Level level;
     private Stage stage;
     private Skin skin;
-    private float aspectRatio;
+//    private float aspectRatio;
     private Label warningTextField;
     private Table noTowerTable;
     private Table towerTable;
@@ -202,7 +203,7 @@ public class Gui {
     }
 
     public Gui(float aspectRatio, Batch batch) {
-        setAspectRatio(aspectRatio);
+//        setAspectRatio(aspectRatio);
         stage = new Stage(new StretchViewport(WorldRenderer.VIEWPORT * aspectRatio, WorldRenderer.VIEWPORT), batch);
         skin = new Skin(Gdx.files.internal("data/uiskin.json"));
 
@@ -218,8 +219,14 @@ public class Gui {
     public InputProcessor getInputProcessor() {
         return stage;
     }
+//
+//    public void setAspectRatio(float aspectRatio) {
+//        this.aspectRatio = aspectRatio;
+//    }
 
-    public void setAspectRatio(float aspectRatio) { this.aspectRatio = aspectRatio; }
+    public void resize(int width, int height) {
+        stage.getViewport().update((int)width, (int)height, true);
+    }
 
 //    public void update(float deltaTime) {
 //        stage.act(deltaTime);
@@ -254,5 +261,11 @@ public class Gui {
 
     public Label getWarningTextField() {
         return warningTextField;
+    }
+
+    @Override
+    public void dispose() {
+        stage.dispose();
+        skin.dispose();
     }
 }
