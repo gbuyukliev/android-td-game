@@ -192,7 +192,7 @@ public class Assets implements Disposable, AssetErrorListener {
         private Map<String, Animation> creeps;
 
         private AssetCreeps(TextureAtlas atlas) {
-            creeps = new HashMap<String, Animation>();
+            creeps = new HashMap<>();
 
             creeps.put(CREEP_BLUE_1, init(atlas, "blue", 1, 6));
             creeps.put(CREEP_RED_1, init(atlas, "red", 1, 6));
