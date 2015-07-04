@@ -32,7 +32,7 @@ public class LevelSelectorWindow extends Window {
     public static final float IMAGE_HEIGHT = 90f;
     public static final float WINDOW_TRANSPARENCY = 0.7f;
     public static final String LEVELS_PATH = "levels/level";
-    public static final String LEVELS_PNG_EXTENSION = ".png";
+    public static final String LEVELS_PNG_EXTENTIONS = ".png";
 
 
     private INetworkScreenListener networkScreen;
@@ -57,11 +57,11 @@ public class LevelSelectorWindow extends Window {
     }
 
     private boolean isLevelExist(int level) {
-        return Gdx.files.internal(LEVELS_PATH + level + LEVELS_PNG_EXTENSION).exists();
+        return Gdx.files.internal(LEVELS_PATH + level + LEVELS_PNG_EXTENTIONS).exists();
     }
 
     private void addButton(final int level) {
-        Image levelSelection = new Image(new Texture(Gdx.files.internal("levels/level" + level + ".png")));
+        Image levelSelection = new Image(new Texture(Gdx.files.internal(LEVELS_PATH + level + LEVELS_PNG_EXTENTIONS)));
         levelSelection.addListener(new ClickListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
