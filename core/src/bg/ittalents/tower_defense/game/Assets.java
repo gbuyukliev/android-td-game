@@ -37,6 +37,8 @@ public class Assets implements Disposable, AssetErrorListener {
     public static final String SLOW_TURRET_CLICKED = "slow_turret_btn_clicked";
     public static final String SPLASH_TURRET = "splash_turret_btn";
     public static final String SPLASH_TURRET_CLICKED = "splash_turret_btn_clicked";
+    public static final String SPECIAL_TURRET = "special_turret_btn";
+    public static final String SPECIAL_TURRET_CLICKED = "special_turret_btn_clicked";
 
 
     public static final String HEALTH_BAR_BACKGROUND = "enemyhealthbg";
@@ -119,6 +121,8 @@ public class Assets implements Disposable, AssetErrorListener {
             textures.put(SLOW_TURRET_CLICKED, atlas.findRegion(SLOW_TURRET_CLICKED));
             textures.put(SPLASH_TURRET, atlas.findRegion(SPLASH_TURRET));
             textures.put(SPLASH_TURRET_CLICKED, atlas.findRegion(SPLASH_TURRET_CLICKED));
+            textures.put(SPECIAL_TURRET, atlas.findRegion(SPECIAL_TURRET));
+            textures.put(SPECIAL_TURRET_CLICKED, atlas.findRegion(SPECIAL_TURRET_CLICKED));
 
             textures.put(HEALTH_BAR_BACKGROUND, atlas.findRegion(HEALTH_BAR_BACKGROUND));
             textures.put(HEALTH_BAR, atlas.findRegion(HEALTH_BAR));

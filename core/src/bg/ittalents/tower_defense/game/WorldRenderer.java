@@ -24,7 +24,6 @@ public class WorldRenderer implements Disposable {
 
     private TiledMap tiledMap;
     private OrthogonalTiledMapRenderer mapRenderer;
-//    private Background background;
 
     private Level level;
     private OrthographicCamera camera;
@@ -48,7 +47,6 @@ public class WorldRenderer implements Disposable {
         gui = new bg.ittalents.tower_defense.game.ui.Gui(aspectRatio, batch);
         this.level = new Level(tiledMap, gui);
         gui.setLevel(this.level);
-//        background = new Background(level.getWidth(), level.getHeight());
         init();
     }
 
@@ -97,14 +95,8 @@ public class WorldRenderer implements Disposable {
     private void renderWorld() {
         cameraHelper.applyTo(camera);
         batch.setProjectionMatrix(camera.combined);
-//
-//        batch.begin();
-//        background.render(batch);
-//        batch.end();
-
         mapRenderer.setView(camera);
         mapRenderer.render();
-
         level.render(batch, camera);
     }
 
