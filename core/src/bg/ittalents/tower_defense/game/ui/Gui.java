@@ -33,6 +33,7 @@ public class Gui {
     private ImageButton buildTowerButton;
     private ImageButton sellTowerButton;
     private ImageButton pauseButton;
+    private ImageButton fastForwardButton;
 
     // A table with buttons which only appears if there is an empty tile selected
 
@@ -137,7 +138,7 @@ public class Gui {
         stage.addActor(warningTextTable);
     }
 
-    public void buildPause() {
+    public void buildControl() {
         Drawable buttonUp1 = new SpriteDrawable(new Sprite(Assets.PAUSE_BUTTON));
         Drawable buttonDown1 = new SpriteDrawable(new Sprite(Assets.PAUSE_BUTTON_CLICKED));
 
@@ -155,6 +156,18 @@ public class Gui {
         Table pauseTable = new Table();
         pauseTable.setFillParent(true);
         pauseTable.bottom().right();
+
+        fastForwardButton = new ImageButton(style1);
+        fastForwardButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                level.spawnWave();
+                level.setTriggerCountTime(false);
+            }
+        });
+
+        pauseTable.add(fastForwardButton).size(40, 40).pad(5);
+
         pauseButton = new ImageButton(style1);
         pauseButton.addListener(new ChangeListener() {
                                     @Override
@@ -170,7 +183,7 @@ public class Gui {
                                 }
         );
 
-        pauseTable.add(pauseButton).size(40, 40).pad(5);
+        pauseTable.add(pauseButton).size(40, 40);
         stage.addActor(pauseTable);
     }
 
@@ -185,7 +198,7 @@ public class Gui {
         buildUpgradeTowerButton();
         buildSellTowerButton();
         buildWarningTextField();
-        buildPause();
+        buildControl();
     }
 
     public InputProcessor getInputProcessor() {
@@ -227,5 +240,9 @@ public class Gui {
 
     public Label getWarningTextField() {
         return warningTextField;
+    }
+
+    public ImageButton getFastForwardButton() {
+        return fastForwardButton;
     }
 }
