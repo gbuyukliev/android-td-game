@@ -6,17 +6,20 @@
  <tileset firstgid="1" name="level_tiles" tilewidth="46" tileheight="46" spacing="2" margin="2">
   <image source="level_tiles.png" width="256" height="256"/>
  </tileset>
+ <tileset firstgid="26" name="level_tiles2" tilewidth="46" tileheight="46" spacing="2" margin="2">
+  <image source="level_tiles2.png" width="256" height="256"/>
+ </tileset>
  <imagelayer name="backgraound" x="-766" y="-182">
   <image source="../galaxy_background_4.jpg"/>
  </imagelayer>
  <layer name="buildable" width="17" height="11">
   <data encoding="base64" compression="zlib">
-   eJxjYKAOYAdiLjIwJ5IZ3GTazY2FTax7OPGYQax7sKlHF8PnHmLNIOQeUszA5RYOIu0iBhAyg5j44cCpm3QAAGq8Atg=
+   eJxjYKAOYAdiLjIwJ5IZ3GTazY2FTax7OPGYQax7sKlHF8PlHgMSzCDkHlLM0MfhHg4i7SIGEDKDmPjhwKmbdAAAxAgDIw==
   </data>
  </layer>
  <layer name="unbuidable1" width="17" height="11">
   <data encoding="base64" compression="zlib">
-   eJxjYBgFowA/4MZBkwLYgJgLDdMbAAAx1ABQ
+   eJxjYBgFowA/4MZBkwLYgJgLiFWRaHoDAEskAIY=
   </data>
  </layer>
  <layer name="unbuildable2" width="17" height="11">

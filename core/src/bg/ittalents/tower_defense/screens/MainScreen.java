@@ -22,7 +22,7 @@ import bg.ittalents.tower_defense.network.Network;
 import bg.ittalents.tower_defense.network.UserInfo;
 import bg.ittalents.tower_defense.screens.windows.*;
 
-public class LoginScreen extends AbstractGameScreen implements INetworkScreenListener {
+public class MainScreen extends AbstractGameScreen implements INetworkScreenListener {
 
     public static final float PADDING = 10f;
     public static final float BUTTON_WIDTH = 100f;
@@ -46,7 +46,7 @@ public class LoginScreen extends AbstractGameScreen implements INetworkScreenLis
     private Texture background;
     private Batch batch;
 
-    public LoginScreen(Game game) {
+    public MainScreen(Game game) {
         super(game);
     }
 
