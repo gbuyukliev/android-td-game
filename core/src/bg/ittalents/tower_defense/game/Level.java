@@ -29,6 +29,8 @@ public class Level implements Disposable {
 
     public static final int STARTING_LIVES = 30;
     public static final int STARTING_MONEY = 210;
+    public static final int MONEY_FOR_COMPLETING_LEVEL = 50;
+
     private static final int DEFAULT_CURRENT_CREEP = 1;
     public static final float TIME_TILL_NEXT_WAVE = 10f;
     public static final String BUILDABLE_LAYER = "buildable";
@@ -170,13 +172,13 @@ public class Level implements Disposable {
 
         if (wave.getTypeOfCreeps().equals("boss")) {
             creep = new CreepBoss(currentPath.first().x, currentPath.first().y,
-                    Assets.instance.creep.get("red1"));
+                    Assets.instance.creep.get("red3"));
         } else if (wave.getTypeOfCreeps().equals("slow")) {
             creep = new CreepBoss(currentPath.first().x, currentPath.first().y,
-                    Assets.instance.creep.get("green1"));
+                    Assets.instance.creep.get("green2"));
         } else if (wave.getTypeOfCreeps().equals("flying")) {
             creep = new CreepFlying(currentPath.first().x, currentPath.first().y,
-                    Assets.instance.creep.get("yellow1"));
+                    Assets.instance.creep.get("yellow3"));
         } else {
             creep = new CreepBasic(currentPath.first().x, currentPath.first().y,
                     Assets.instance.creep.get("blue1"));
@@ -257,11 +259,12 @@ public class Level implements Disposable {
         timeSinceSpawn = 0;
     }
 
-    private void spawnWave() {
+    public void spawnWave() {
         currentWave++;
         wave = new Wave(currentWave);
 
         currentCreep = DEFAULT_CURRENT_CREEP;
+        money += MONEY_FOR_COMPLETING_LEVEL;
 
         spawnCreepInWave();
     }
@@ -445,6 +448,10 @@ public class Level implements Disposable {
 
     public boolean isTriggerCountTime() {
         return triggerCountTime;
+    }
+
+    public void setTriggerCountTime(boolean triggerCountTime) {
+        this.triggerCountTime = triggerCountTime;
     }
 
     public float getTimeSinceLastWave() {
