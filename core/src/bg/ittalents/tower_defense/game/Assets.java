@@ -30,6 +30,9 @@ public class Assets implements Disposable, AssetErrorListener {
     public static final Texture PAUSE_BUTTON;
     public static final Texture PAUSE_BUTTON_CLICKED;
 
+    public static final Texture FAST_FORWARD_BUTTON;
+    public static final Texture FAST_FORWARD_BUTTON_CLICKED;
+
     // Location of description file for texture atlas
     public static final String TEXTURE_ATLAS_OBJECTS;
     public static final String TAG;
@@ -47,6 +50,8 @@ public class Assets implements Disposable, AssetErrorListener {
         PAUSE_BUTTON_CLICKED = new Texture("pause_clicked.png");
 
         TEXTURE_ATLAS_OBJECTS = "texture/texture_atlas.txt";
+        FAST_FORWARD_BUTTON = new Texture("fast_forward_btn.png");
+        FAST_FORWARD_BUTTON_CLICKED = new Texture("fast_forward_btn_clicked.png");
         TAG = Assets.class.getName();
         instance = new Assets();
     }

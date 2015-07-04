@@ -8,7 +8,7 @@ public class Projectile extends AbstractProjectile {
     public Projectile(float positionX, float positionY, int damage, TextureRegion texture) {
         super(positionX, positionY, texture);
         this.damage = damage;
-        moveSpeed = 500f;
+        setMoveSpeed(250f);
     }
 
     public void render(SpriteBatch batch) {

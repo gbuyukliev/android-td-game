@@ -29,6 +29,7 @@ public class Tower extends AbstractTower {
         timeFromLastShot = 0f;
         Projectile projectile = new Projectile(position.x, position.y, damage, new TextureRegion(
                 PROJECTILE_TEXTURE));
+        projectile.setMoveSpeed(projectile.getMoveSpeed() * Level.getCoeff());
         projectile.setTarget(foe);
         return projectile;
     }

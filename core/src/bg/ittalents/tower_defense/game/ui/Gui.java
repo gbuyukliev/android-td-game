@@ -142,6 +142,9 @@ public class Gui {
         Drawable buttonUp2 = new SpriteDrawable(new Sprite(Assets.RESUME_BUTTON));
         Drawable buttonDown2 = new SpriteDrawable(new Sprite(Assets.RESUME_BUTTON_CLICKED));
 
+        Drawable ffButtonUp = new SpriteDrawable(new Sprite(Assets.FAST_FORWARD_BUTTON));
+        Drawable ffButtonDown = new SpriteDrawable(new Sprite(Assets.FAST_FORWARD_BUTTON_CLICKED));
+
         final ImageButton.ImageButtonStyle style1 = new ImageButton.ImageButtonStyle();
         style1.imageUp = buttonUp1;
         style1.imageDown = buttonDown1;
@@ -150,11 +153,15 @@ public class Gui {
         style2.imageUp = buttonUp2;
         style2.imageDown = buttonDown2;
 
+        final ImageButton.ImageButtonStyle ffStyle = new ImageButton.ImageButtonStyle();
+        ffStyle.imageUp = ffButtonUp;
+        ffStyle.imageDown = ffButtonDown;
+
         Table pauseTable = new Table();
         pauseTable.setFillParent(true);
         pauseTable.bottom().right();
 
-        fastForwardButton = new ImageButton(style1);
+        fastForwardButton = new ImageButton(ffStyle);
         fastForwardButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {

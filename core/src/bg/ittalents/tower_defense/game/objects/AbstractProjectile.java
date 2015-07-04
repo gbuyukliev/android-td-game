@@ -3,7 +3,7 @@ package bg.ittalents.tower_defense.game.objects;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public abstract class AbstractProjectile extends AbstractObject {
-    float moveSpeed;
+    private float moveSpeed;
     int damage;
     AbstractCreep target;
 
@@ -32,6 +32,16 @@ public abstract class AbstractProjectile extends AbstractObject {
         if (isVisible() && position.dst(target.position) < texture.getRegionWidth()) {
             target.reciveDamage(damage);
             setVisible(false);
+        }
+    }
+
+    public float getMoveSpeed() {
+        return moveSpeed;
+    }
+
+    public void setMoveSpeed(float moveSpeed) {
+        if (moveSpeed > 0) {
+            this.moveSpeed = moveSpeed;
         }
     }
 }
