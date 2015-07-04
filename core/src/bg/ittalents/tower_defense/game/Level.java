@@ -176,16 +176,16 @@ public class Level implements Disposable {
 
         if (wave.getTypeOfCreeps().equals("boss")) {
             creep = new CreepBoss(currentPath.first().x, currentPath.first().y,
-                    Assets.instance.creep.get("boss"));
+                    Assets.instance.getCreep(Assets.CREEP_BOSS));
         } else if (wave.getTypeOfCreeps().equals("slow")) {
             creep = new CreepSlow(currentPath.first().x, currentPath.first().y,
-                    Assets.instance.creep.get("green2"));
+                    Assets.instance.getCreep(Assets.CREEP_GREEN_2));
         } else if (wave.getTypeOfCreeps().equals("flying")) {
             creep = new CreepFlying(currentPath.first().x, currentPath.first().y,
-                    Assets.instance.creep.get("yellow3"));
+                    Assets.instance.getCreep(Assets.CREEP_YELLOW_3));
         } else {
             creep = new CreepBasic(currentPath.first().x, currentPath.first().y,
-                    Assets.instance.creep.get("blue1"));
+                    Assets.instance.getCreep(Assets.CREEP_BLUE_1));
         }
 
         creep.setWaypoints(currentPath);
@@ -194,7 +194,7 @@ public class Level implements Disposable {
 
     public void buildTower(int col, int row) {
         Tower tower = new Tower((col + 0.5f) * tileWidth, (row + 0.5f) * tileHeight,
-                Assets.instance.towers.tower[0], this);
+                Assets.instance.getTower(Assets.TOWER_TYPE_1), this);
 
         if (money >= tower.getPrice()) {
             currentTowerPrice = tower.getPrice();

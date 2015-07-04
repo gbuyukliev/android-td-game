@@ -17,21 +17,46 @@ import com.badlogic.gdx.utils.Disposable;
 import java.util.HashMap;
 import java.util.Map;
 
-import bg.ittalents.tower_defense.game.WorldRenderer;
-
 public class Assets implements Disposable, AssetErrorListener {
-    public static final Texture UPGRADE_BUTTON_BLUE;
-    public static final Texture UPGRADE_BUTTON_CLICKED_BLUE;
-    public static final Texture SELL_BUTTON_BLUE;
-    public static final Texture SELL_BUTTON_CLICKED_BLUE;
+    //textures types
+    public static final String UPGRADE_BUTTON_BLUE;
+    public static final String UPGRADE_BUTTON_CLICKED_BLUE;
+    public static final String SELL_BUTTON_BLUE;
+    public static final String SELL_BUTTON_CLICKED_BLUE;
+    public static final String RESUME_BUTTON;
+    public static final String RESUME_BUTTON_CLICKED;
+    public static final String PAUSE_BUTTON;
+    public static final String PAUSE_BUTTON_CLICKED;
+    public static final String FAST_FORWARD_BUTTON;
+    public static final String FAST_FORWARD_BUTTON_CLICKED;
 
-    public static final Texture RESUME_BUTTON;
-    public static final Texture RESUME_BUTTON_CLICKED;
-    public static final Texture PAUSE_BUTTON;
-    public static final Texture PAUSE_BUTTON_CLICKED;
+    public static final String HEALTH_BAR_BACKGROUND = "enemyhealthbg";
+    public static final String HEALTH_BAR = "enemyhealth";
+    public static final String PROJECTILE = "projectile";
 
-    public static final Texture FAST_FORWARD_BUTTON;
-    public static final Texture FAST_FORWARD_BUTTON_CLICKED;
+    //creep types
+    public static final String CREEP_BLUE_1 = "blue1";
+    public static final String CREEP_RED_1 = "red1";
+    public static final String CREEP_GREEN_1 = "green1";
+    public static final String CREEP_YELLOW_1 = "yellow1";
+    public static final String CREEP_BLUE_2 = "blue2";
+    public static final String CREEP_RED_2 = "red2";
+    public static final String CREEP_GREEN_2 = "green2";
+    public static final String CREEP_YELLOW_2 = "yellow2";
+    public static final String CREEP_BLUE_3 = "blue3";
+    public static final String CREEP_RED_3 = "red3";
+    public static final String CREEP_GREEN_3 = "green3";
+    public static final String CREEP_YELLOW_3 = "yellow3";
+    public static final String CREEP_BOSS = "boss";
+
+    public static final int TOWER_TYPE_1 = 0;
+    public static final int TOWER_TYPE_2 = 1;
+    public static final int TOWER_TYPE_3 = 2;
+    public static final int TOWER_TYPE_4 = 3;
+    public static final int TOWER_TYPE_5 = 4;
+    public static final int TOWER_TYPE_6 = 5;
+    public static final int TOWER_TYPE_7 = 6;
+
 
     // Location of description file for texture atlas
     public static final String TEXTURE_ATLAS_OBJECTS;
@@ -39,35 +64,53 @@ public class Assets implements Disposable, AssetErrorListener {
     public static final Assets instance;
 
     static {
-        UPGRADE_BUTTON_BLUE = new Texture("upgrade_button_blue.png");
-        UPGRADE_BUTTON_CLICKED_BLUE = new Texture("upgrade_button_clicked_blue.png");
-        SELL_BUTTON_BLUE = new Texture("sell_button_blue.png");
-        SELL_BUTTON_CLICKED_BLUE = new Texture("sell_button_clicked_blue.png");
-
-        RESUME_BUTTON = new Texture("resume.png");
-        RESUME_BUTTON_CLICKED = new Texture("resume_clicked.png");
-        PAUSE_BUTTON = new Texture("pause.png");
-        PAUSE_BUTTON_CLICKED = new Texture("pause_clicked.png");
+        UPGRADE_BUTTON_BLUE ="upgrade_button_blue";
+        UPGRADE_BUTTON_CLICKED_BLUE = "upgrade_button_clicked_blue";
+        SELL_BUTTON_BLUE = "sell_button_blue";
+        SELL_BUTTON_CLICKED_BLUE = "sell_button_clicked_blue";
+        RESUME_BUTTON = "resume";
+        RESUME_BUTTON_CLICKED = "resume_clicked";
+        PAUSE_BUTTON = "pause";
+        PAUSE_BUTTON_CLICKED = "pause_clicked";
+        FAST_FORWARD_BUTTON = "fast_forward_btn";
+        FAST_FORWARD_BUTTON_CLICKED = "fast_forward_btn_clicked";
 
         TEXTURE_ATLAS_OBJECTS = "texture/texture_atlas.txt";
-        FAST_FORWARD_BUTTON = new Texture("fast_forward_btn.png");
-        FAST_FORWARD_BUTTON_CLICKED = new Texture("fast_forward_btn_clicked.png");
         TAG = Assets.class.getName();
         instance = new Assets();
     }
 
     private AssetManager assetManager;
 
-    public AssetCreeps creep;
-    public AssetTower towers;
-    public AssetBackground background;
-    public AssetFonts fonts;
+    private AssetsTexture texture;
+    private AssetCreeps creep;
+    private AssetTower towers;
+    private AssetFonts fonts;
 
-    public class AssetBackground {
-        public final AtlasRegion background;
+    public class AssetsTexture {
+        private Map<String, TextureRegion> textures;
 
-        public AssetBackground(TextureAtlas atlas) {
-            background = atlas.findRegion("tower-defense-background-stars");
+        private AssetsTexture(TextureAtlas atlas) {
+            textures = new HashMap<String, TextureRegion>();
+
+            textures.put(UPGRADE_BUTTON_BLUE, atlas.findRegion(UPGRADE_BUTTON_BLUE));
+            textures.put(UPGRADE_BUTTON_CLICKED_BLUE, atlas.findRegion(UPGRADE_BUTTON_CLICKED_BLUE));
+            textures.put(SELL_BUTTON_BLUE, atlas.findRegion(SELL_BUTTON_BLUE));
+            textures.put(SELL_BUTTON_CLICKED_BLUE, atlas.findRegion(SELL_BUTTON_CLICKED_BLUE));
+            textures.put(RESUME_BUTTON, atlas.findRegion(RESUME_BUTTON));
+            textures.put(RESUME_BUTTON_CLICKED, atlas.findRegion(RESUME_BUTTON_CLICKED));
+            textures.put(PAUSE_BUTTON, atlas.findRegion(PAUSE_BUTTON));
+            textures.put(PAUSE_BUTTON_CLICKED, atlas.findRegion(PAUSE_BUTTON_CLICKED));
+            textures.put(FAST_FORWARD_BUTTON, atlas.findRegion(FAST_FORWARD_BUTTON));
+            textures.put(FAST_FORWARD_BUTTON_CLICKED, atlas.findRegion(FAST_FORWARD_BUTTON_CLICKED));
+
+            textures.put(HEALTH_BAR_BACKGROUND, atlas.findRegion(HEALTH_BAR_BACKGROUND));
+            textures.put(HEALTH_BAR, atlas.findRegion(HEALTH_BAR));
+            textures.put(PROJECTILE, atlas.findRegion(PROJECTILE));
+        }
+
+        public TextureRegion get(String type) {
+            return textures.get(type);
         }
     }
 
@@ -105,11 +148,14 @@ public class Assets implements Disposable, AssetErrorListener {
     public class AssetTower {
         public final AtlasRegion[][] tower;
 
-        public AssetTower(TextureAtlas atlas) {
-            tower = new AtlasRegion[7][3];
+        private AssetTower(TextureAtlas atlas) {
+            final int TOWER_TYPES_COUNT = 7;
+            final int TOWER_UPGRADES_COUNT = 3;
 
-            for (int type = 1; type <= 7; type++) {
-                for (int strength = 1; strength <= 3; strength++) {
+            tower = new AtlasRegion[TOWER_TYPES_COUNT][TOWER_UPGRADES_COUNT];
+
+            for (int type = 1; type <= TOWER_TYPES_COUNT; type++) {
+                for (int strength = 1; strength <= TOWER_UPGRADES_COUNT; strength++) {
                     tower[type - 1][strength - 1] = atlas.findRegion(
                             "turret-" + type + "-" + strength);
                 }
@@ -121,25 +167,25 @@ public class Assets implements Disposable, AssetErrorListener {
 
         private Map<String, Animation> creeps;
 
-        public AssetCreeps(TextureAtlas atlas) {
+        private AssetCreeps(TextureAtlas atlas) {
             creeps = new HashMap<String, Animation>();
 
-            creeps.put("blue1", init(atlas, "blue", 1, 6));
-            creeps.put("red1", init(atlas, "red", 1, 6));
-            creeps.put("green1", init(atlas, "green", 1, 6));
-            creeps.put("yellow1", init(atlas, "yellow", 1, 6));
+            creeps.put(CREEP_BLUE_1, init(atlas, "blue", 1, 6));
+            creeps.put(CREEP_RED_1, init(atlas, "red", 1, 6));
+            creeps.put(CREEP_GREEN_1, init(atlas, "green", 1, 6));
+            creeps.put(CREEP_YELLOW_1, init(atlas, "yellow", 1, 6));
 
-            creeps.put("blue2", init(atlas, "blue", 2, 4));
-            creeps.put("red2", init(atlas, "red", 2, 4));
-            creeps.put("green2", init(atlas, "green", 2, 4));
-            creeps.put("yellow2", init(atlas, "yellow", 2, 4));
+            creeps.put(CREEP_BLUE_2, init(atlas, "blue", 2, 4));
+            creeps.put(CREEP_RED_2, init(atlas, "red", 2, 4));
+            creeps.put(CREEP_GREEN_2, init(atlas, "green", 2, 4));
+            creeps.put(CREEP_YELLOW_2, init(atlas, "yellow", 2, 4));
 
-            creeps.put("blue3", init(atlas, "blue", 3, 4));
-            creeps.put("red3", init(atlas, "red", 3, 4));
-            creeps.put("green3", init(atlas, "green", 3, 4));
-            creeps.put("yellow3", init(atlas, "yellow", 3, 4));
+            creeps.put(CREEP_BLUE_3, init(atlas, "blue", 3, 4));
+            creeps.put(CREEP_RED_3, init(atlas, "red", 3, 4));
+            creeps.put(CREEP_GREEN_3, init(atlas, "green", 3, 4));
+            creeps.put(CREEP_YELLOW_3, init(atlas, "yellow", 3, 4));
 
-            creeps.put("boss", initBoss(atlas));
+            creeps.put(CREEP_BOSS, initBoss(atlas));
         }
 
         private Animation initBoss(TextureAtlas atlas) {
@@ -181,6 +227,23 @@ public class Assets implements Disposable, AssetErrorListener {
 
     }
 
+    public BitmapFont getFont() {
+        return fonts.defaultFont;
+    }
+
+    public Animation getCreep(String type) {
+        return creep.get(type);
+    }
+
+    public TextureRegion getTexture(String type) {
+        return texture.get(type);
+    }
+
+
+    public TextureRegion[] getTower(int type) {
+        return towers.tower[type];
+    }
+
     public void init(AssetManager assetManager) {
         this.assetManager = assetManager;
         // set asset manager error handler
@@ -202,12 +265,11 @@ public class Assets implements Disposable, AssetErrorListener {
             t.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
         }
         // create game resource objects
+        texture = new AssetsTexture(atlas);
         fonts = new AssetFonts();
-        background = new AssetBackground(atlas);
         creep = new AssetCreeps(atlas);
         towers = new AssetTower(atlas);
     }
-
 
     @Override
     public void dispose() {

@@ -119,7 +119,7 @@ public class WorldRenderer implements Disposable {
 
 
     private void renderGuiScore() {
-        BitmapFont font = Assets.instance.fonts.defaultFont;
+        BitmapFont font = Assets.instance.getFont();
 
         float screenWidth = Gdx.graphics.getWidth();
         float screenHeight = Gdx.graphics.getHeight();
@@ -142,7 +142,7 @@ public class WorldRenderer implements Disposable {
 
     private void renderGuiFpsCounter() {
         int fps = Gdx.graphics.getFramesPerSecond();
-        BitmapFont font = Assets.instance.fonts.defaultFont;
+        BitmapFont font = Assets.instance.getFont();
 
         float x = cameraGUI.viewportWidth / 2 - 30 / scale;
         float y = cameraGUI.viewportHeight - 15 / scale;

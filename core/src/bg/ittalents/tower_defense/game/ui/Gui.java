@@ -46,7 +46,8 @@ public class Gui {
     }
 
     public void buildBuildTowerButton() {
-        buildTowerButton = new MyButton(Assets.UPGRADE_BUTTON_BLUE, Assets.UPGRADE_BUTTON_CLICKED_BLUE);
+        buildTowerButton = new MyButton(Assets.instance.getTexture(Assets.UPGRADE_BUTTON_BLUE),
+                Assets.instance.getTexture(Assets.UPGRADE_BUTTON_CLICKED_BLUE));
         buildTowerButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -76,8 +77,8 @@ public class Gui {
     }
 
     public void buildUpgradeTowerButton() {
-        Drawable buttonUp = new SpriteDrawable(new Sprite(Assets.UPGRADE_BUTTON_BLUE));
-        Drawable buttonDown = new SpriteDrawable(new Sprite(Assets.UPGRADE_BUTTON_CLICKED_BLUE));
+        Drawable buttonUp = new SpriteDrawable(new Sprite(Assets.instance.getTexture(Assets.UPGRADE_BUTTON_BLUE)));
+        Drawable buttonDown = new SpriteDrawable(new Sprite(Assets.instance.getTexture(Assets.UPGRADE_BUTTON_CLICKED_BLUE)));
 
         ImageButton.ImageButtonStyle style = new ImageButton.ImageButtonStyle();
         style.imageUp = buttonUp;
@@ -107,7 +108,8 @@ public class Gui {
     }
 
     public void buildSellTowerButton() {
-        sellTowerButton = new MyButton(Assets.SELL_BUTTON_BLUE, Assets.SELL_BUTTON_CLICKED_BLUE);
+        sellTowerButton = new MyButton(Assets.instance.getTexture(Assets.SELL_BUTTON_BLUE),
+                Assets.instance.getTexture(Assets.SELL_BUTTON_CLICKED_BLUE));
         sellTowerButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -136,14 +138,14 @@ public class Gui {
     }
 
     public void buildControl() {
-        Drawable buttonUp1 = new SpriteDrawable(new Sprite(Assets.PAUSE_BUTTON));
-        Drawable buttonDown1 = new SpriteDrawable(new Sprite(Assets.PAUSE_BUTTON_CLICKED));
+        Drawable buttonUp1 = new SpriteDrawable(new Sprite(Assets.instance.getTexture(Assets.PAUSE_BUTTON)));
+        Drawable buttonDown1 = new SpriteDrawable(new Sprite(Assets.instance.getTexture(Assets.PAUSE_BUTTON_CLICKED)));
 
-        Drawable buttonUp2 = new SpriteDrawable(new Sprite(Assets.RESUME_BUTTON));
-        Drawable buttonDown2 = new SpriteDrawable(new Sprite(Assets.RESUME_BUTTON_CLICKED));
+        Drawable buttonUp2 = new SpriteDrawable(new Sprite(Assets.instance.getTexture(Assets.RESUME_BUTTON)));
+        Drawable buttonDown2 = new SpriteDrawable(new Sprite(Assets.instance.getTexture(Assets.RESUME_BUTTON_CLICKED)));
 
-        Drawable ffButtonUp = new SpriteDrawable(new Sprite(Assets.FAST_FORWARD_BUTTON));
-        Drawable ffButtonDown = new SpriteDrawable(new Sprite(Assets.FAST_FORWARD_BUTTON_CLICKED));
+        Drawable ffButtonUp = new SpriteDrawable(new Sprite(Assets.instance.getTexture(Assets.FAST_FORWARD_BUTTON)));
+        Drawable ffButtonDown = new SpriteDrawable(new Sprite(Assets.instance.getTexture(Assets.FAST_FORWARD_BUTTON_CLICKED)));
 
         final ImageButton.ImageButtonStyle style1 = new ImageButton.ImageButtonStyle();
         style1.imageUp = buttonUp1;

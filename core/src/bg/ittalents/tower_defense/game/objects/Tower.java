@@ -1,14 +1,11 @@
 package bg.ittalents.tower_defense.game.objects;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
+import bg.ittalents.tower_defense.game.Assets;
 import bg.ittalents.tower_defense.game.Level;
 
 public class Tower extends AbstractTower {
-
-    private static final Texture PROJECTILE_TEXTURE = new Texture(Gdx.files.internal("projectile.png"));
 
     public Tower(float positionX, float positionY, TextureRegion[] textures, Level level) {
         super(positionX, positionY, textures, level);
@@ -27,8 +24,8 @@ public class Tower extends AbstractTower {
     @Override
     public AbstractProjectile shoot() {
         timeFromLastShot = 0f;
-        Projectile projectile = new Projectile(position.x, position.y, damage, new TextureRegion(
-                PROJECTILE_TEXTURE));
+        Projectile projectile = new Projectile(position.x, position.y, damage,
+                Assets.instance.getTexture(Assets.PROJECTILE));
         projectile.setMoveSpeed(projectile.getMoveSpeed() * Level.getCoeff());
         projectile.setTarget(foe);
         return projectile;

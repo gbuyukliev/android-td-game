@@ -1,7 +1,5 @@
 package bg.ittalents.tower_defense.game.objects;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
@@ -11,17 +9,13 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.utils.Array;
 
+import bg.ittalents.tower_defense.game.Assets;
+
 public abstract class AbstractCreep extends AbstractObject {
 
-    private static final Texture ENEMY_BG_TEXTURE;
-    private static final Texture ENEMY_FG_TEXTURE;
-    private static final Texture ENEMY_FG;
     public static final float WAYPOINT_TOLERANCE;
 
     static {
-        ENEMY_BG_TEXTURE = new Texture("enemyhealthbg.png");
-        ENEMY_FG_TEXTURE = new Texture("enemyhealthfg.png");
-        ENEMY_FG = new Texture(Gdx.files.internal("enemyhealth.png"));
         WAYPOINT_TOLERANCE = 5f;
     }
 
@@ -44,38 +38,30 @@ public abstract class AbstractCreep extends AbstractObject {
         private static final float SCALE = 1f;
 
         private Sprite healthBarBG;
-        private Sprite healthBarFG;
         NinePatchDrawable health;
-        private AbstractCreep owner;
 
-        public HealthBar(AbstractCreep owner, Texture healthBG, Texture healthFG) {
-            this.owner = owner;
-            healthBarBG = new Sprite(healthBG);
-            healthBarFG = new Sprite(healthFG);
-            health = new NinePatchDrawable(new NinePatch(ENEMY_FG, 1, 1, 1, 1));
+        public HealthBar() {
+            healthBarBG = new Sprite(Assets.instance.getTexture(Assets.HEALTH_BAR_BACKGROUND));
+            health = new NinePatchDrawable(new NinePatch(Assets.instance.getTexture(Assets.HEALTH_BAR), 1, 1, 1, 1));
 
             setPosition();
             healthBarBG.setOrigin(0, 0);
-            healthBarFG.setOrigin(0, 0);
             healthBarBG.setScale(SCALE);
         }
 
         private void setPosition() {
             healthBarBG.setX(getTextureX() + BUFFER_X);
             healthBarBG.setY(getTextureY() + BUFFER_Y);
-            healthBarFG.setX(getTextureX() + BUFFER_X);
-            healthBarFG.setY(getTextureY() + BUFFER_Y);
         }
 
         public void update() {
             setPosition();
-            healthBarFG.setScale(owner.health / owner.maxHealth * SCALE, SCALE);
         }
 
         public void render(Batch batch) {
             healthBarBG.draw(batch);
-            health.draw(batch, getTextureX() + BUFFER_X, getTextureY() + BUFFER_Y, owner.health / owner.maxHealth * 40f, 5f);
-//            healthBarFG.draw(batch);
+            health.draw(batch, getTextureX() + BUFFER_X, getTextureY() + BUFFER_Y,
+                    AbstractCreep.this.health / AbstractCreep.this.maxHealth * 40f, 5f);
         }
     }
 
@@ -85,8 +71,7 @@ public abstract class AbstractCreep extends AbstractObject {
         angle = 90f;
         currentWaypoint = -1;
 
-        healthBar = new HealthBar(this, ENEMY_BG_TEXTURE,
-                ENEMY_FG_TEXTURE);
+        healthBar = new HealthBar();
     }
 
     public void setWaypoints(Array<Vector2> waypoints) {
