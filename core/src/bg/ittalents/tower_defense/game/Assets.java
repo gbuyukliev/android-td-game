@@ -64,7 +64,7 @@ public class Assets implements Disposable, AssetErrorListener {
     public static final int TOWER_TYPE_SLOW = 0;
     public static final int TOWER_TYPE_BASIC = 1;
     public static final int TOWER_TYPE_3 = 2;
-    public static final int TOWER_TYPE_SIEGE = 3;
+    public static final int TOWER_TYPE_SPLASH = 3;
     public static final int TOWER_TYPE_SPECIAL = 4;
     public static final int TOWER_TYPE_6 = 5;
     public static final int TOWER_TYPE_7 = 6;

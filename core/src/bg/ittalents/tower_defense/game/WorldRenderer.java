@@ -66,7 +66,7 @@ public class WorldRenderer implements Disposable {
     }
 
     public void render() {
-//        Gdx.graphics.setTitle("Tower Defense -- FPS: " + Gdx.graphics.getFramesPerSecond());
+//        Gdx.graphics.setTitle("TowerBasic Defense -- FPS: " + Gdx.graphics.getFramesPerSecond());
         renderWorld();
         renderGui();
         gui.render(batch);

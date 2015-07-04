@@ -33,7 +33,7 @@ public abstract class AbstractProjectile extends AbstractObject {
         if (isVisible() && position.dst(target.position) < texture.getRegionWidth()) {
             target.receiveDamage(tower.getDamage());
 
-            if (tower.getEffect().equals("slow")) {
+            if (tower.getTypeOfTower().equals("slowTower")) {
                 target.getSlowed();
             }
 

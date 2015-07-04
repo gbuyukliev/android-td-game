@@ -26,11 +26,10 @@ public abstract class AbstractTower extends AbstractObject {
     protected int price;
     protected boolean isUpgradable;
     protected int upgradePrice;
-    protected String effect;
 
     protected float timeFromLastShot;
     protected int moneySpent;
-    protected Level level;
+    protected static Level level;
 
     private Sound sound;
 
@@ -42,6 +41,21 @@ public abstract class AbstractTower extends AbstractObject {
         upgrade();
 
         sound = Assets.instance.getSound(Assets.SOUND_LASER);
+    }
+
+    public static AbstractTower createTower(float col, float row, String type) {
+        switch(type) {
+            case "basicTower":
+                return new TowerBasic(col, row, Assets.instance.getTower(Assets.TOWER_TYPE_BASIC), level);
+            case "slowTower":
+                return new TowerSlow(col, row, Assets.instance.getTower(Assets.TOWER_TYPE_SLOW), level);
+            case "splashTower":
+                return new TowerSplash(col, row, Assets.instance.getTower(Assets.TOWER_TYPE_SPLASH), level);
+            case "specialTower":
+                return new TowerSpecial(col, row, Assets.instance.getTower(Assets.TOWER_TYPE_SPECIAL), level);
+            default:
+                return new TowerBasic(col, row, Assets.instance.getTower(Assets.TOWER_TYPE_BASIC), level);
+        }
     }
 
     public AbstractProjectile shoot() {
@@ -130,8 +144,4 @@ public abstract class AbstractTower extends AbstractObject {
     }
 
     public int getDamage() { return damage; }
-
-    public String getEffect() {
-        return effect;
-    }
 }
