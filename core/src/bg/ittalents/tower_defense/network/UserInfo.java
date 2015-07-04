@@ -34,7 +34,7 @@ public class UserInfo {
 
     private static UserInfo getInstance() {
         if (instance == null) {
-            logAsGuess();
+            logInAsGuest();
         }
         return instance;
     }
@@ -47,11 +47,11 @@ public class UserInfo {
         return instance != null;
     }
 
-    public static void logAsGuess() {
+    public static void logInAsGuest() {
         instance = new UserInfo();
 
-        instance.nickName = "Guess";
-        instance.userName = "Guess";
+        instance.nickName = "Guest";
+        instance.userName = "Guest";
         instance.email = "";
     }
 

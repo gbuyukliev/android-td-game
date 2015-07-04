@@ -62,6 +62,7 @@ public class LevelSelectorWindow extends Window {
         ImageButton.ImageButtonStyle style = new ImageButton.ImageButtonStyle();
         style.imageUp = new SpriteDrawable(new Sprite(up));
         style.imageDown = new SpriteDrawable(new Sprite(down));
+        style.imageDisabled = new SpriteDrawable(new Sprite(down));
 
         ImageButton levelSelection = new ImageButton(style);
 
