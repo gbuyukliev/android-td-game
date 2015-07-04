@@ -16,15 +16,13 @@ public abstract class AbstractCreep extends AbstractObject {
     private static final Texture ENEMY_BG_TEXTURE;
     private static final Texture ENEMY_FG_TEXTURE;
     private static final Texture ENEMY_FG;
-    public static final float WAYPOINT_TOLERANCE = 3f;
-
-    private static float waveCoeff;
+    public static final float WAYPOINT_TOLERANCE;
 
     static {
         ENEMY_BG_TEXTURE = new Texture("enemyhealthbg.png");
         ENEMY_FG_TEXTURE = new Texture("enemyhealthfg.png");
         ENEMY_FG = new Texture(Gdx.files.internal("enemyhealth.png"));
-        waveCoeff = 1f;
+        WAYPOINT_TOLERANCE = 5f;
     }
 
     Animation animation;
@@ -157,15 +155,5 @@ public abstract class AbstractCreep extends AbstractObject {
 //        if (health < maxHealth) {
             healthBar.render(batch);
 //        }
-    }
-
-    public static void setCoeff(float newWaveCoeff) {
-        if (newWaveCoeff > 0) {
-            waveCoeff = newWaveCoeff;
-        }
-    }
-
-    public static float getCoeff() {
-        return waveCoeff;
     }
 }

@@ -2,14 +2,16 @@ package bg.ittalents.tower_defense.game.objects;
 
 import com.badlogic.gdx.graphics.g2d.Animation;
 
+import bg.ittalents.tower_defense.game.Level;
+
 public class CreepBasic extends AbstractCreep {
 
     public CreepBasic(float positionX, float positionY, Animation animation) {
         super(positionX, positionY, animation);
-        award = 25 * (int) getCoeff();
-        moveSpeed = 50f * getCoeff();
-        health = 180f * getCoeff();
-        maxHealth = 180f * getCoeff();
+        award = 25 * (int) Level.getCoeff();
+        moveSpeed = 50f * Level.getCoeff();
+        health = 180f * Level.getCoeff();
+        maxHealth = 180f * Level.getCoeff();
         isFlying = false;
     }
 }

@@ -19,6 +19,7 @@ import bg.ittalents.tower_defense.game.objects.AbstractTower;
 import bg.ittalents.tower_defense.game.objects.CreepBasic;
 import bg.ittalents.tower_defense.game.objects.CreepBoss;
 import bg.ittalents.tower_defense.game.objects.CreepFlying;
+import bg.ittalents.tower_defense.game.objects.CreepSlow;
 import bg.ittalents.tower_defense.game.objects.Tower;
 import bg.ittalents.tower_defense.game.objects.Wave;
 import bg.ittalents.tower_defense.game.ui.Gui;
@@ -30,6 +31,9 @@ public class Level implements Disposable {
     public static final int STARTING_LIVES = 30;
     public static final int STARTING_MONEY = 210;
     public static final int MONEY_FOR_COMPLETING_LEVEL = 50;
+
+    private static float waveCoeff = 1f;
+    private static float fasterSpawn = 0f;
 
     private static final int DEFAULT_CURRENT_CREEP = 1;
     public static final float TIME_TILL_NEXT_WAVE = 10f;
@@ -174,7 +178,7 @@ public class Level implements Disposable {
             creep = new CreepBoss(currentPath.first().x, currentPath.first().y,
                     Assets.instance.creep.get("red3"));
         } else if (wave.getTypeOfCreeps().equals("slow")) {
-            creep = new CreepBoss(currentPath.first().x, currentPath.first().y,
+            creep = new CreepSlow(currentPath.first().x, currentPath.first().y,
                     Assets.instance.creep.get("green2"));
         } else if (wave.getTypeOfCreeps().equals("flying")) {
             creep = new CreepFlying(currentPath.first().x, currentPath.first().y,
@@ -267,7 +271,8 @@ public class Level implements Disposable {
         money += MONEY_FOR_COMPLETING_LEVEL;
 
         if(wave.getNumber() != 1 && wave.getNumber() % 10 == 1) {
-            AbstractCreep.setCoeff(AbstractCreep.getCoeff() + 0.25f);
+            waveCoeff += 0.1f;
+            setFasterSpawn(getFasterSpawn() + 0.04f);
         }
 
         spawnCreepInWave();
@@ -288,9 +293,9 @@ public class Level implements Disposable {
         }
 
         if (currentCreep <= wave.getNumOfCreeps() && !isTriggerCountTime()) {
-            if (wave.getTypeOfCreeps().equals("slow") && timeSinceSpawn > 1.5f) {
+            if (wave.getTypeOfCreeps().equals("slow") && timeSinceSpawn > 1.5f - fasterSpawn) {
                 spawnCreepInWave();
-            } else if (!wave.getTypeOfCreeps().equals("slow") && timeSinceSpawn > 1f) {
+            } else if (!wave.getTypeOfCreeps().equals("slow") && timeSinceSpawn > 1f - fasterSpawn) {
                 spawnCreepInWave();
             }
         }
@@ -504,5 +509,25 @@ public class Level implements Disposable {
 
     public int getCurrentTowerPrice() {
         return currentTowerPrice;
+    }
+
+    public static void setCoeff(float newWaveCoeff) {
+        if (newWaveCoeff > 0) {
+            waveCoeff = newWaveCoeff;
+        }
+    }
+
+    public static float getCoeff() {
+        return waveCoeff;
+    }
+
+    public static float getFasterSpawn() {
+        return fasterSpawn;
+    }
+
+    public static void setFasterSpawn(float fasterSpawn) {
+        if (fasterSpawn > 0 && fasterSpawn <= 0.7f) {
+            Level.fasterSpawn = fasterSpawn;
+        }
     }
 }
