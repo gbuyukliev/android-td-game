@@ -16,6 +16,9 @@ public class Wave {
         if (number % 10 == 0) {
             setNumOfCreeps(1);
             setTypeOfCreeps("boss");
+        } else if (number % 5 == 0) {
+            setNumOfCreeps(3);
+            setTypeOfCreeps("slow");
         } else if (number % 7 == 0) {
             setNumOfCreeps(6);
             setTypeOfCreeps("flying");
