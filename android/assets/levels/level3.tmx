@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="left-up" width="25" height="16" tilewidth="46" tileheight="46" nextobjectid="1">
+<map version="1.0" orientation="orthogonal" renderorder="left-up" width="17" height="15" tilewidth="46" tileheight="46" nextobjectid="1">
  <properties>
-  <property name="waypoints" value="2,2|2,6|6,6|6,2|10,2|10,6|14,6|14,2|18,2|18,6|22,6|22,2"/>
+  <property name="waypoints1" value="2,2|2,6|6,6|6,2|10,2|10,6|14,6|14,2"/>
+  <property name="waypoints2" value="2,12|2,8|6,8|6,12|10,12|10,8|14,8|14,12"/>
  </properties>
  <tileset firstgid="1" name="level_tiles" tilewidth="46" tileheight="46" spacing="2" margin="2">
   <image source="level_tiles.png" width="256" height="256"/>
@@ -9,12 +10,12 @@
  <tileset firstgid="26" name="level_tiles2" tilewidth="46" tileheight="46" spacing="2" margin="2">
   <image source="level_tiles2.png" width="256" height="256"/>
  </tileset>
- <imagelayer name="Image Layer 1" y="-10">
+ <imagelayer name="background" x="-146" y="-33">
   <image source="../Starburst_in_a_Dwarf_Irregular_Galaxy.jpg"/>
  </imagelayer>
- <layer name="buildable" width="25" height="16">
+ <layer name="buildable" width="17" height="15">
   <data encoding="base64" compression="zlib">
-   eJy9VIsKgCAMHBGl9Rk9//8LW+BgHAppmwfHDW9yKkOiPpiZC/MGRdb6UWWszDEpKUXU+AP04V5RuV9s9L9kWKmup3SuUOht9bGmzPpf/8XJ3B14QcbmQJ3R462sZrXk53o9Z9dqVksZ3n+JnOcARdb6gfrhAQyADfw=
+   eJytUgkKwDAIk7Gj3d6x4/8vnIMKEnQVqhAiTaqFlCinNsbOeIARqFc142DMjUkxltYn8OFdYXlf7fj+tCjrfm17i+P1dOzJOO/pX11k57AAI+7kd0Rz8HTLO5JLNAdvxug/lX0nMAL1Qnn1AsSVBdY=
   </data>
  </layer>
 </map>

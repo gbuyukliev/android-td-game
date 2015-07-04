@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.0" orientation="orthogonal" renderorder="left-up" width="22" height="14" tilewidth="46" tileheight="46" nextobjectid="1">
  <properties>
-  <property name="waypoints" value="2,2|19,2|19,11|2,11"/>
+  <property name="waypoints1" value="2,2|19,2|19,11|2,11"/>
  </properties>
  <tileset firstgid="1" name="level_tiles" tilewidth="46" tileheight="46" spacing="2" margin="2">
   <image source="level_tiles.png" width="256" height="256"/>

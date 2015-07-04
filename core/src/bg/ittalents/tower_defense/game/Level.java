@@ -33,6 +33,7 @@ public class Level implements Disposable {
     public static final float TIME_TILL_NEXT_WAVE = 10f;
     public static final String BUILDABLE_LAYER = "buildable";
     public static final String TAG = Level.class.getName();
+    public static final String WAYPOINTS = "waypoints";
 
     //    private INetwork offline;
     private int lives, money, score, currentWave, currentCreep, currentTowerPrice;
@@ -46,14 +47,15 @@ public class Level implements Disposable {
     private Gui gui;
 
     private int tileRows, tileColumns, tileWidth, tileHeight;
-    Vector2 startPosition;
+//    Vector2 startPosition;
 
     private int colTower, rowTower;
 
     private Array<AbstractTower> towers;
     private Array<AbstractCreep> creeps;
     private Array<AbstractProjectile> projectiles;
-    private Array<Vector2> waypoints;
+    private Array<Array<Vector2>> waypoints;
+    private int pathCount;
 
     private Tile[][] tiles;
 
@@ -104,9 +106,8 @@ public class Level implements Disposable {
 
         towers = new Array<AbstractTower>();
         creeps = new Array<AbstractCreep>();
-        waypoints = new Array<Vector2>();
+        waypoints = new Array<Array<Vector2>>();
         projectiles = new Array<AbstractProjectile>();
-        startPosition = new Vector2();
 
         loadLevelData(tiledMap);
         initTiles(tiledMap);
@@ -134,42 +135,51 @@ public class Level implements Disposable {
         tileWidth = tiledMap.getProperties().get("tilewidth", Integer.class);
         tileHeight = tiledMap.getProperties().get("tileheight", Integer.class);
 
-        loadWayPoints(tiledMap.getProperties().get("waypoints", String.class));
+        int counter = 1;
+        String pathStr;
+        while ((pathStr = tiledMap.getProperties().get(WAYPOINTS + counter, String.class)) != null) {
+            Gdx.app.debug("Path " + counter, pathStr);
+            loadWayPoints(pathStr);
+            counter++;
+        }
+        pathCount = counter - 1;
     }
 
     private void loadWayPoints(String pathStr) {
+        Array<Vector2> tempPath = new Array<Vector2>();
         String[] pathWaypoints = pathStr.split("\\|");
 
         for(String waypoint : pathWaypoints) {
             String[] coordinates = waypoint.split(",");
             if (coordinates.length >= 2) {
-                this.waypoints.add(new Vector2(
+                tempPath.add(new Vector2(
                         Float.parseFloat(coordinates[0]) * tileWidth + tileWidth / 2,
                         Float.parseFloat(coordinates[1]) * tileHeight + tileWidth / 2));
-                Gdx.app.debug(TAG, "Waypoint(" + waypoints.get(waypoints.size - 1).toString() + ") added");
+                Gdx.app.debug(TAG, "Waypoint(" + tempPath.get(tempPath.size - 1).toString() + ") added");
             }
         }
 
-        if (waypoints.size > 0) {
-            startPosition = waypoints.first();
-        }
+        this.waypoints.add(tempPath);
     }
 
     public void spawnCreep() {
         AbstractCreep creep;
 
+        int pathIndex = currentWave % pathCount;
+        Array<Vector2> currentPath = this.waypoints.get(pathIndex);
+
         if (wave.getTypeOfCreeps().equals("boss")) {
-            creep = new CreepBoss(startPosition.x, startPosition.y,
+            creep = new CreepBoss(currentPath.first().x, currentPath.first().y,
                     Assets.instance.creep.get("red1"));
         } else if (wave.getTypeOfCreeps().equals("flying")) {
-            creep = new CreepFlying(startPosition.x, startPosition.y,
+            creep = new CreepFlying(currentPath.first().x, currentPath.first().y,
                     Assets.instance.creep.get("yellow1"));
         } else {
-            creep = new CreepBasic(startPosition.x, startPosition.y,
+            creep = new CreepBasic(currentPath.first().x, currentPath.first().y,
                     Assets.instance.creep.get("blue1"));
         }
 
-        creep.setWaypoints(waypoints);
+        creep.setWaypoints(currentPath);
         creeps.add(creep);
     }
 
