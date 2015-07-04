@@ -32,7 +32,7 @@ public class Network {
         if (online) {
             instance = new Online();
         } else {
-            new Offline();
+            instance = new Offline();
         }
     }
 

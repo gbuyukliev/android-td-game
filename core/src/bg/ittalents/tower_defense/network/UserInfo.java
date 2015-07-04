@@ -13,13 +13,13 @@ public class UserInfo {
     private int score;
     private int level;
 
-    @Override
-    public String toString() {
+    public static String getAsString() {
+        UserInfo instance = getInstance();
         return "UserInfo{" +
-                "nickName='" + nickName + '\'' +
-                ", userName='" + userName + '\'' +
-                ", spam=" + spam +
-                ", email='" + email + '\'' +
+                "nickName='" + instance.nickName + '\'' +
+                ", userName='" + instance.userName + '\'' +
+                ", spam=" + instance.spam +
+                ", email='" + instance.email + '\'' +
                 '}';
     }
 
@@ -32,11 +32,10 @@ public class UserInfo {
         instance = json.fromJson(UserInfo.class, userJson);
     }
 
-    public static UserInfo getInstance() {
+    private static UserInfo getInstance() {
         if (instance == null) {
             logAsGuess();
         }
-
         return instance;
     }
 
@@ -56,23 +55,27 @@ public class UserInfo {
         instance.email = "";
     }
 
-    public int getLevel() {
-        return level;
+    public static void setLevel(int level) {
+        getInstance().level = level;
     }
 
-    public void setLevel(int level) {
-        this.level = level;
+    public static int getLevel() {
+         return getInstance().level;
     }
 
-    public int getScore() {
-        return score;
+    public static String getUserName() {
+        return getInstance().userName;
     }
 
-    public void setScore(int score) {
-        this.score = score;
+    public static int getScore() {
+        return getInstance().score;
     }
 
-    public String getNickName() {
-        return nickName;
+    public static void setScore(int score) {
+        getInstance().score = score;
+    }
+
+    public static String getNickName() {
+        return getInstance().nickName;
     }
 }

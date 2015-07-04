@@ -8,6 +8,10 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.utils.Disposable;
 
+import org.omg.IOP.TAG_ALTERNATE_IIOP_ADDRESS;
+
+import bg.ittalents.tower_defense.network.Network;
+import bg.ittalents.tower_defense.network.UserInfo;
 import bg.ittalents.tower_defense.screens.LoginScreen;
 
 public class WorldController extends GestureDetector.GestureAdapter implements Disposable {
@@ -18,7 +22,6 @@ public class WorldController extends GestureDetector.GestureAdapter implements D
     private float scale;
 
     private WorldRenderer worldRenderer;
-
 
     public WorldController(Game game) {
         worldRenderer = new WorldRenderer(this);
@@ -81,7 +84,10 @@ public class WorldController extends GestureDetector.GestureAdapter implements D
 
     public void render() {
         if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE) || Gdx.input.isKeyPressed(Input.Keys.BACK)) {
-            // switch to menu screen
+
+            Network.getInstance().saveScore(UserInfo.getUserName(), UserInfo.getLevel(), level.getScore());
+            // switch to login screen
+//            worldRenderer.dispose();
             game.setScreen(new LoginScreen(game));
         }
 

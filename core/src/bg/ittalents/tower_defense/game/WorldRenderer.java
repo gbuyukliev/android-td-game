@@ -40,7 +40,7 @@ public class WorldRenderer implements Disposable {
         this.worldController = worldController;
         batch = new SpriteBatch();
 
-        int levelNum = UserInfo.getInstance().getLevel();
+        int levelNum = UserInfo.getLevel();
 
         tiledMap = new TmxMapLoader().load(LEVELS_PATH + levelNum + LEVELS_EXTENSION);
         mapRenderer = new OrthogonalTiledMapRenderer(tiledMap, batch);

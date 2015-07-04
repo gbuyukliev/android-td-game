@@ -13,16 +13,31 @@ class Offline implements INetwork {
 
     @Override
     public void getLevelData(String username, int levelNumber) {
-        String levelJSON = Gdx.files.internal(PATH + LEVEL_DATA_FILES + levelNumber + EXTENSION).readString();
+        String levelPath = PATH + LEVEL_DATA_FILES + levelNumber + EXTENSION;
 
-        Json json = new Json();
-        json.setTypeName(null);
-        json.setUsePrototypes(false);
-        json.setIgnoreUnknownFields(true);
-        json.setOutputType(JsonWriter.OutputType.json);
-        LevelData levelData = json.fromJson(LevelData.class, levelJSON);
+        if (Gdx.files.internal(levelPath).exists()) {
+            String levelJSON = Gdx.files.internal(levelPath).readString();
+
+            Json json = new Json();
+            json.setTypeName(null);
+            json.setUsePrototypes(false);
+            json.setIgnoreUnknownFields(true);
+            json.setOutputType(JsonWriter.OutputType.json);
+            LevelData levelData = json.fromJson(LevelData.class, levelJSON);
+
 //        return levelData;
 //        Gdx.app.debug("JSON", levelData.toString());
+        }
+    }
+
+    @Override
+    public void saveScore(String username, int level, int score) {
+
+    }
+
+    @Override
+    public void getTopPlayers() {
+
     }
 
     @Override
