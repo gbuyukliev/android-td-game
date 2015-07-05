@@ -1,6 +1,7 @@
 package bg.ittalents.tower_defense.game.objects;
 
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import bg.ittalents.tower_defense.game.Assets;
@@ -30,6 +31,8 @@ public abstract class AbstractTower extends AbstractObject {
     protected float timeFromLastShot;
     protected int moneySpent;
     protected Level level;
+
+    Animation projectileAnimation;
 
     private Sound sound;
 
@@ -64,7 +67,7 @@ public abstract class AbstractTower extends AbstractObject {
     public AbstractProjectile shoot() {
         timeFromLastShot = 0f;
         Projectile projectile = new Projectile(position.x, position.y,
-                Assets.instance.getTexture(Assets.PROJECTILE), this);
+                projectileAnimation, this);
         projectile.setMoveSpeed(projectile.getMoveSpeed() * Level.getCoeff());
         projectile.setTarget(foe);
 

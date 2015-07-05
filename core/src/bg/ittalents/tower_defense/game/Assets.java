@@ -61,6 +61,7 @@ public class Assets implements Disposable, AssetErrorListener {
     public static final String CREEP_SPECIAL = "yellow3";
     public static final String CREEP_BOSS = "boss";
 
+    //tower types
     public static final int TOWER_TYPE_SLOW = 0;
     public static final int TOWER_TYPE_BASIC = 1;
     public static final int TOWER_TYPE_3 = 2;
@@ -69,12 +70,19 @@ public class Assets implements Disposable, AssetErrorListener {
     public static final int TOWER_TYPE_6 = 5;
     public static final int TOWER_TYPE_7 = 6;
 
+    //projectile types
+    public static final String SOUND_LASER = "laser";
+    public static final String PROJECTILE_FIRE = "projectile-fire";
+    public static final String PROJECTILE_GRAY = "projectile-gray";
+    public static final String PROJECTILE_ICE = "projectile-ice";
+    public static final String PROJECTILE_WATER = "projectile-water";
+    public static final String PROJECTILE_PURPLE = "projectile-purple";
+    public static final String PROJECTILE_GREEN = "projectile-green";
 
     // Location of description file for texture atlas
     public static final String TEXTURE_ATLAS_OBJECTS;
     public static final String TAG;
     public static final Assets instance;
-    public static final String SOUND_LASER = "laser";
 
     static {
         UPGRADE_BUTTON_BLUE ="upgrade_button_blue";
@@ -98,6 +106,7 @@ public class Assets implements Disposable, AssetErrorListener {
     private AssetSounds sounds;
 
     private AssetsTexture texture;
+    private AssetProjectiles projectiles;
     private AssetCreeps creep;
     private AssetTower towers;
     private AssetFonts fonts;
@@ -186,6 +195,41 @@ public class Assets implements Disposable, AssetErrorListener {
             }
         }
     }
+
+    public class AssetProjectiles {
+
+        private Map<String, Animation> projectiles;
+
+        private AssetProjectiles(TextureAtlas atlas) {
+            projectiles = new HashMap<>();
+
+            projectiles.put(PROJECTILE_FIRE, init(atlas, PROJECTILE_FIRE, 4));
+            projectiles.put(PROJECTILE_GRAY, init(atlas, PROJECTILE_GRAY, 7));
+            projectiles.put(PROJECTILE_ICE, init(atlas, PROJECTILE_ICE, 4));
+            projectiles.put(PROJECTILE_WATER, init(atlas, PROJECTILE_WATER, 4));
+            projectiles.put(PROJECTILE_PURPLE, init(atlas, PROJECTILE_PURPLE, 4));
+            projectiles.put(PROJECTILE_GREEN, init(atlas, PROJECTILE_GREEN, 4));
+        }
+
+        private Animation init(TextureAtlas atlas, String projectileType, int frameCount) {
+            String path = projectileType + "/";
+
+            TextureRegion[] frames = new TextureRegion[frameCount];
+
+            for (int frameIndex = 1; frameIndex <= frameCount; frameIndex++) {
+                frames[frameIndex - 1] = atlas.findRegion(path + frameIndex);
+            }
+
+            Animation anim = new Animation(1f / frameCount, frames);
+            anim.setPlayMode(PlayMode.LOOP);
+            return anim;
+        }
+
+        public Animation get(String type) {
+            return projectiles.get(type);
+        }
+    }
+
 
     public class AssetCreeps {
 
@@ -280,6 +324,10 @@ public class Assets implements Disposable, AssetErrorListener {
         return fonts.defaultFont;
     }
 
+    public Animation getProjectile(String type) {
+        return projectiles.get(type);
+    }
+
     public Animation getCreep(String type) {
         return creep.get(type);
     }
@@ -321,6 +369,7 @@ public class Assets implements Disposable, AssetErrorListener {
         texture = new AssetsTexture(atlas);
         fonts = new AssetFonts();
         creep = new AssetCreeps(atlas);
+        projectiles = new AssetProjectiles(atlas);
         towers = new AssetTower(atlas);
         sounds = new AssetSounds();
     }
