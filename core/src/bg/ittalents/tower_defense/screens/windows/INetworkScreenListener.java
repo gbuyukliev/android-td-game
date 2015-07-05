@@ -7,6 +7,5 @@ public interface INetworkScreenListener {
 
     void setStatus(String message);
     void switchToWindow(SCREEN window);
-    void play(int level);
     void setPlayerInfo(String userInfoJSON);
 }

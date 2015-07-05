@@ -5,6 +5,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
 
 import bg.ittalents.tower_defense.game.Assets;
+import bg.ittalents.tower_defense.utils.AudioManager;
 
 public abstract class AbstractGameScreen implements Screen {
     private Game game;
@@ -21,9 +22,7 @@ public abstract class AbstractGameScreen implements Screen {
     @Override
     public void resume() {
         Assets.instance.init(new AssetManager());
-        Assets.instance.getMusic().setLooping(true);
-        Assets.instance.getMusic().setVolume(0.3f);
-        Assets.instance.getMusic().play();
+        AudioManager.instance.play(Assets.instance.getMusic());
     }
 
     public void dispose() {

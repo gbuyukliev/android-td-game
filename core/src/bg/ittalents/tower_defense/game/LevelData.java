@@ -22,7 +22,6 @@ public class LevelData {
                     '}';
         }
 
-
         public String getTypeOfCreeps() {
             return typeOfCreep;
         }

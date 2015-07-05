@@ -21,7 +21,7 @@ import bg.ittalents.tower_defense.network.Network;
 import bg.ittalents.tower_defense.network.UserInfo;
 import bg.ittalents.tower_defense.screens.windows.*;
 
-public class MainScreen extends AbstractGameScreen implements INetworkScreenListener {
+public class MainScreen extends AbstractGameScreen implements INetworkScreenListener, IParent, ILevelSelect {
 
     public static final float PADDING = 10f;
     public static final float BUTTON_WIDTH = 100f;
@@ -78,6 +78,9 @@ public class MainScreen extends AbstractGameScreen implements INetworkScreenList
 
         if (UserInfo.isLogged()) {
             switchToWindow(SCREEN.LEVEL_SELECTOR);
+            if(!Network.isOnline()) {
+                hideButtons(true);
+            }
         } else {
             switchToWindow(SCREEN.LOGIN);
         }
@@ -251,6 +254,11 @@ public class MainScreen extends AbstractGameScreen implements INetworkScreenList
         UserInfo.logAs(userJson);
         Gdx.app.debug("JSON", userJson);
         Gdx.app.debug("JSON", UserInfo.getAsString());
+    }
+
+    @Override
+    public void back() {
+        switchToWindow(INetworkScreenListener.SCREEN.LEVEL_SELECTOR);
     }
 
     @Override

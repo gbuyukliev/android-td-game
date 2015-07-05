@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.utils.Align;
 
 import bg.ittalents.tower_defense.utils.AudioManager;
 import bg.ittalents.tower_defense.utils.GamePreferences;
@@ -23,9 +24,12 @@ public class PreferencesWindow extends Window {
     private Slider sldSound;
     private Slider sldMusic;
 
-    public PreferencesWindow(Skin skin, final INetworkScreenListener networkScreenListener) {
+    public PreferencesWindow(Skin skin, final IParent parent) {
         super("Preferences", skin);
         this.setMovable(false);
+        this.center();
+        this.align(Align.center);
+
         this.setColor(1, 1, 1, WINDOW_TRANSPARENCY);
         this.add(buildOptWinAudioSettings()).colspan(2);
         loadSettings();
@@ -35,7 +39,7 @@ public class PreferencesWindow extends Window {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 saveSettings();
-                networkScreenListener.switchToWindow(INetworkScreenListener.SCREEN.LEVEL_SELECTOR);
+                parent.back();
             }
         });
         this.add(btnSave);
@@ -43,7 +47,7 @@ public class PreferencesWindow extends Window {
         btnClose.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                networkScreenListener.switchToWindow(INetworkScreenListener.SCREEN.LEVEL_SELECTOR);
+                parent.back();
             }
         });
         this.add(btnClose);

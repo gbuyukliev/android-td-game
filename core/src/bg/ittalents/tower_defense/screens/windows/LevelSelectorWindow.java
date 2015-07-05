@@ -30,14 +30,14 @@ public class LevelSelectorWindow extends Window {
     public static final String LEVELS_PNG_EXTENSION = ".png";
     public static final int LEVELS_PER_ROW = 2;
 
-    private INetworkScreenListener networkScreen;
+    private ILevelSelect levelSelector;
     private Map<String, Integer> levelScores;
 
 
-    public LevelSelectorWindow(Skin skin, INetworkScreenListener networkScreen) {
+    public LevelSelectorWindow(Skin skin, ILevelSelect levelSelector) {
         super("Pick a level", skin);
         this.setMovable(false);
-        this.networkScreen = networkScreen;
+        this.levelSelector = levelSelector;
     }
 
     public void updateWindow() {
@@ -72,12 +72,12 @@ public class LevelSelectorWindow extends Window {
         style.imageDown = new SpriteDrawable(new Sprite(down));
         style.imageDisabled = new SpriteDrawable(new Sprite(down));
 
-        ImageButton levelSelection = new ImageButton(style);
+        final ImageButton levelSelection = new ImageButton(style);
 
         levelSelection.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                networkScreen.play(level);
+                levelSelector.play(level);
             }
         });
         table.add(levelSelection).width(IMAGE_WIDTH).height(IMAGE_HEIGHT).pad(PADDING);

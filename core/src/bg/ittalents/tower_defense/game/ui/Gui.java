@@ -27,8 +27,11 @@ import bg.ittalents.tower_defense.game.WorldRenderer;
 import bg.ittalents.tower_defense.network.Network;
 import bg.ittalents.tower_defense.network.UserInfo;
 import bg.ittalents.tower_defense.screens.MainScreen;
+import bg.ittalents.tower_defense.screens.windows.IParent;
+import bg.ittalents.tower_defense.screens.windows.IngameWindow;
+import bg.ittalents.tower_defense.screens.windows.PreferencesWindow;
 
-public class Gui implements Disposable {
+public class Gui implements Disposable, IParent {
     private Level level;
     private Stage stage;
     private Skin skin;
@@ -36,6 +39,9 @@ public class Gui implements Disposable {
     private Label warningTextField;
     private Table noTowerTable;
     private Table towerTable;
+    private Table preferencensWindow;
+    private Table ingameWindow;
+    private Table mainTable;
     private ImageButton upgradeTowerButton;
     private ImageButton buildTowerButton;
     private ImageButton sellTowerButton;
@@ -48,6 +54,13 @@ public class Gui implements Disposable {
         stage = new Stage(new StretchViewport(WorldRenderer.VIEWPORT * aspectRatio, WorldRenderer.VIEWPORT), batch);
         skin = new Skin(Gdx.files.internal("data/uiskin.json"));
         this.game = game;
+
+        preferencensWindow = new PreferencesWindow(skin, this);
+        ingameWindow = new IngameWindow(skin, this);
+        mainTable = new Table();
+        mainTable.setFillParent(true);
+        mainTable.center();
+        stage.addActor(mainTable);
 
         buildNoTowerTable();
         buildTowerButtons();
@@ -206,10 +219,10 @@ public class Gui implements Disposable {
             public void changed(ChangeEvent event, Actor actor) {
                 if (level.isPaused() == false) {
                     pauseButton.setStyle(style2);
-                    level.setIsPaused(true);
+                    level.setPaused(true);
                 } else {
                     pauseButton.setStyle(style1);
-                    level.setIsPaused(false);
+                    level.setPaused(false);
                 }
             }
         });
@@ -238,10 +251,8 @@ public class Gui implements Disposable {
 
     public void render(Batch batch) {
         if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE) || Gdx.input.isKeyPressed(Input.Keys.BACK)) {
-
-            Network.getInstance().saveScore(UserInfo.getUserName(), UserInfo.getLevel(), level.getScore());
-            // switch to main screen
-            game.setScreen(new MainScreen(game));
+            level.setPaused(true);
+            mainTable.add(ingameWindow);
         }
         stage.act(Gdx.graphics.getDeltaTime());
         stage.draw();
@@ -255,6 +266,21 @@ public class Gui implements Disposable {
         if (level != null) {
             this.level = level;
         }
+    }
+
+    public void unpause() {
+        level.setPaused(false);
+    }
+
+    public void switchToOptions() {
+        ingameWindow.remove();
+        mainTable.add(preferencensWindow);
+    }
+
+    public void goToLogin() {
+        Network.getInstance().saveScore(UserInfo.getUserName(), UserInfo.getLevel(), level.getScore());
+        // switch to main screen
+        game.setScreen(new MainScreen(game));
     }
 
     public Table getTowerTable() {
@@ -271,6 +297,12 @@ public class Gui implements Disposable {
 
     public Label getWarningTextField() {
         return warningTextField;
+    }
+
+    @Override
+    public void back() {
+        preferencensWindow.remove();
+        mainTable.add(ingameWindow);
     }
 
     @Override
