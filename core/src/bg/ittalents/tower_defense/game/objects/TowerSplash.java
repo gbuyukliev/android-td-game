@@ -9,7 +9,7 @@ public class TowerSplash extends AbstractTower {
     public TowerSplash(float positionX, float positionY, TextureRegion[] textures, Level level) {
         super(positionX, positionY, textures, level);
         typeOfTower = "splashTower";
-        damage = 40;
+        damage = 20;
         fireRate = 1.6f;
         range = 100f;
         price = 80;

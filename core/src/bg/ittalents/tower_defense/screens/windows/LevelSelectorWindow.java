@@ -13,9 +13,14 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.badlogic.gdx.utils.Array;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import bg.ittalents.tower_defense.network.UserInfo;
+
 public class LevelSelectorWindow extends Window {
 
-    public static final float PADDING = 10f;
+    public static final float PADDING = 5f;
     public static final float BUTTON_WIDTH = 100f;
     public static final float IMAGE_WIDTH = 160f;
     public static final float IMAGE_HEIGHT = 90f;
@@ -23,18 +28,22 @@ public class LevelSelectorWindow extends Window {
     public static final String LEVELS_PREVIEW_PATH = "levels/preview/level";
     public static final String BLACK_WHITE = "_bw";
     public static final String LEVELS_PNG_EXTENSION = ".png";
-    public static final int LEVELS_PER_ROW = 4;
+    public static final int LEVELS_PER_ROW = 2;
 
-    private Array<Label> score;
     private INetworkScreenListener networkScreen;
+    private Map<String, Integer> levelScores;
+
 
     public LevelSelectorWindow(Skin skin, INetworkScreenListener networkScreen) {
         super("Pick a level", skin);
+        this.setMovable(false);
         this.networkScreen = networkScreen;
-        build();
     }
 
-    public void build() {
+    public void updateWindow() {
+        this.clearChildren();
+
+        levelScores = UserInfo.getScores();
         this.setColor(1, 1, 1, WINDOW_TRANSPARENCY);
 
         int levelCounter = 1;
@@ -66,14 +75,18 @@ public class LevelSelectorWindow extends Window {
         ImageButton levelSelection = new ImageButton(style);
 
         levelSelection.addListener(new ChangeListener() {
-                                       @Override
-                                       public void changed(ChangeEvent event, Actor actor) {
-                                           networkScreen.play(level);
-                                       }
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                networkScreen.play(level);
+            }
         });
         table.add(levelSelection).width(IMAGE_WIDTH).height(IMAGE_HEIGHT).pad(PADDING);
-//        table.row();
-//        table.add(new Label("Test", getSkin())).pad(PADDING);
+        table.row();
+        Label scores = new Label("Not Played", getSkin());
+        if (levelScores!= null && levelScores.containsKey("" + level)) {
+            scores.setText(levelScores.get("" + level).toString());
+        }
+        table.add(scores).pad(PADDING);
         this.add(table);
     }
 }

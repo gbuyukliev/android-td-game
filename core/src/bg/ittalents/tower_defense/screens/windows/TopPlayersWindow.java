@@ -29,7 +29,7 @@ public class TopPlayersWindow extends Window {
 
     public TopPlayersWindow(Skin skin, final INetworkScreenListener networkScreenListener) {
         super("Top Players", skin);
-
+        this.setMovable(false);
         this.setColor(1, 1, 1, WINDOW_TRANSPARENCY);
         this.networkScreenListener = networkScreenListener;
         requestTopPlayersList();

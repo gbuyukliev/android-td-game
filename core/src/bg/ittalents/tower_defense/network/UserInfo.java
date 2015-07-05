@@ -3,6 +3,10 @@ package bg.ittalents.tower_defense.network;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonWriter;
 
+import java.util.Collections;
+import java.util.Map;
+import java.util.TreeMap;
+
 public class UserInfo {
     private static UserInfo instance;
 
@@ -12,15 +16,35 @@ public class UserInfo {
     private String email;
     private int score;
     private int level;
+    private TreeMap<String, Integer> levels;
+
+    private UserInfo() {
+        levels = new TreeMap<>();
+    }
+
+    @Override
+    public String toString() {
+        return "UserInfo{" +
+                "nickName='" + nickName + '\'' +
+                ", userName='" + userName + '\'' +
+                ", spam=" + spam +
+                ", email='" + email + '\'' +
+                ", score=" + score +
+                ", level=" + level +
+                ", levels=" + levels +
+                '}';
+    }
 
     public static String getAsString() {
-        UserInfo instance = getInstance();
-        return "UserInfo{" +
-                "nickName='" + instance.nickName + '\'' +
-                ", userName='" + instance.userName + '\'' +
-                ", spam=" + instance.spam +
-                ", email='" + instance.email + '\'' +
-                '}';
+        if (instance != null) {
+            return instance.toString();
+        } else {
+            return "";
+        }
+    }
+
+    public static Map<String, Integer> getScores() {
+        return Collections.unmodifiableMap(instance.levels);
     }
 
     public static void logAs(String userJson) {

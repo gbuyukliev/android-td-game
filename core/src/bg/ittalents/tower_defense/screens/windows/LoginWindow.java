@@ -30,6 +30,7 @@ public class LoginWindow extends Window {
 
     public LoginWindow(Skin skin, INetworkScreenListener networkScreen) {
         super(TITLE, skin);
+        this.setMovable(false);
         this.networkScreen = networkScreen;
         buildLoginWindow();
     }

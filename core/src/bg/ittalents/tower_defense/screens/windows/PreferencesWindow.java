@@ -16,14 +16,18 @@ import bg.ittalents.tower_defense.utils.GamePreferences;
 
 public class PreferencesWindow extends Window {
 
+    public static final float WINDOW_TRANSPARENCY = 0.7f;
+
     private CheckBox chkSound;
     private CheckBox chkMusic;
     private Slider sldSound;
     private Slider sldMusic;
 
-    public PreferencesWindow(Skin skin) {
+    public PreferencesWindow(Skin skin, final INetworkScreenListener networkScreenListener) {
         super("Preferences", skin);
-        this.add(buildOptWinAudioSettings());
+        this.setMovable(false);
+        this.setColor(1, 1, 1, WINDOW_TRANSPARENCY);
+        this.add(buildOptWinAudioSettings()).colspan(2);
         loadSettings();
         this.row();
         TextButton btnSave = new TextButton("Save", skin);
@@ -31,17 +35,18 @@ public class PreferencesWindow extends Window {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 saveSettings();
+                networkScreenListener.switchToWindow(INetworkScreenListener.SCREEN.LEVEL_SELECTOR);
             }
         });
         this.add(btnSave);
-        TextButton btnClose = new TextButton("Save", skin);
-        btnSave.addListener(new ChangeListener() {
+        TextButton btnClose = new TextButton("Close", skin);
+        btnClose.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                saveSettings();
+                networkScreenListener.switchToWindow(INetworkScreenListener.SCREEN.LEVEL_SELECTOR);
             }
         });
-        this.add(btnSave);
+        this.add(btnClose);
     }
 
     private Table buildOptWinAudioSettings() {

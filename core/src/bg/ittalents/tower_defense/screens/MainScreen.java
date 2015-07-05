@@ -40,7 +40,8 @@ public class MainScreen extends AbstractGameScreen implements INetworkScreenList
     private Table loggedOutTable;
     private Table registerWindow;
     private Table loginWindow;
-    private Table levelSelectorWindow;
+    private Table optionsWindow;
+    private LevelSelectorWindow levelSelectorWindow;
     private Table topPlaersWindow;
     private TextButton btnTopPlayers;
     private TextButton btnEditAccount;
@@ -69,6 +70,7 @@ public class MainScreen extends AbstractGameScreen implements INetworkScreenList
         registerWindow = new RegisterWindow(skin, this);
         levelSelectorWindow = new LevelSelectorWindow(skin, this);
         topPlaersWindow = new TopPlayersWindow(skin, this);
+        optionsWindow = new PreferencesWindow(skin, this);
         buildStatusTable();
 //        mainTable.add(loginWindow).center();
 
@@ -133,6 +135,17 @@ public class MainScreen extends AbstractGameScreen implements INetworkScreenList
         lblLogged.setAlignment(Align.right);
         loggedTable.add(lblLogged).expandX().pad(PADDING);
 
+        TextButton btnOptions = new TextButton("Options", skin);
+        btnOptions.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                switchToWindow(SCREEN.OPTIONS);
+            }
+        });
+        loggedTable.add(btnOptions).width(BUTTON_WIDTH).pad(PADDING).right();
+
+        loggedTable.row();
+
         btnEditAccount = new TextButton("Edit Account", skin);
         btnEditAccount.addListener(new ChangeListener() {
             @Override
@@ -140,14 +153,12 @@ public class MainScreen extends AbstractGameScreen implements INetworkScreenList
                 switchToWindow(SCREEN.ACCOUNT_INFO);
             }
         });
-        loggedTable.add(btnEditAccount).width(BUTTON_WIDTH).pad(PADDING).right();
-
-        loggedTable.row();
+        loggedTable.add(btnEditAccount).width(BUTTON_WIDTH).pad(PADDING).left();
 
         lblLoggedStatus = new Label("", skin);
         lblLoggedStatus.setColor(Color.RED);
         lblLogged.setAlignment(Align.center);
-        loggedTable.add(lblLoggedStatus).expandX().colspan(2).pad(PADDING);
+        loggedTable.add(lblLoggedStatus).expandX().pad(PADDING);
 
         btnTopPlayers = new TextButton("Top Players", skin);
         btnTopPlayers.addListener(new ChangeListener() {
@@ -186,12 +197,17 @@ public class MainScreen extends AbstractGameScreen implements INetworkScreenList
                 stage.addActor(loggedOutTable);
                 break;
             case LEVEL_SELECTOR:
+                levelSelectorWindow.updateWindow();
                 lblLogged.setText("Welcome " + UserInfo.getNickName());
                 mainTable.add(levelSelectorWindow);
                 stage.addActor(loggedTable);
                 break;
             case TOP_PLAYERS:
                 mainTable.add(topPlaersWindow);
+                stage.addActor(loggedTable);
+                break;
+            case OPTIONS:
+                mainTable.add(optionsWindow);
                 stage.addActor(loggedTable);
                 break;
             case ACCOUNT_INFO:

@@ -7,6 +7,7 @@ import com.badlogic.gdx.assets.AssetManager;
 
 import bg.ittalents.tower_defense.game.Assets;
 import bg.ittalents.tower_defense.screens.MainScreen;
+import bg.ittalents.tower_defense.utils.AudioManager;
 
 public class TowerDefense extends Game {
 
@@ -18,8 +19,10 @@ public class TowerDefense extends Game {
 		Assets.instance.init(new AssetManager());
 		// Start game at menu screen
 		setScreen(new MainScreen(this));
-		Assets.instance.getMusic().setLooping(true);
-		Assets.instance.getMusic().setVolume(0.3f);
-		Assets.instance.getMusic().play();
+//		Assets.instance.getMusic().setLooping(true);
+//		Assets.instance.getMusic().setVolume(0.3f);
+//		Assets.instance.getMusic().play();
+
+		AudioManager.instance.play(Assets.instance.getMusic());
 	}
 }

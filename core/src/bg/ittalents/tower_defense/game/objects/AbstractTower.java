@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import bg.ittalents.tower_defense.game.Assets;
 import bg.ittalents.tower_defense.game.Level;
+import bg.ittalents.tower_defense.utils.AudioManager;
 
 
 public abstract class AbstractTower extends AbstractObject {
@@ -69,8 +70,8 @@ public abstract class AbstractTower extends AbstractObject {
         projectile.setMoveSpeed(projectile.getMoveSpeed() * Level.getCoeff());
         projectile.setTarget(foe);
 
-        sound.play(0.3f);
-
+        AudioManager.instance.play(sound);
+//        sound.play(0.3f);
         return projectile;
     }
 
