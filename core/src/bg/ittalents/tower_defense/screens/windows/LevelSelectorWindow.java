@@ -11,7 +11,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
-import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 
 public class LevelSelectorWindow extends Window {
@@ -21,7 +20,7 @@ public class LevelSelectorWindow extends Window {
     public static final float IMAGE_WIDTH = 160f;
     public static final float IMAGE_HEIGHT = 90f;
     public static final float WINDOW_TRANSPARENCY = 0.7f;
-    public static final String LEVELS_PATH = "levels/level";
+    public static final String LEVELS_PREVIEW_PATH = "levels/preview/level";
     public static final String BLACK_WHITE = "_bw";
     public static final String LEVELS_PNG_EXTENSION = ".png";
     public static final int LEVELS_PER_ROW = 4;
@@ -51,13 +50,13 @@ public class LevelSelectorWindow extends Window {
     }
 
     private boolean doesLevelExist(int level) {
-        return Gdx.files.internal(LEVELS_PATH + level + LEVELS_PNG_EXTENSION).exists();
+        return Gdx.files.internal(LEVELS_PREVIEW_PATH + level + LEVELS_PNG_EXTENSION).exists();
     }
 
     private void addButton(final int level) {
         Table table = new Table();
-        Texture up = new Texture(Gdx.files.internal(LEVELS_PATH + level + LEVELS_PNG_EXTENSION));
-        Texture down = new Texture(Gdx.files.internal(LEVELS_PATH + level + BLACK_WHITE + LEVELS_PNG_EXTENSION));
+        Texture up = new Texture(Gdx.files.internal(LEVELS_PREVIEW_PATH + level + LEVELS_PNG_EXTENSION));
+        Texture down = new Texture(Gdx.files.internal(LEVELS_PREVIEW_PATH + level + BLACK_WHITE + LEVELS_PNG_EXTENSION));
 
         ImageButton.ImageButtonStyle style = new ImageButton.ImageButtonStyle();
         style.imageUp = new SpriteDrawable(new Sprite(up));

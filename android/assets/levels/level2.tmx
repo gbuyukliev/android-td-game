@@ -9,8 +9,8 @@
  <tileset firstgid="26" name="level_tiles2" tilewidth="46" tileheight="46" spacing="2" margin="2">
   <image source="level_tiles2.png" width="256" height="256"/>
  </tileset>
- <imagelayer name="background" x="-477" y="-286">
-  <image source="../galaxy_background.jpg"/>
+ <imagelayer name="background" x="-115" y="-80">
+  <image source="backgrounds/level2.jpg"/>
  </imagelayer>
  <layer name="buildable" width="22" height="14">
   <data encoding="base64" compression="zlib">

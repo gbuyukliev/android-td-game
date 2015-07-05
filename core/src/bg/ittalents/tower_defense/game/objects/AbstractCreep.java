@@ -175,8 +175,9 @@ public abstract class AbstractCreep extends AbstractObject {
     @Override
     public void render(Batch batch) {
         super.render(batch);
-//        if (health < maxHealth) {
-            healthBar.render(batch);
-//        }
+    }
+
+    public void renderHealthBar(Batch batch) {
+        healthBar.render(batch);
     }
 }

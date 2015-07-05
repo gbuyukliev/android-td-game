@@ -413,6 +413,9 @@ public class Level implements Disposable {
         for (AbstractProjectile projectile : projectiles) {
             projectile.render(batch);
         }
+        for (AbstractCreep creep : creeps) {
+            creep.renderHealthBar(batch);
+        }
 
         batch.end();
 

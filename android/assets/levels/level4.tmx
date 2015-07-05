@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="left-up" width="20" height="15" tilewidth="46" tileheight="46" nextobjectid="1">
+ <properties>
+  <property name="waypoints1" value="2,2|6,2|6,8|8,8|8,2|10,2|10,8|12,8|12,6|17,6|17,4|12,4|12,2|17,2"/>
+  <property name="waypoints2" value="2,12|2,4|4,4|4,10|17,10|17,8|12,8|12,6|17,6|17,4|12,4|12,2|17,2"/>
+  <property name="waypoints3" value="17,12|4,12|4,10|17,10|17,8|12,8|12,6|17,6|17,4|12,4|12,2|17,2"/>
+ </properties>
+ <tileset firstgid="1" name="level_tiles" tilewidth="46" tileheight="46" spacing="2" margin="2">
+  <image source="level_tiles.png" width="256" height="256"/>
+ </tileset>
+ <tileset firstgid="26" name="level_tiles2" tilewidth="46" tileheight="46" spacing="2" margin="2">
+  <image source="level_tiles2.png" width="256" height="256"/>
+ </tileset>
+ <imagelayer name="background" x="-102" y="-67">
+  <image source="backgrounds/level4.jpg"/>
+ </imagelayer>
+ <layer name="buildable" width="20" height="15">
+  <data encoding="base64" compression="zlib">
+   eJxjYKAt4CID0xpwo9H6FLoP3TxK3ITNPHY0+zXwuM2ACPPQ3UmMu4kxzwgHH1v4qhNhHiF3E3KfIQFz1LC4C1/4EeteQu6DAZidHATcjR5+xAJy4hmb+2BYlQCfHvkXAGLGBnM=
+  </data>
+ </layer>
+ <layer name="unbuildable" width="20" height="15">
+  <data encoding="base64" compression="zlib">
+   eJxjYKA+YAdiLiDWIFM/SC8nEp8biFmgNDmAEr3YAMh96lQ0bxSMLKDGAElD5AL09AfLH+QCRgbU/MHGQLn7OCjQjw8AACXpAUU=
+  </data>
+ </layer>
+ <layer name="unbuildable2" width="20" height="15">
+  <data encoding="base64" compression="zlib">
+   eJxjYKA+4EHClOhH5jMwkG8epXqxmUVN80bByAKUph9c+YMSgG4eNd1HTQAAQ94A8Q==
+  </data>
+ </layer>
+</map>

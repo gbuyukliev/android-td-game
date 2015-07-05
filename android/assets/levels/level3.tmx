@@ -11,7 +11,7 @@
   <image source="level_tiles2.png" width="256" height="256"/>
  </tileset>
  <imagelayer name="background" x="-146" y="-33">
-  <image source="../Starburst_in_a_Dwarf_Irregular_Galaxy.jpg"/>
+  <image source="backgrounds/level3.jpg"/>
  </imagelayer>
  <layer name="buildable" width="17" height="15">
   <data encoding="base64" compression="zlib">
