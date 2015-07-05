@@ -42,6 +42,7 @@ public class RegisterWindow extends Window {
 
     public RegisterWindow(Skin skin, INetworkScreenListener networkScreen) {
         super(TITLE, skin);
+        this.setMovable(false);
         this.networkScreen = networkScreen;
         textFields = new HashMap<String, TextField>();
         buildRegisterWindow();
@@ -51,6 +52,10 @@ public class RegisterWindow extends Window {
         for (String fieldName : fieldNames) {
             table.add(new Label(fieldName + ": ", skin)).pad(PADDING);
             TextField textField = new TextField("", skin);
+            if (fieldName.toLowerCase().contains("password")) {
+                textField.setPasswordMode(true);
+                textField.setPasswordCharacter('*');
+            }
             table.add(textField).pad(PADDING);
             table.row();
             fields.put(fieldName, textField);

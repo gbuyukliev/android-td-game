@@ -1,6 +1,8 @@
 package bg.ittalents.tower_defense.game.ui;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -22,6 +24,9 @@ import com.badlogic.gdx.utils.viewport.StretchViewport;
 import bg.ittalents.tower_defense.game.Assets;
 import bg.ittalents.tower_defense.game.Level;
 import bg.ittalents.tower_defense.game.WorldRenderer;
+import bg.ittalents.tower_defense.network.Network;
+import bg.ittalents.tower_defense.network.UserInfo;
+import bg.ittalents.tower_defense.screens.MainScreen;
 
 public class Gui implements Disposable {
     private Level level;
@@ -36,6 +41,22 @@ public class Gui implements Disposable {
     private ImageButton sellTowerButton;
     private ImageButton pauseButton;
     private ImageButton fastForwardButton;
+    private Game game;
+
+    public Gui(float aspectRatio, Batch batch, Game game) {
+//        setAspectRatio(aspectRatio);
+        stage = new Stage(new StretchViewport(WorldRenderer.VIEWPORT * aspectRatio, WorldRenderer.VIEWPORT), batch);
+        skin = new Skin(Gdx.files.internal("data/uiskin.json"));
+        this.game = game;
+
+        buildNoTowerTable();
+        buildTowerButtons();
+        buildTowerTable();
+        buildUpgradeTowerButton();
+        buildSellTowerButton();
+        buildWarningTextField();
+        buildControl();
+    }
 
     // A table with buttons which only appears if there is an empty tile selected
 
@@ -197,19 +218,7 @@ public class Gui implements Disposable {
         stage.addActor(pauseTable);
     }
 
-    public Gui(float aspectRatio, Batch batch) {
-//        setAspectRatio(aspectRatio);
-        stage = new Stage(new StretchViewport(WorldRenderer.VIEWPORT * aspectRatio, WorldRenderer.VIEWPORT), batch);
-        skin = new Skin(Gdx.files.internal("data/uiskin.json"));
 
-        buildNoTowerTable();
-        buildTowerButtons();
-        buildTowerTable();
-        buildUpgradeTowerButton();
-        buildSellTowerButton();
-        buildWarningTextField();
-        buildControl();
-    }
 
     public InputProcessor getInputProcessor() {
         return stage;
@@ -228,6 +237,12 @@ public class Gui implements Disposable {
 //    }
 
     public void render(Batch batch) {
+        if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE) || Gdx.input.isKeyPressed(Input.Keys.BACK)) {
+
+            Network.getInstance().saveScore(UserInfo.getUserName(), UserInfo.getLevel(), level.getScore());
+            // switch to main screen
+            game.setScreen(new MainScreen(game));
+        }
         stage.act(Gdx.graphics.getDeltaTime());
         stage.draw();
     }

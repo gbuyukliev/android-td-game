@@ -42,6 +42,7 @@ public class EditAccountInfoWindow extends Window {
 
     public EditAccountInfoWindow(Skin skin, INetworkScreenListener networkScreen) {
         super(TITLE, skin);
+        this.setMovable(false);
         this.networkScreen = networkScreen;
         textFields = new HashMap<String, TextField>();
         buildRegisterWindow();
