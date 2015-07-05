@@ -11,8 +11,9 @@ class Online implements INetwork {
 
     @Override
     public void getLevelData(String username) {
-
-        new Offline().getLevelData(username);
+        Offline offline = new Offline();
+        offline.setListener(networkLevelListener);
+        offline.getLevelData(username);
 
 //        Net.HttpRequest httpRequest = new Net.HttpRequest(Net.HttpMethods.GET);
 //        httpRequest.setUrl(Network.URL + Network.LEVEL_MANAGER);

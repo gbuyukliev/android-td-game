@@ -16,7 +16,7 @@ public abstract class AbstractGameScreen implements Screen {
 
     @Override
     public void pause() {
-        Assets.instance.getMusic().pause();
+        AudioManager.instance.stopMusic();
     }
 
     @Override
@@ -32,5 +32,4 @@ public abstract class AbstractGameScreen implements Screen {
     public Game getGame() {
         return game;
     }
-
 }
