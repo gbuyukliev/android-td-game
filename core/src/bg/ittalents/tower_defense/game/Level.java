@@ -19,6 +19,7 @@ import bg.ittalents.tower_defense.game.objects.Explosion;
 import bg.ittalents.tower_defense.game.objects.Projectile;
 import bg.ittalents.tower_defense.game.objects.Wave;
 import bg.ittalents.tower_defense.game.ui.Gui;
+import bg.ittalents.tower_defense.network.INetworkLevelListener;
 import bg.ittalents.tower_defense.network.Network;
 import bg.ittalents.tower_defense.network.UserInfo;
 
@@ -60,6 +61,7 @@ public class Level implements Disposable {
     private Array<Explosion> explosions;
     private Array<Array<Vector2>> waypoints;
     private int pathCount;
+    private LevelData levelData;
 
     private Tile[][] tiles;
 
@@ -92,7 +94,17 @@ public class Level implements Disposable {
 //    private Batch batch;
 
     public Level(TiledMap tiledMap, Gui gui) {
-        //can use static Network class, to get instance
+        Network.getInstance().setListener(new INetworkLevelListener() {
+            @Override
+            public void onLevelLoaded(LevelData levelData) {
+                Level.this.levelData = levelData;
+            }
+
+            @Override
+            public void onError(String message) {
+
+            }
+        });
         Network.getInstance().getLevelData(UserInfo.getUserName(), UserInfo.getLevel());
 
         this.gui = gui;
@@ -116,7 +128,6 @@ public class Level implements Disposable {
 
         loadLevelData(tiledMap);
         initTiles(tiledMap);
-
     }
 
     private void initTiles(TiledMap tiledMap) {
@@ -226,16 +237,18 @@ public class Level implements Disposable {
     }
 
     public void update(float deltaTime) {
-        if (!isPaused) {
-            updateWave(deltaTime);
-            updateCreeps(deltaTime);
-            updateProjectiles(deltaTime);
-            updateTowers(deltaTime);
-            updateExplosions(deltaTime);
-        }
+        if (levelData != null) {
+            if (!isPaused) {
+                updateWave(deltaTime);
+                updateCreeps(deltaTime);
+                updateProjectiles(deltaTime);
+                updateTowers(deltaTime);
+                updateExplosions(deltaTime);
+            }
 
-        updateFastForwardButton();
-        updateWarningText(deltaTime);
+            updateFastForwardButton();
+            updateWarningText(deltaTime);
+        }
     }
 
     private void updateWarningText(float deltaTime) {
