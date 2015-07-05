@@ -544,7 +544,7 @@ public class Level implements Disposable {
         return isPaused;
     }
 
-    public void setIsPaused(boolean isPaused) {
+    public void setPaused(boolean isPaused) {
         this.isPaused = isPaused;
     }
 

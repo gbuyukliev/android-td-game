@@ -2,6 +2,10 @@ package bg.ittalents.tower_defense.network;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Net;
+import com.badlogic.gdx.utils.Json;
+import com.badlogic.gdx.utils.JsonWriter;
+
+import bg.ittalents.tower_defense.game.LevelData;
 
 public class Network {
     public static final String URL = "http://192.168.1.105:8080/towerdefense/";
@@ -36,10 +40,23 @@ public class Network {
         }
     }
 
+    public static boolean isOnline() {
+        return instance != null && instance instanceof Online;
+    }
+
     public static INetwork getInstance() {
         if (instance == null) {
             instance = new Offline();
         }
         return instance;
+    }
+
+    static LevelData parseJson(String levelJSON) {
+        Json json = new Json();
+        json.setTypeName(null);
+        json.setUsePrototypes(false);
+        json.setIgnoreUnknownFields(true);
+        json.setOutputType(JsonWriter.OutputType.json);
+        return json.fromJson(LevelData.class, levelJSON);
     }
 }
