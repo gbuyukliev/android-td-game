@@ -5,6 +5,7 @@ import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonWriter;
 
 import bg.ittalents.tower_defense.game.LevelData;
+import bg.ittalents.tower_defense.utils.GamePreferences;
 
 class Offline implements INetwork {
     private static final String PATH = "offline/";
@@ -19,20 +20,15 @@ class Offline implements INetwork {
         if (Gdx.files.internal(levelPath).exists() && networkLevelListener != null) {
             String levelJSON = Gdx.files.internal(levelPath).readString();
 
-            Json json = new Json();
-            json.setTypeName(null);
-            json.setUsePrototypes(false);
-            json.setIgnoreUnknownFields(true);
-            json.setOutputType(JsonWriter.OutputType.json);
-            LevelData levelData = json.fromJson(LevelData.class, levelJSON);
-
+            LevelData levelData = Network.parseJson(levelJSON);
             networkLevelListener.onLevelLoaded(levelData);
         }
     }
 
     @Override
     public void saveScore(String username, int level, int score) {
-
+        GamePreferences.instance.putLevelScore(level, score);
+        GamePreferences.instance.save();
     }
 
     @Override

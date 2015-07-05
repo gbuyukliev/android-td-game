@@ -7,6 +7,8 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.TreeMap;
 
+import bg.ittalents.tower_defense.utils.GamePreferences;
+
 public class UserInfo {
     private static UserInfo instance;
 
@@ -44,7 +46,11 @@ public class UserInfo {
     }
 
     public static Map<String, Integer> getScores() {
-        return Collections.unmodifiableMap(instance.levels);
+        if (Network.isOnline()) {
+            return Collections.unmodifiableMap(instance.levels);
+        } else {
+            return GamePreferences.instance.getLevelScores();
+        }
     }
 
     public static void logAs(String userJson) {

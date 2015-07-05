@@ -21,7 +21,6 @@ import bg.ittalents.tower_defense.network.UserInfo;
 public class LevelSelectorWindow extends Window {
 
     public static final float PADDING = 5f;
-    public static final float BUTTON_WIDTH = 100f;
     public static final float IMAGE_WIDTH = 160f;
     public static final float IMAGE_HEIGHT = 90f;
     public static final float WINDOW_TRANSPARENCY = 0.7f;
@@ -44,16 +43,17 @@ public class LevelSelectorWindow extends Window {
         this.clearChildren();
 
         levelScores = UserInfo.getScores();
+
+        Gdx.app.debug("LevelScores", levelScores.toString());
+
         this.setColor(1, 1, 1, WINDOW_TRANSPARENCY);
 
         int levelCounter = 1;
         while (doesLevelExist(levelCounter)) {
             addButton(levelCounter);
-
             if (levelCounter % LEVELS_PER_ROW == 0) {
                 this.row();
             }
-
             levelCounter++;
         }
     }

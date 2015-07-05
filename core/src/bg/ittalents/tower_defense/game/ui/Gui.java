@@ -252,6 +252,7 @@ public class Gui implements Disposable, IParent {
     public void render(Batch batch) {
         if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE) || Gdx.input.isKeyPressed(Input.Keys.BACK)) {
             level.setPaused(true);
+            mainTable.clearChildren();
             mainTable.add(ingameWindow);
         }
         stage.act(Gdx.graphics.getDeltaTime());
