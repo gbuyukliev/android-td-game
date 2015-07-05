@@ -10,12 +10,17 @@ public class TowerBasic extends AbstractTower {
     public TowerBasic(float positionX, float positionY, TextureRegion[] textures, Level level) {
         super(positionX, positionY, textures, level);
         typeOfTower = "basicTower";
-        projectileAnimation = Assets.instance.getProjectile(Assets.PROJECTILE_GRAY);
         damage = 20;
         fireRate = 1f;
         range = 120f;
         price = 50;
         upgradePrice = 30;
         moneySpent = price;
+    }
+
+    @Override
+    protected AbstractProjectile getProjectile() {
+        return new Projectile(position.x, position.y,
+                Assets.instance.getProjectile(Assets.PROJECTILE_GRAY), this);
     }
 }

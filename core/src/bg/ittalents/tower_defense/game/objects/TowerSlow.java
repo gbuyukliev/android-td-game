@@ -9,7 +9,6 @@ public class TowerSlow extends AbstractTower {
 
     public TowerSlow(float positionX, float positionY, TextureRegion[] textures, Level level) {
         super(positionX, positionY, textures, level);
-        projectileAnimation = Assets.instance.getProjectile(Assets.PROJECTILE_ICE);
         typeOfTower = "slowTower";
         damage = 10;
         fireRate = 1f;
@@ -17,5 +16,11 @@ public class TowerSlow extends AbstractTower {
         price = 30;
         upgradePrice = 20;
         moneySpent = price;
+    }
+
+    @Override
+    protected AbstractProjectile getProjectile() {
+        return new Projectile(position.x, position.y,
+                Assets.instance.getProjectile(Assets.PROJECTILE_ICE), this);
     }
 }

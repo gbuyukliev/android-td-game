@@ -79,6 +79,7 @@ public class Assets implements Disposable, AssetErrorListener {
     public static final String PROJECTILE_WATER = "projectile-water";
     public static final String PROJECTILE_PURPLE = "projectile-purple";
     public static final String PROJECTILE_GREEN = "projectile-green";
+    public static final String EXPLOSION = "explosion";
 
     // Location of description file for texture atlas
     public static final String TEXTURE_ATLAS_OBJECTS;
@@ -210,6 +211,7 @@ public class Assets implements Disposable, AssetErrorListener {
             projectiles.put(PROJECTILE_WATER, init(atlas, PROJECTILE_WATER, 4));
             projectiles.put(PROJECTILE_PURPLE, init(atlas, PROJECTILE_PURPLE, 4));
             projectiles.put(PROJECTILE_GREEN, init(atlas, PROJECTILE_GREEN, 4));
+            projectiles.put(EXPLOSION, init(atlas, EXPLOSION, 12));
         }
 
         private Animation init(TextureAtlas atlas, String projectileType, int frameCount) {
@@ -221,7 +223,7 @@ public class Assets implements Disposable, AssetErrorListener {
                 frames[frameIndex] = atlas.findRegion(path + frameIndex);
             }
 
-            Animation anim = new Animation(1f / frameCount, frames);
+            Animation anim = new Animation(0.5f / frameCount, frames);
             anim.setPlayMode(PlayMode.LOOP);
             return anim;
         }

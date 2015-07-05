@@ -1,7 +1,6 @@
 package bg.ittalents.tower_defense.game.objects;
 
 import com.badlogic.gdx.audio.Sound;
-import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import bg.ittalents.tower_defense.game.Assets;
@@ -14,7 +13,7 @@ public abstract class AbstractTower extends AbstractObject {
     public static final float UPGRADE_FIRE_RATE_COEFF = 0.8f;
 
     TextureRegion[] textures;
-    int upgrade;
+    int nextUpgrade;
     AbstractCreep foe;
 
     // rotation moveSpeed degrees per second
@@ -32,8 +31,6 @@ public abstract class AbstractTower extends AbstractObject {
     protected int moneySpent;
     protected Level level;
 
-    Animation projectileAnimation;
-
     private Sound sound;
 
     public AbstractTower(float positionX, float positionY, TextureRegion[] textures, Level level) {
@@ -43,7 +40,7 @@ public abstract class AbstractTower extends AbstractObject {
         timeFromLastShot = Float.MAX_VALUE;
         rotationSpeed = 90f;
         isUpgradable = true;
-        upgrade = -1;
+        nextUpgrade = 0;
         upgrade();
 
         sound = Assets.instance.getSound(Assets.SOUND_LASER);
@@ -64,10 +61,11 @@ public abstract class AbstractTower extends AbstractObject {
         }
     }
 
+    protected abstract AbstractProjectile getProjectile();
+
     public AbstractProjectile shoot() {
         timeFromLastShot = 0f;
-        Projectile projectile = new Projectile(position.x, position.y,
-                projectileAnimation, this);
+        AbstractProjectile projectile = getProjectile();
         projectile.setMoveSpeed(projectile.getMoveSpeed() * Level.getCoeff());
         projectile.setTarget(foe);
 
@@ -100,15 +98,15 @@ public abstract class AbstractTower extends AbstractObject {
     }
 
     public void upgrade() {
-        if (textures != null && textures.length > upgrade + 1 && level.getMoney() >= getUpgradePrice()) {
-            texture = textures[++upgrade];
+        if (textures != null && textures.length > nextUpgrade && level.getMoney() >= getUpgradePrice()) {
+            texture = textures[nextUpgrade++];
             damage *= UPGRADE_DAMAGE_COEFF;
             fireRate *= UPGRADE_FIRE_RATE_COEFF;
             moneySpent += getUpgradePrice();
             level.setMoney(level.getMoney() - getUpgradePrice());
         }
 
-        if (textures.length <= upgrade + 1) {
+        if (textures.length <= nextUpgrade) {
             isUpgradable = false;
         }
     }

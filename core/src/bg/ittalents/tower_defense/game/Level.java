@@ -16,6 +16,7 @@ import java.util.Iterator;
 import bg.ittalents.tower_defense.game.objects.AbstractCreep;
 import bg.ittalents.tower_defense.game.objects.AbstractProjectile;
 import bg.ittalents.tower_defense.game.objects.AbstractTower;
+import bg.ittalents.tower_defense.game.objects.Explosion;
 import bg.ittalents.tower_defense.game.objects.WaveBasic;
 import bg.ittalents.tower_defense.game.objects.WaveManager;
 import bg.ittalents.tower_defense.game.ui.Gui;
@@ -57,6 +58,7 @@ public class Level implements Disposable {
     private Array<AbstractTower> towers;
     private Array<AbstractCreep> creeps;
     private Array<AbstractProjectile> projectiles;
+    private Array<Explosion> explosions;
     private Array<Array<Vector2>> waypoints;
     private int pathCount;
 
@@ -111,6 +113,7 @@ public class Level implements Disposable {
         creeps = new Array<AbstractCreep>();
         waypoints = new Array<Array<Vector2>>();
         projectiles = new Array<AbstractProjectile>();
+        explosions = new Array<Explosion>();
 
         loadLevelData(tiledMap);
         initTiles(tiledMap);
@@ -229,6 +232,7 @@ public class Level implements Disposable {
             updateCreeps(deltaTime);
             updateProjectiles(deltaTime);
             updateTowers(deltaTime);
+            updateExplosions(deltaTime);
         }
 
         updateFastForwardButton();
@@ -318,12 +322,34 @@ public class Level implements Disposable {
         }
     }
 
+    private void updateExplosions(float deltaTime) {
+        for (Iterator<Explosion> explosionIterator = explosions.iterator(); explosionIterator.hasNext();) {
+            Explosion explosion = explosionIterator.next();
+            if (explosion.isVisible()) {
+                explosion.update(deltaTime);
+            } else {
+                explosionIterator.remove();
+            }
+        }
+    }
+
     private void updateProjectiles(float deltaTime) {
         for (Iterator<AbstractProjectile> projectileIterator = projectiles.iterator(); projectileIterator.hasNext();) {
             AbstractProjectile projectile = projectileIterator.next();
             if (projectile.isVisible()) {
                 projectile.update(deltaTime);
             } else {
+                if (projectile.hasSplash()) {
+                    Explosion explosion = new Explosion(projectile);
+                    explosions.add(explosion);
+                    float damage = explosion.getDamage();
+                    for (AbstractCreep creep : creeps) {
+                        if(explosion.isInRange(creep)) {
+                            creep.receiveDamage(damage);
+                        }
+                    }
+
+                }
                 projectileIterator.remove();
             }
         }
@@ -406,6 +432,9 @@ public class Level implements Disposable {
 
         for (AbstractCreep creep : creeps) {
             creep.render(batch);
+        }
+        for (Explosion explosion : explosions) {
+            explosion.render(batch);
         }
         for (AbstractTower tower : towers) {
             tower.render(batch);
