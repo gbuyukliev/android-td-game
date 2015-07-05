@@ -13,8 +13,17 @@ public abstract class AbstractGameScreen implements Screen {
         this.game = game;
     }
 
+    @Override
+    public void pause() {
+        Assets.instance.getMusic().pause();
+    }
+
+    @Override
     public void resume() {
         Assets.instance.init(new AssetManager());
+        Assets.instance.getMusic().setLooping(true);
+        Assets.instance.getMusic().setVolume(0.3f);
+        Assets.instance.getMusic().play();
     }
 
     public void dispose() {

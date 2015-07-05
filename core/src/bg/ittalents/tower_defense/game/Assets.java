@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetDescriptor;
 import com.badlogic.gdx.assets.AssetErrorListener;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -106,6 +107,7 @@ public class Assets implements Disposable, AssetErrorListener {
     private AssetManager assetManager;
 
     private AssetSounds sounds;
+    private AssetMusic music;
 
     private AssetsTexture texture;
     private AssetProjectiles projectiles;
@@ -318,6 +320,25 @@ public class Assets implements Disposable, AssetErrorListener {
         }
     }
 
+    public class AssetMusic implements Disposable {
+        public final Music song01;
+
+        public AssetMusic() {
+
+            assetManager.load("music/Returning We Hear the Larks - IV- Of Spectres and Angels.mp3",
+                    Music.class);
+
+            assetManager.finishLoading();
+            song01 = assetManager.get("music/Returning We Hear the Larks - IV- Of Spectres and Angels.mp3",
+                    Music.class);
+        }
+
+        @Override
+        public void dispose() {
+            song01.dispose();
+        }
+    }
+
     // singleton: prevent instantiation from other classes
     private Assets() {
 
@@ -341,6 +362,10 @@ public class Assets implements Disposable, AssetErrorListener {
 
     public Sound getSound(String name) {
         return sounds.get(name);
+    }
+
+    public Music getMusic() {
+        return music.song01;
     }
 
 
@@ -375,6 +400,7 @@ public class Assets implements Disposable, AssetErrorListener {
         projectiles = new AssetProjectiles(atlas);
         towers = new AssetTower(atlas);
         sounds = new AssetSounds();
+        music = new AssetMusic();
     }
 
     @Override
@@ -382,6 +408,7 @@ public class Assets implements Disposable, AssetErrorListener {
         assetManager.dispose();
         fonts.defaultFont.dispose();
         sounds.dispose();
+        music.dispose();
     }
 
     @Override

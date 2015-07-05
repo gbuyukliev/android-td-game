@@ -42,6 +42,7 @@ public class GameScreen extends AbstractGameScreen {
 
     @Override
     public void pause() {
+        super.pause();
         paused = true;
     }
 

@@ -1,5 +1,6 @@
 package bg.ittalents.tower_defense.game;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -12,6 +13,7 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Disposable;
 
+import bg.ittalents.tower_defense.game.ui.Gui;
 import bg.ittalents.tower_defense.network.UserInfo;
 import bg.ittalents.tower_defense.utils.CameraHelper;
 
@@ -30,11 +32,11 @@ public class WorldRenderer implements Disposable {
     private OrthographicCamera cameraGUI;
     private CameraHelper cameraHelper;
 
-    private bg.ittalents.tower_defense.game.ui.Gui gui;
+    private Gui gui;
     private WorldController worldController;
     private Batch batch;
 
-    public WorldRenderer(WorldController worldController) {
+    public WorldRenderer(WorldController worldController, Game game) {
         this.worldController = worldController;
         batch = new SpriteBatch();
 
@@ -44,7 +46,7 @@ public class WorldRenderer implements Disposable {
         mapRenderer = new OrthogonalTiledMapRenderer(tiledMap, batch);
 
         aspectRatio = Gdx.graphics.getWidth() / (float) Gdx.graphics.getHeight();
-        gui = new bg.ittalents.tower_defense.game.ui.Gui(aspectRatio, batch);
+        gui = new Gui(aspectRatio, batch, game);
         this.level = new Level(tiledMap, gui);
         gui.setLevel(this.level);
         init();

@@ -11,6 +11,6 @@ public class ProjectileSplash extends AbstractProjectile {
         super(positionX, positionY,
                 Assets.instance.getProjectile(Assets.PROJECTILE_FIRE), tower);
         setMoveSpeed(250f);
-        splashRadius = 40f;
+        splashRadius = 80f;
     }
 }

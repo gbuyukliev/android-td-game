@@ -18,6 +18,8 @@ public class TowerDefense extends Game {
 		Assets.instance.init(new AssetManager());
 		// Start game at menu screen
 		setScreen(new MainScreen(this));
-//		setScreen(new GameScreen(this));
+		Assets.instance.getMusic().setLooping(true);
+		Assets.instance.getMusic().setVolume(0.3f);
+		Assets.instance.getMusic().play();
 	}
 }

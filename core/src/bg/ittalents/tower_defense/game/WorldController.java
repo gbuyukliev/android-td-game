@@ -15,14 +15,14 @@ import bg.ittalents.tower_defense.screens.MainScreen;
 public class WorldController extends GestureDetector.GestureAdapter implements Disposable {
 
     private Level level;
-    private Game game;
+//    private Game game;
 
     private float scale;
 
     private WorldRenderer worldRenderer;
 
     public WorldController(Game game) {
-        worldRenderer = new WorldRenderer(this);
+        worldRenderer = new WorldRenderer(this, game);
 
         InputMultiplexer inputMultiplexer = new InputMultiplexer();
         inputMultiplexer.addProcessor(worldRenderer.getInputProcessor());
@@ -30,7 +30,7 @@ public class WorldController extends GestureDetector.GestureAdapter implements D
 
         Gdx.input.setInputProcessor(inputMultiplexer);
         level = worldRenderer.getLevel();
-        this.game = game;
+//        this.game = game;
         updateScale();
     }
 
@@ -81,14 +81,6 @@ public class WorldController extends GestureDetector.GestureAdapter implements D
     }
 
     public void render() {
-        if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE) || Gdx.input.isKeyPressed(Input.Keys.BACK)) {
-
-            Network.getInstance().saveScore(UserInfo.getUserName(), UserInfo.getLevel(), level.getScore());
-            // switch to main screen
-//            worldRenderer.dispose();
-            game.setScreen(new MainScreen(game));
-        }
-
         Gdx.gl.glClearColor(0, 0, 0, 0);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         worldRenderer.render();

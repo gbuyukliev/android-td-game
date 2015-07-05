@@ -256,7 +256,7 @@ public class MainScreen extends AbstractGameScreen implements INetworkScreenList
 
     @Override
     public void pause() {
-
+        super.pause();
     }
 
     @Override
