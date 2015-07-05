@@ -19,8 +19,8 @@ public class TowerSpecial extends AbstractTower {
     }
 
     @Override
-    protected AbstractProjectile getProjectile() {
-        return new ProjectileSpecial(position.x, position.y,
+    protected Projectile getProjectile() {
+        return new Projectile(position.x, position.y,
                 Assets.instance.getProjectile(Assets.PROJECTILE_GREEN), this);
     }
 }

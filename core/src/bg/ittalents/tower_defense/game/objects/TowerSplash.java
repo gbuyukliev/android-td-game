@@ -2,6 +2,7 @@ package bg.ittalents.tower_defense.game.objects;
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
+import bg.ittalents.tower_defense.game.Assets;
 import bg.ittalents.tower_defense.game.Level;
 
 public class TowerSplash extends AbstractTower {
@@ -18,7 +19,7 @@ public class TowerSplash extends AbstractTower {
     }
 
     @Override
-    protected AbstractProjectile getProjectile() {
-        return new ProjectileSplash(position.x, position.y, this);
+    protected Projectile getProjectile() {
+        return new Projectile(position.x, position.y, Assets.instance.getProjectile(Assets.PROJECTILE_FIRE), this);
     }
 }

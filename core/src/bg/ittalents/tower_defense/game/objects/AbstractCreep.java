@@ -14,7 +14,6 @@ import bg.ittalents.tower_defense.game.Assets;
 public abstract class AbstractCreep extends AbstractObject {
 
     public static final float WAYPOINT_TOLERANCE = 5f;
-    public static final float SLOWED_MOVESPEED_COEFF = 0.5f;
 
     Animation animation;
     protected String typeOfCreep;
@@ -60,7 +59,7 @@ public abstract class AbstractCreep extends AbstractObject {
         public void render(Batch batch) {
             healthBarBG.draw(batch);
             health.draw(batch, getTextureX() + BUFFER_X, getTextureY() + BUFFER_Y,
-                    AbstractCreep.this.health / AbstractCreep.this.maxHealth * 40f, 5f);
+                    AbstractCreep.this.getHealth() / AbstractCreep.this.maxHealth * 40f, 5f);
         }
     }
 
@@ -70,11 +69,21 @@ public abstract class AbstractCreep extends AbstractObject {
         angle = 90f;
         timeSinceSlowed = 0;
         currentWaypoint = -1;
-
         healthBar = new HealthBar();
     }
 
-    public static AbstractCreep createCreep(Array<Vector2> currentPath, WaveManager wave) {
+    public AbstractCreep(float positionX, float positionY, Animation animation, String typeOfCreep, int reward, float moveSpeed, float health) {
+        this(positionX, positionY, animation);
+        setTypeOfCreep(typeOfCreep);
+        setReward(reward);
+        setMoveSpeed(moveSpeed);
+        setHealth(health);
+        maxHealth = health;
+        slowedMoveSpeed = moveSpeed * Projectile.SLOW_AMOUNT;
+        savedMoveSpeed = moveSpeed;
+    }
+
+    public static AbstractCreep createCreep(Array<Vector2> currentPath, Wave wave) {
         switch(wave.getTypeOfCreeps()) {
             case "basicCreep":
                 return new CreepBasic(currentPath.first().x, currentPath.first().y,
@@ -86,7 +95,7 @@ public abstract class AbstractCreep extends AbstractObject {
                 return new CreepSpecial(currentPath.first().x, currentPath.first().y,
                         Assets.instance.getCreep(Assets.CREEP_SPECIAL));
             case "bossCreep":
-                return new CreepSlow(currentPath.first().x, currentPath.first().y,
+                return new CreepBoss(currentPath.first().x, currentPath.first().y,
                         Assets.instance.getCreep(Assets.CREEP_BOSS));
             default:
                 return new CreepBasic(currentPath.first().x, currentPath.first().y,
@@ -106,7 +115,7 @@ public abstract class AbstractCreep extends AbstractObject {
     }
 
     public boolean isDead() {
-        return health <= 0;
+        return getHealth() <= 0;
     }
 
     public int getReward () {
@@ -135,20 +144,20 @@ public abstract class AbstractCreep extends AbstractObject {
             }
             double radRotation = AbstractObject.countAngle(position, waypoints.get(currentWaypoint));
             angle = (float) Math.toDegrees(radRotation);
-            updatePosition(position.x + moveSpeed * deltaTime * (float) Math.cos(radRotation),
-                    position.y + moveSpeed * deltaTime * (float) Math.sin(radRotation));
+            updatePosition(position.x + getMoveSpeed() * deltaTime * (float) Math.cos(radRotation),
+                    position.y + getMoveSpeed() * deltaTime * (float) Math.sin(radRotation));
         }
     }
 
     public void receiveDamage(float damage) {
-        health -= damage;
-        if (health <= 0) {
+        setHealth(getHealth() - damage);
+        if (getHealth() <= 0) {
             setVisible(false);
         }
     }
 
     public void getSlowed() {
-        moveSpeed = slowedMoveSpeed;
+        setMoveSpeed(slowedMoveSpeed);
         timeSinceSlowed = 0f;
     }
 
@@ -156,11 +165,41 @@ public abstract class AbstractCreep extends AbstractObject {
         return typeOfCreep;
     }
 
+    public void setTypeOfCreep(String typeOfCreep) {
+        if (typeOfCreep != null) {
+            this.typeOfCreep = typeOfCreep;
+        }
+    }
+
+    public void setReward(int reward) {
+        if (reward > 0) {
+            this.reward = reward;
+        }
+    }
+
+    public float getMoveSpeed() {
+        return moveSpeed;
+    }
+
+    public void setMoveSpeed(float moveSpeed) {
+        if (moveSpeed > 0) {
+            this.moveSpeed = moveSpeed;
+        }
+    }
+
+    public float getHealth() {
+        return health;
+    }
+
+    public void setHealth(float health) {
+        this.health = health;
+    }
+
     public void updateTimeSlowed(float deltaTime) {
         timeSinceSlowed += deltaTime;
 
         if (timeSinceSlowed >= 3f) {
-            moveSpeed = savedMoveSpeed;
+            setMoveSpeed(savedMoveSpeed);
         }
     }
 
