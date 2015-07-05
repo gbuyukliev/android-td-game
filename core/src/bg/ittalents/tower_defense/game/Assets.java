@@ -325,11 +325,11 @@ public class Assets implements Disposable, AssetErrorListener {
 
         public AssetMusic() {
 
-            assetManager.load("music/Returning We Hear the Larks - IV- Of Spectres and Angels.mp3",
+            assetManager.load("music/in_game_music.mp3",
                     Music.class);
 
             assetManager.finishLoading();
-            song01 = assetManager.get("music/Returning We Hear the Larks - IV- Of Spectres and Angels.mp3",
+            song01 = assetManager.get("music/in_game_music.mp3",
                     Music.class);
         }
 

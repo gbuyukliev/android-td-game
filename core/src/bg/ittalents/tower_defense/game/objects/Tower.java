@@ -14,24 +14,24 @@ public class Tower extends AbstractObject {
     public static final float UPGRADE_DAMAGE_COEFF = 1.20f;
     public static final float UPGRADE_FIRE_RATE_COEFF = 0.8f;
 
-    TextureRegion[] textures;
-    int nextUpgrade;
-    Creep foe;
+    private TextureRegion[] textures;
+    private int nextUpgrade;
+    private Creep foe;
 
     // rotation moveSpeed degrees per second
-    protected float rotationSpeed;
+    private float rotationSpeed;
 
-    protected String typeOfTower;
-    protected float damage;
-    protected float fireRate;
-    protected float range;
-    protected int price;
-    protected boolean isUpgradable;
-    protected int upgradePrice;
+    private String typeOfTower;
+    private float damage;
+    private float fireRate;
+    private float range;
+    private int price;
+    private boolean isUpgradable;
+    private int upgradePrice;
 
-    protected float timeFromLastShot;
-    protected int moneySpent;
-    protected Level level;
+    private float timeFromLastShot;
+    private int moneySpent;
+    private Level level;
 
     private static LevelData.TowerType tower;
 

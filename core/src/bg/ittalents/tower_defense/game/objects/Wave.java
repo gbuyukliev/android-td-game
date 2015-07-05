@@ -4,6 +4,7 @@ public class Wave {
     public static final int DEFAULT_CREEPS_COUNT = 6;
     public static final int BOSS_CREEPS_COUNT = 1;
     public static final int SLOW_CREEPS_COUNT = 3;
+
     private String typeOfCreeps;
     private int creepsCount;
 

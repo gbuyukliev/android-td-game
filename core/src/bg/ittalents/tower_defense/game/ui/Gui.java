@@ -32,10 +32,11 @@ import bg.ittalents.tower_defense.screens.windows.IngameWindow;
 import bg.ittalents.tower_defense.screens.windows.PreferencesWindow;
 
 public class Gui implements Disposable, IParent {
+    public static boolean isMenu;
+
     private Level level;
     private Stage stage;
     private Skin skin;
-//    private float aspectRatio;
     private Label warningTextField;
     private Table noTowerTable;
     private Table towerTable;
@@ -50,7 +51,6 @@ public class Gui implements Disposable, IParent {
     private Game game;
 
     public Gui(float aspectRatio, Batch batch, Game game) {
-//        setAspectRatio(aspectRatio);
         stage = new Stage(new StretchViewport(WorldRenderer.VIEWPORT * aspectRatio, WorldRenderer.VIEWPORT), batch);
         skin = new Skin(Gdx.files.internal("data/uiskin.json"));
         this.game = game;
@@ -188,6 +188,7 @@ public class Gui implements Disposable, IParent {
         final ImageButton.ImageButtonStyle style1 = new ImageButton.ImageButtonStyle();
         style1.imageUp = buttonUp1;
         style1.imageDown = buttonDown1;
+        style1.imageDisabled = buttonDown1;
 
         final ImageButton.ImageButtonStyle style2 = new ImageButton.ImageButtonStyle();
         style2.imageUp = buttonUp2;
@@ -227,34 +228,29 @@ public class Gui implements Disposable, IParent {
             }
         });
 
-        pauseTable.add(pauseButton).size(40, 40).padRight(5);
+        pauseTable.add(getPauseButton()).size(40, 40).padRight(5);
         stage.addActor(pauseTable);
     }
-
-
 
     public InputProcessor getInputProcessor() {
         return stage;
     }
-//
-//    public void setAspectRatio(float aspectRatio) {
-//        this.aspectRatio = aspectRatio;
-//    }
 
     public void resize(int width, int height) {
         stage.getViewport().update((int)width, (int)height, true);
     }
 
-//    public void update(float deltaTime) {
-//        stage.act(deltaTime);
-//    }
-
-    public void render(Batch batch) {
+    public void renderMenu() {
         if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE) || Gdx.input.isKeyPressed(Input.Keys.BACK)) {
             level.setPaused(true);
             mainTable.clearChildren();
             mainTable.add(ingameWindow);
+            isMenu = true;
         }
+    }
+
+    public void render(Batch batch) {
+        renderMenu();
         stage.act(Gdx.graphics.getDeltaTime());
         stage.draw();
     }
@@ -314,5 +310,9 @@ public class Gui implements Disposable, IParent {
 
     public ImageButton getFastForwardButton() {
         return fastForwardButton;
+    }
+
+    public ImageButton getPauseButton() {
+        return pauseButton;
     }
 }

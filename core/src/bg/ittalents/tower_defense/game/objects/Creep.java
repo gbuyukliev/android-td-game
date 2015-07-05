@@ -21,18 +21,18 @@ public class Creep extends AbstractObject {
     public static final float WAYPOINT_TOLERANCE = 5f;
 
     Animation animation;
-    protected String typeOfCreep;
-    protected int reward;
-    protected float moveSpeed;
-    protected float health;
-    protected float maxHealth;
-    protected float stateTime;
-    protected HealthBar healthBar;
-    protected float slowedMoveSpeed;
-    protected float savedMoveSpeed;
+    private String typeOfCreep;
+    private int reward;
+    private float moveSpeed;
+    private float health;
+    private float maxHealth;
+    private float stateTime;
+    private HealthBar healthBar;
+    private float slowedMoveSpeed;
+    private float savedMoveSpeed;
     private float timeSinceSlowed;
 
-    protected Level level;
+    private Level level;
     private static LevelData.CreepType creep;
 
     int currentWaypoint;

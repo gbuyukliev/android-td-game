@@ -246,7 +246,7 @@ public class Level implements Disposable {
                 updateExplosions(deltaTime);
             }
 
-            updateFastForwardButton();
+            updateButtons();
             updateWarningText(deltaTime);
         }
     }
@@ -282,7 +282,7 @@ public class Level implements Disposable {
         spawnCreepInWave();
     }
 
-    private void updateFastForwardButton() {
+    private void updateButtons() {
         if (triggerCountTime) {
             if (isPaused) {
                 gui.getFastForwardButton().setDisabled(true);
@@ -291,6 +291,12 @@ public class Level implements Disposable {
             }
         } else {
             gui.getFastForwardButton().setDisabled(true);
+        }
+
+        if (Gui.isMenu) {
+            gui.getPauseButton().setDisabled(true);
+        } else {
+            gui.getPauseButton().setDisabled(false);
         }
     }
 

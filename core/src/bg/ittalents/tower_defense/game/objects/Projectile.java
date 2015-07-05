@@ -5,12 +5,13 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 public class Projectile extends AbstractObject {
     public static final float SPLASH_RADIUS = 80f;
     public static final float SLOW_AMOUNT = 0.5f;
-    protected float moveSpeed;
-    protected Creep target;
-    protected Tower tower;
-    Animation animation;
-    float stateTime;
-    float splashRadius;
+
+    private float moveSpeed;
+    private Tower tower;
+    private Animation animation;
+    private float stateTime;
+    private Creep target;
+    private float splashRadius;
     float slowAmount;
     boolean isSpecial;
 
@@ -26,7 +27,9 @@ public class Projectile extends AbstractObject {
     }
 
     public void setTarget(Creep target) {
-        this.target = target;
+        if (target != null) {
+            this.target = target;
+        }
     }
 
     public boolean hasSplash() {
@@ -84,5 +87,9 @@ public class Projectile extends AbstractObject {
 
     public float getSplashRadius() {
         return splashRadius;
+    }
+
+    public Tower getTower() {
+        return tower;
     }
 }

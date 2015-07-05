@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
 
+import bg.ittalents.tower_defense.game.ui.Gui;
 import bg.ittalents.tower_defense.utils.AudioManager;
 import bg.ittalents.tower_defense.utils.GamePreferences;
 

@@ -35,7 +35,7 @@ public class GamePreferences {
     public void load () {
         sound = prefs.getBoolean("sound", true);
         music = prefs.getBoolean("music", true);
-        volSound = MathUtils.clamp(prefs.getFloat("volSound", 0.5f), 0.0f, 1.0f);
+        volSound = MathUtils.clamp(prefs.getFloat("volSound", 0.1f), 0.0f, 1.0f);
         volMusic = MathUtils.clamp(prefs.getFloat("volMusic", 0.5f), 0.0f, 1.0f);
         showFpsCounter = prefs.getBoolean("showFpsCounter", false);
 

@@ -5,19 +5,19 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import bg.ittalents.tower_defense.game.Assets;
 
 public class Explosion extends AbstractObject {
-    Animation animation;
-    float stateTime;
-    float splashRadius;
-    float explosionDuration;
-    float damage;
+    private Animation animation;
+    private float stateTime;
+    private float splashRadius;
+    private float explosionDuration;
+    private float damage;
 
     public Explosion(Projectile projectile) {
         super(projectile.position.x, projectile.position.y, null);
         this.animation = Assets.instance.getProjectile(Assets.EXPLOSION);
-        damage = projectile.tower.getDamage();
+        damage = projectile.getTower().getDamage();
         visible = true;
         texture = animation.getKeyFrame(0);
-        this.splashRadius = projectile.splashRadius;
+        this.splashRadius = projectile.getSplashRadius();
         stateTime = 0;
         explosionDuration = 0.5f;
     }
