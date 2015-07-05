@@ -13,6 +13,7 @@ public class CreepBoss extends AbstractCreep {
         moveSpeed = 30f * Level.getCoeff();
         health = 2000f * Level.getCoeff();
         maxHealth = 2000f * Level.getCoeff();
+        slowedMoveSpeed = moveSpeed * SLOWED_MOVESPEED_COEFF;
         savedMoveSpeed = moveSpeed;
     }
 }

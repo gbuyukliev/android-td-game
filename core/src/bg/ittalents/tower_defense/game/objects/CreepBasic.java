@@ -13,6 +13,7 @@ public class CreepBasic extends AbstractCreep {
         moveSpeed = 50f * Level.getCoeff();
         health = 180f * Level.getCoeff();
         maxHealth = 180f * Level.getCoeff();
+        slowedMoveSpeed = moveSpeed * SLOWED_MOVESPEED_COEFF;
         savedMoveSpeed = moveSpeed;
     }
 }
