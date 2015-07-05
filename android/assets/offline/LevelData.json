@@ -1,32 +1,32 @@
 {
-  "creeps": [
-    {
+  "creeps" : {
+    "basicCreep": {
       "typeOfCreep": "basicCreep",
       "reward": 25,
       "moveSpeed": 50,
       "health": 180
     },
-    {
+    "slowCreep": {
       "typeOfCreep": "slowCreep",
       "reward": 60,
       "moveSpeed": 40,
       "health": 600
     },
-    {
+    "specialCreep": {
       "typeOfCreep": "specialCreep",
       "reward": 40,
       "moveSpeed": 80,
       "health": 140
     },
-    {
+    "bossCreep": {
       "typeOfCreep": "bossCreep",
       "reward": 200,
       "moveSpeed": 30,
       "health": 2000
     }
-  ],
-  "towers": [
-    {
+  },
+  "towers" : {
+    "basicTower": {
       "typeOfTower": "basicTower",
       "damage": 25,
       "fireRate": 1,
@@ -34,7 +34,7 @@
       "price": 50,
       "upgradePrice": 30
     },
-    {
+    "slowTower": {
       "typeOfTower": "slowTower",
       "damage": 10,
       "fireRate": 1,
@@ -42,7 +42,7 @@
       "price": 30,
       "upgradePrice": 20
     },
-    {
+    "splashTower": {
       "typeOfTower": "splashTower",
       "damage": 20,
       "fireRate": 1.6,
@@ -50,7 +50,7 @@
       "price": 80,
       "upgradePrice": 40
     },
-    {
+    "specialTower": {
       "typeOfTower": "specialTower",
       "damage": 30,
       "fireRate": 0.9,
@@ -58,5 +58,5 @@
       "price": 100,
       "upgradePrice": 50
     }
-  ]
+  }
 }

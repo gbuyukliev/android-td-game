@@ -1,27 +1,26 @@
 package bg.ittalents.tower_defense.game;
 
-import com.badlogic.gdx.utils.Array;
+import java.util.HashMap;
 
 public class LevelData {
-    Array<CreepTypes> creeps;
-    Array<TowerTypes> towers;
+    private HashMap<String, CreepType> creeps;
+    private HashMap<String, TowerType> towers;
 
-    public static class CreepTypes {
+    public static class CreepType {
         private String typeOfCreep;
-        private float reward;
+        private int reward;
         private float moveSpeed;
         private float health;
 
         @Override
         public String toString() {
-            return "CreepTypes{" +
+            return "CreepType{" +
                     "typeOfCreep=" + typeOfCreep +
                     ", reward=" + reward +
                     ", moveSpeed=" + moveSpeed +
                     ", health=" + health +
                     '}';
         }
-
 
         public String getTypeOfCreeps() {
             return typeOfCreep;
@@ -33,11 +32,11 @@ public class LevelData {
             }
         }
 
-        public float getReward() {
+        public int getReward() {
             return reward;
         }
 
-        public void setReward(float reward) {
+        public void setReward(int reward) {
             if (reward > 0) {
                 this.reward = reward;
             }
@@ -64,17 +63,17 @@ public class LevelData {
         }
     }
 
-    public static class TowerTypes {
+    public static class TowerType {
         private String typeOfTower;
         private float damage;
         private float fireRate;
         private float range;
-        private float price;
-        private float upgradePrice;
+        private int price;
+        private int upgradePrice;
 
         @Override
         public String toString() {
-            return "TowerTypes{" +
+            return "TowerType{" +
                     "typeOfTower=" + typeOfTower +
                     ", damage='" + damage +
                     ", fireRate=" + fireRate +
@@ -125,21 +124,21 @@ public class LevelData {
             }
         }
 
-        public float getPrice() {
+        public int getPrice() {
             return price;
         }
 
-        public void setPrice(float price) {
+        public void setPrice(int price) {
             if (price > 0) {
                 this.price = price;
             }
         }
 
-        public float getUpgradePrice() {
+        public int getUpgradePrice() {
             return upgradePrice;
         }
 
-        public void setUpgradePrice(float upgradePrice) {
+        public void setUpgradePrice(int upgradePrice) {
             if (upgradePrice > 0) {
                 this.upgradePrice = upgradePrice;
             }
@@ -154,6 +153,26 @@ public class LevelData {
                 '}';
     }
 
+    public CreepType getCreep(String typeOfCreep) {
+        for (String x : creeps.keySet()) {
+            if (x.equals(typeOfCreep)) {
+                return creeps.get(x);
+            }
+        }
+
+        return null;
+    }
+
+    public TowerType getTower(String typeOfTower) {
+        for (String x : towers.keySet()) {
+            if (x.equals(typeOfTower)) {
+                return towers.get(x);
+            }
+        }
+
+        return null;
+    }
+
 //    static void getData() {
 //        Json json = new Json();
 //        json.setTypeName(null);
@@ -163,8 +182,8 @@ public class LevelData {
 //
 //        Data data = json.fromJson(Data.class, Gdx.files.internal("offline/LevelData.json"));
 //
-//        Array<CreepTypes> results = new Array<CreepTypes>();
-//        for (CreepTypes creep : data.creeps) {
+//        Array<CreepType> results = new Array<CreepType>();
+//        for (CreepType creep : data.creeps) {
 //            results.add(creep.typeOfCreep);
 //        }
 //    }

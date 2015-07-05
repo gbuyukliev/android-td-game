@@ -13,7 +13,7 @@ class Offline implements INetwork {
     private INetworkLevelListener networkLevelListener;
 
     @Override
-    public void getLevelData(String username, int levelNumber) {
+    public void getLevelData(String username) {
         String levelPath = PATH + LEVEL_DATA_FILES + EXTENSION;
 
         if (Gdx.files.internal(levelPath).exists() && networkLevelListener != null) {
@@ -25,6 +25,8 @@ class Offline implements INetwork {
             json.setIgnoreUnknownFields(true);
             json.setOutputType(JsonWriter.OutputType.json);
             LevelData levelData = json.fromJson(LevelData.class, levelJSON);
+
+//            Gdx.app.debug("asd", levelData.toString());
 
             networkLevelListener.onLevelLoaded(levelData);
         }

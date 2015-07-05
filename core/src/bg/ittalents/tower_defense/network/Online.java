@@ -10,10 +10,10 @@ class Online implements INetwork {
     INetworkLevelListener networkLevelListener;
 
     @Override
-    public void getLevelData(String username, int levelToPlay) {
+    public void getLevelData(String username) {
         Net.HttpRequest httpRequest = new Net.HttpRequest(Net.HttpMethods.GET);
         httpRequest.setUrl(Network.URL + Network.LEVEL_MANAGER);
-        httpRequest.setContent("userName=" + username + "&levelToPlay=" + levelToPlay);
+        httpRequest.setContent("userName=" + username);
         Gdx.net.sendHttpRequest(httpRequest, new Net.HttpResponseListener() {
             @Override
             public void handleHttpResponse(Net.HttpResponse httpResponse) {

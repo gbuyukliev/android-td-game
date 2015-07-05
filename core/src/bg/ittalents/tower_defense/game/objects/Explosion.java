@@ -14,7 +14,7 @@ public class Explosion extends AbstractObject {
     public Explosion(Projectile projectile) {
         super(projectile.position.x, projectile.position.y, null);
         this.animation = Assets.instance.getProjectile(Assets.EXPLOSION);
-        damage = projectile.tower.damage;
+        damage = projectile.tower.getDamage();
         visible = true;
         texture = animation.getKeyFrame(0);
         this.splashRadius = projectile.splashRadius;
@@ -35,7 +35,7 @@ public class Explosion extends AbstractObject {
         return damage;
     }
 
-    public boolean isInRange(AbstractCreep foe) {
+    public boolean isInRange(Creep foe) {
         float dx = (foe.position.x - position.x);
         float dy = (foe.position.y - position.y);
         return (splashRadius * splashRadius) > ((dx * dx) + (dy * dy));

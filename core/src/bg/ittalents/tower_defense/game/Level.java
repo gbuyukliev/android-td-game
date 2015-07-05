@@ -13,8 +13,8 @@ import com.badlogic.gdx.utils.Disposable;
 
 import java.util.Iterator;
 
-import bg.ittalents.tower_defense.game.objects.AbstractTower;
-import bg.ittalents.tower_defense.game.objects.AbstractCreep;
+import bg.ittalents.tower_defense.game.objects.Tower;
+import bg.ittalents.tower_defense.game.objects.Creep;
 import bg.ittalents.tower_defense.game.objects.Explosion;
 import bg.ittalents.tower_defense.game.objects.Projectile;
 import bg.ittalents.tower_defense.game.objects.Wave;
@@ -55,8 +55,8 @@ public class Level implements Disposable {
 
     private int colTower, rowTower;
 
-    private Array<AbstractTower> towers;
-    private Array<AbstractCreep> creeps;
+    private Array<Tower> towers;
+    private Array<Creep> creeps;
     private Array<Projectile> projectiles;
     private Array<Explosion> explosions;
     private Array<Array<Vector2>> waypoints;
@@ -67,7 +67,7 @@ public class Level implements Disposable {
 
     public class Tile {
         private boolean buildable;
-        private AbstractTower tower;
+        private Tower tower;
 
         Tile() {
             setBuildable(false);
@@ -78,7 +78,7 @@ public class Level implements Disposable {
             tower = null;
         }
 
-        public AbstractTower getTower() {
+        public Tower getTower() {
             return tower;
         }
 
@@ -105,7 +105,7 @@ public class Level implements Disposable {
 
             }
         });
-        Network.getInstance().getLevelData(UserInfo.getUserName(), UserInfo.getLevel());
+        Network.getInstance().getLevelData(UserInfo.getUserName());
 
         this.gui = gui;
         wave = Wave.createWave(0);
@@ -120,8 +120,8 @@ public class Level implements Disposable {
         isPaused = false;
         isClicked = false;
 
-        towers = new Array<AbstractTower>();
-        creeps = new Array<AbstractCreep>();
+        towers = new Array<Tower>();
+        creeps = new Array<Creep>();
         waypoints = new Array<Array<Vector2>>();
         projectiles = new Array<Projectile>();
         explosions = new Array<Explosion>();
@@ -182,14 +182,14 @@ public class Level implements Disposable {
         int pathIndex = currentWave % pathCount;
         Array<Vector2> currentPath = this.waypoints.get(pathIndex);
 
-        AbstractCreep creep = AbstractCreep.createCreep(currentPath, wave);
+        Creep creep = Creep.createCreep(currentPath.first(), wave, this);
 
         creep.setWaypoints(currentPath);
         creeps.add(creep);
     }
 
     public void buildTower(int col, int row, String type) {
-        AbstractTower tower = AbstractTower.createTower((col + 0.5f) * tileWidth, (row + 0.5f) * tileHeight, type, this);
+        Tower tower = Tower.createTower((col + 0.5f) * tileWidth, (row + 0.5f) * tileHeight, type, this);
 
         if (money >= tower.getPrice()) {
             towers.add(tower);
@@ -202,7 +202,7 @@ public class Level implements Disposable {
         }
     }
 
-    public void sellTower(AbstractTower tower) {
+    public void sellTower(Tower tower) {
         towers.removeValue(tower, true);
         money += tower.getMoneySpent() / 2;
     }
@@ -237,7 +237,7 @@ public class Level implements Disposable {
     }
 
     public void update(float deltaTime) {
-        if (levelData != null) {
+        if (getLevelData() != null) {
             if (!isPaused) {
                 updateWave(deltaTime);
                 updateCreeps(deltaTime);
@@ -318,8 +318,8 @@ public class Level implements Disposable {
     }
 
     private void updateCreeps(float deltaTime) {
-        for (Iterator<AbstractCreep> creepIterator = creeps.iterator(); creepIterator.hasNext();) {
-            AbstractCreep creep = creepIterator.next();
+        for (Iterator<Creep> creepIterator = creeps.iterator(); creepIterator.hasNext();) {
+            Creep creep = creepIterator.next();
             if (creep.isVisible()) {
                 creep.update(deltaTime);
             } else {
@@ -355,7 +355,7 @@ public class Level implements Disposable {
                     Explosion explosion = new Explosion(projectile);
                     explosions.add(explosion);
                     float damage = explosion.getDamage();
-                    for (AbstractCreep creep : creeps) {
+                    for (Creep creep : creeps) {
                         if(explosion.isInRange(creep)) {
                             creep.receiveDamage(damage);
                         }
@@ -368,9 +368,9 @@ public class Level implements Disposable {
     }
 
     private void updateTowers(float deltaTime) {
-        for (AbstractTower tower : towers) {
+        for (Tower tower : towers) {
             if (!tower.hasTarget()) {
-                for (AbstractCreep creep : creeps) {
+                for (Creep creep : creeps) {
                     if (tower.isInRange(creep)) {
                         tower.setFoe(creep);
                         break;
@@ -387,7 +387,7 @@ public class Level implements Disposable {
 
     private void setShapeRenderer(OrthographicCamera camera) {
         if (isClicked()) {
-            AbstractTower tower = tiles[rowTower][colTower].getTower();
+            Tower tower = tiles[rowTower][colTower].getTower();
             int padding = 10;
 
             camera.update();
@@ -442,19 +442,19 @@ public class Level implements Disposable {
     public void render(Batch batch, OrthographicCamera camera) {
         batch.begin();
 
-        for (AbstractCreep creep : creeps) {
+        for (Creep creep : creeps) {
             creep.render(batch);
         }
         for (Explosion explosion : explosions) {
             explosion.render(batch);
         }
-        for (AbstractTower tower : towers) {
+        for (Tower tower : towers) {
             tower.render(batch);
         }
         for (Projectile projectile : projectiles) {
             projectile.render(batch);
         }
-        for (AbstractCreep creep : creeps) {
+        for (Creep creep : creeps) {
             creep.renderHealthBar(batch);
         }
 
@@ -570,5 +570,9 @@ public class Level implements Disposable {
         if (fasterSpawn > 0 && fasterSpawn <= 0.7f) {
             Level.fasterSpawn = fasterSpawn;
         }
+    }
+
+    public LevelData getLevelData() {
+        return levelData;
     }
 }
