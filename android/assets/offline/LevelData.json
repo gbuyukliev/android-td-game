@@ -46,7 +46,7 @@
   "towers": [
     {
       "typeOfTower": "basicTower",
-      "damage": 20,
+      "damage": 25,
       "fireRate": 1,
       "range": 120,
       "price": 50,
@@ -62,7 +62,7 @@
     },
     {
       "typeOfTower": "splashTower",
-      "damage": 40,
+      "damage": 20,
       "fireRate": 1.6,
       "range": 100,
       "price": 80,

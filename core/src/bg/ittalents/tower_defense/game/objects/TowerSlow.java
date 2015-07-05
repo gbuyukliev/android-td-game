@@ -20,7 +20,7 @@ public class TowerSlow extends AbstractTower {
 
     @Override
     protected AbstractProjectile getProjectile() {
-        return new Projectile(position.x, position.y,
+        return new ProjectileSlow(position.x, position.y,
                 Assets.instance.getProjectile(Assets.PROJECTILE_ICE), this);
     }
 }

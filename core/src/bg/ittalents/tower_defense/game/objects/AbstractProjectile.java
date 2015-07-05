@@ -9,6 +9,8 @@ public abstract class AbstractProjectile extends AbstractObject {
     Animation animation;
     float stateTime;
     float splashRadius;
+    float slowAmount;
+    boolean isSpecial;
 
     public AbstractProjectile(float positionX, float positionY, Animation animation, AbstractTower tower) {
         super(positionX, positionY, null);
@@ -16,7 +18,10 @@ public abstract class AbstractProjectile extends AbstractObject {
         this.animation = animation;
         visible = true;
         texture = animation.getKeyFrame(0);
+        moveSpeed = 250f;
         splashRadius = 0;
+        slowAmount = 1f;
+        isSpecial = false;
     }
 
     public void setTarget(AbstractCreep target) {
