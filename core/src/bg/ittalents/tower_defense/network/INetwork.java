@@ -6,5 +6,4 @@ public interface INetwork {
     void getLevelData(String username, int levelNumber);
     void setListener(INetworkLevelListener networkLevelListener);
     void saveScore(String username, int level, int score);
-    void getTopPlayers();
 }

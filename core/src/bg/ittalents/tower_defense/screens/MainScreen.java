@@ -30,7 +30,6 @@ public class MainScreen extends AbstractGameScreen implements INetworkScreenList
     public static final float WINDOW_TRANSPARENCY = 0.7f;
     public static final float STATUS_MESSAGE_DELAY = 5f;
 
-
     private Stage stage;
     private Skin skin;
     private Label lblStatus;
@@ -43,6 +42,8 @@ public class MainScreen extends AbstractGameScreen implements INetworkScreenList
     private Table loginWindow;
     private Table levelSelectorWindow;
     private Table topPlaersWindow;
+    private TextButton btnTopPlayers;
+    private TextButton btnEditAccount;
     private Texture background;
     private Batch batch;
 
@@ -132,7 +133,7 @@ public class MainScreen extends AbstractGameScreen implements INetworkScreenList
         lblLogged.setAlignment(Align.right);
         loggedTable.add(lblLogged).expandX().pad(PADDING);
 
-        TextButton btnEditAccount = new TextButton("Edit Account", skin);
+        btnEditAccount = new TextButton("Edit Account", skin);
         btnEditAccount.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -148,30 +149,29 @@ public class MainScreen extends AbstractGameScreen implements INetworkScreenList
         lblLogged.setAlignment(Align.center);
         loggedTable.add(lblLoggedStatus).expandX().colspan(2).pad(PADDING);
 
-        TextButton topPlayers = new TextButton("Top Players", skin);
-        topPlayers.addListener(new ChangeListener() {
+        btnTopPlayers = new TextButton("Top Players", skin);
+        btnTopPlayers.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 switchToWindow(SCREEN.TOP_PLAYERS);
             }
         });
-        loggedTable.add(topPlayers).width(BUTTON_WIDTH).pad(PADDING).right();
+        loggedTable.add(btnTopPlayers).width(BUTTON_WIDTH).pad(PADDING).right();
     }
 
     private void offline() {
-//        Json json = new Json();
-//        json.setTypeName(null);
-//        json.setUsePrototypes(false);
-//        json.setIgnoreUnknownFields(true);
-//        json.setOutputType(JsonWriter.OutputType.json);
-//        LevelData levelData = json.fromJson(LevelData.class, new Offline().getLevelData(1));
-
-//        Gdx.app.debug("JSON", levelData.toString());
-
-//        getGame().setScreen(new LevelSelectorScreen(getGame(), UserInfo.createGuessUser(), new Offline()));
         Network.setOnline(false);
+        UserInfo.logInAsGuest();
+
+        hideButtons(true);
 
         switchToWindow(SCREEN.LEVEL_SELECTOR);
+    }
+
+    private void hideButtons(boolean hide) {
+//        btnTopPlayers.setDisabled(true);
+        btnTopPlayers.setVisible(!hide);
+        btnEditAccount.setVisible(!hide);
     }
 
     @Override
@@ -196,6 +196,7 @@ public class MainScreen extends AbstractGameScreen implements INetworkScreenList
                 break;
             case ACCOUNT_INFO:
             case LOGIN :
+                hideButtons(false);
                 mainTable.add(loginWindow);
                 stage.addActor(loggedOutTable);
                 break;

@@ -36,11 +36,6 @@ class Offline implements INetwork {
     }
 
     @Override
-    public void getTopPlayers() {
-
-    }
-
-    @Override
     public void setListener(INetworkLevelListener networkLevelListener) {
 
     }
