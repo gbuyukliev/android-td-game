@@ -84,7 +84,7 @@ public class LevelSelectorWindow extends Window {
         table.row();
         Label scores = new Label("Not Played", getSkin());
         if (levelScores!= null && levelScores.containsKey("" + level)) {
-            scores.setText(levelScores.get("" + level).toString());
+            scores.setText("High score: " + levelScores.get("" + level).toString());
         }
         table.add(scores).pad(PADDING);
         this.add(table);
