@@ -121,7 +121,7 @@ public class LevelData {
         private float damage;
         private String typeOfTower;
         private float price;
-        private float attackSpeed;
+        private float fireRate;
         private float range;
         private float sellPrice;
 
@@ -131,7 +131,7 @@ public class LevelData {
                     "damage=" + damage +
                     ", typeOfTower='" + typeOfTower + '\'' +
                     ", price=" + price +
-                    ", attackSpeed=" + attackSpeed +
+                    ", fireRate=" + fireRate +
                     ", range=" + range +
                     ", sellPrice=" + sellPrice +
                     '}';
@@ -168,12 +168,12 @@ public class LevelData {
         }
 
         public float getAttackSpeed() {
-            return attackSpeed;
+            return fireRate;
         }
 
-        public void setAttackSpeed(float attackSpeed) {
-            if (attackSpeed > 0) {
-                this.attackSpeed = attackSpeed;
+        public void setAttackSpeed(float fireRate) {
+            if (fireRate > 0) {
+                this.fireRate = fireRate;
             }
         }
 

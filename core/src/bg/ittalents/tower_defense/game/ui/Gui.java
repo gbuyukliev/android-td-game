@@ -54,12 +54,6 @@ public class Gui implements Disposable {
         buildTowerButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                if (level.getMoney() < level.getCurrentTowerPrice()) {
-                    level.setTextTime(0);
-                    warningTextField.setText("Not enough money to buy a tower!");
-                    warningTextField.setVisible(true);
-                }
-
                 level.buildTower(level.getColTower(), level.getRowTower(), type);
                 noTowerTable.setVisible(false);
                 level.setIsClicked(false);
@@ -71,9 +65,9 @@ public class Gui implements Disposable {
 
     public void buildTowerButtons() {
         buildTowerBtn(Assets.instance.getTexture(Assets.BASIC_TURRET), Assets.instance.getTexture(Assets.BASIC_TURRET_CLICKED), "basicTower");
-        buildTowerBtn(Assets.instance.getTexture(Assets.BASIC_TURRET), Assets.instance.getTexture(Assets.BASIC_TURRET_CLICKED), "basicTower");
-        buildTowerBtn(Assets.instance.getTexture(Assets.BASIC_TURRET), Assets.instance.getTexture(Assets.BASIC_TURRET_CLICKED), "basicTower");
-        buildTowerBtn(Assets.instance.getTexture(Assets.BASIC_TURRET), Assets.instance.getTexture(Assets.BASIC_TURRET_CLICKED), "basicTower");
+        buildTowerBtn(Assets.instance.getTexture(Assets.SLOW_TURRET), Assets.instance.getTexture(Assets.SLOW_TURRET_CLICKED), "slowTower");
+        buildTowerBtn(Assets.instance.getTexture(Assets.SPLASH_TURRET), Assets.instance.getTexture(Assets.SPLASH_TURRET_CLICKED), "splashTower");
+        buildTowerBtn(Assets.instance.getTexture(Assets.SPECIAL_TURRET), Assets.instance.getTexture(Assets.SPECIAL_TURRET_CLICKED), "specialTower");
     }
 
     // A table with buttons which only appears if there is a tower selected
@@ -104,7 +98,7 @@ public class Gui implements Disposable {
 
                 if (level.getMoney() < tile.getTower().getUpgradePrice()) {
                     level.setTextTime(0);
-                    warningTextField.setText("Not enough money for an upgrade!");
+                    warningTextField.setText("Not enough money for this upgrade!");
                     warningTextField.setVisible(true);
                 }
 
@@ -168,6 +162,7 @@ public class Gui implements Disposable {
         final ImageButton.ImageButtonStyle ffStyle = new ImageButton.ImageButtonStyle();
         ffStyle.imageUp = ffButtonUp;
         ffStyle.imageDown = ffButtonDown;
+        ffStyle.imageDisabled = ffButtonDown;
 
         Table pauseTable = new Table();
         pauseTable.setFillParent(true);
@@ -267,5 +262,9 @@ public class Gui implements Disposable {
     public void dispose() {
         stage.dispose();
         skin.dispose();
+    }
+
+    public ImageButton getFastForwardButton() {
+        return fastForwardButton;
     }
 }

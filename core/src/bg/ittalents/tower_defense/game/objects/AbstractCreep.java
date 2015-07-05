@@ -13,11 +13,7 @@ import bg.ittalents.tower_defense.game.Assets;
 
 public abstract class AbstractCreep extends AbstractObject {
 
-    public static final float WAYPOINT_TOLERANCE;
-
-    static {
-        WAYPOINT_TOLERANCE = 5f;
-    }
+    public static final float WAYPOINT_TOLERANCE = 5f;
 
     private float timeSlowed;
 
@@ -25,7 +21,6 @@ public abstract class AbstractCreep extends AbstractObject {
     protected String typeOfCreep;
     protected int reward;
     protected float moveSpeed;
-    protected boolean isSpecial;
     protected float health;
     protected float maxHealth;
     protected float stateTime;
@@ -78,6 +73,26 @@ public abstract class AbstractCreep extends AbstractObject {
         currentWaypoint = -1;
 
         healthBar = new HealthBar();
+    }
+
+    public static AbstractCreep createCreep(Array<Vector2> currentPath, WaveManager wave) {
+        switch(wave.getTypeOfCreeps()) {
+            case "basicCreep":
+                return new CreepBasic(currentPath.first().x, currentPath.first().y,
+                        Assets.instance.getCreep(Assets.CREEP_BASIC));
+            case "slowCreep":
+                return new CreepSlow(currentPath.first().x, currentPath.first().y,
+                        Assets.instance.getCreep(Assets.CREEP_SLOW));
+            case "specialCreep":
+                return new CreepSpecial(currentPath.first().x, currentPath.first().y,
+                        Assets.instance.getCreep(Assets.CREEP_SPECIAL));
+            case "bossCreep":
+                return new CreepSlow(currentPath.first().x, currentPath.first().y,
+                        Assets.instance.getCreep(Assets.CREEP_BOSS));
+            default:
+                return new CreepBasic(currentPath.first().x, currentPath.first().y,
+                        Assets.instance.getCreep(Assets.CREEP_BASIC));
+        }
     }
 
     public void setWaypoints(Array<Vector2> waypoints) {
@@ -139,6 +154,10 @@ public abstract class AbstractCreep extends AbstractObject {
             moveSpeed /= 2;
             isSlowed = true;
         }
+    }
+
+    public String getTypeOfCreep() {
+        return typeOfCreep;
     }
 
     public void updateTimeSlowed(float deltaTime) {

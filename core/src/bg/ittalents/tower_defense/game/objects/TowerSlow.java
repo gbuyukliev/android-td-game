@@ -8,16 +8,12 @@ public class TowerSlow extends AbstractTower {
 
     public TowerSlow(float positionX, float positionY, TextureRegion[] textures, Level level) {
         super(positionX, positionY, textures, level);
-
-        timeFromLastShot = Float.MAX_VALUE;
         typeOfTower = "slowTower";
-        damage = 20;
-        attackSpeed = 1f;
+        damage = 10;
+        fireRate = 1f;
         range = 120f;
-        rotationSpeed = 90f;
-        price = 50;
+        price = 30;
+        upgradePrice = 20;
         moneySpent = price;
-        isUpgradable = true;
-        upgradePrice = 30;
     }
 }
