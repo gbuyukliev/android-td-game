@@ -17,6 +17,7 @@ import bg.ittalents.tower_defense.utils.GamePreferences;
 
 public class PreferencesWindow extends Window {
 
+    public static final int PADDING = 10;
     public static final float WINDOW_TRANSPARENCY = 0.7f;
 
     private CheckBox chkSound;
@@ -42,7 +43,7 @@ public class PreferencesWindow extends Window {
                 parent.back();
             }
         });
-        this.add(btnSave);
+        this.add(btnSave).pad(PADDING);
         TextButton btnClose = new TextButton("Close", skin);
         btnClose.addListener(new ChangeListener() {
             @Override
@@ -50,7 +51,7 @@ public class PreferencesWindow extends Window {
                 parent.back();
             }
         });
-        this.add(btnClose);
+        this.add(btnClose).pad(PADDING);
     }
 
     private Table buildOptWinAudioSettings() {

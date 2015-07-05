@@ -43,7 +43,7 @@ public class MainScreen extends AbstractGameScreen implements INetworkScreenList
     private Table optionsWindow;
     private Table editAccountInfo;
     private LevelSelectorWindow levelSelectorWindow;
-    private Table topPlaersWindow;
+    private Table topPlayersWindow;
     private TextButton btnTopPlayers;
     private TextButton btnEditAccount;
     private Texture background;
@@ -70,7 +70,7 @@ public class MainScreen extends AbstractGameScreen implements INetworkScreenList
         loginWindow = new LoginWindow(skin, this);
         registerWindow = new RegisterWindow(skin, this);
         levelSelectorWindow = new LevelSelectorWindow(skin, this);
-        topPlaersWindow = new TopPlayersWindow(skin, this);
+        topPlayersWindow = new TopPlayersWindow(skin, this);
         optionsWindow = new PreferencesWindow(skin, this);
         editAccountInfo = new EditAccountInfoWindow(skin, this);
         buildStatusTable();
@@ -208,7 +208,7 @@ public class MainScreen extends AbstractGameScreen implements INetworkScreenList
                 stage.addActor(loggedTable);
                 break;
             case TOP_PLAYERS:
-                mainTable.add(topPlaersWindow);
+                mainTable.add(topPlayersWindow);
                 stage.addActor(loggedTable);
                 break;
             case OPTIONS:
