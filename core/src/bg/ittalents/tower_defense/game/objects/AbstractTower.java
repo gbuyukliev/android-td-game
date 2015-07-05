@@ -61,11 +61,11 @@ public abstract class AbstractTower extends AbstractObject {
         }
     }
 
-    protected abstract AbstractProjectile getProjectile();
+    protected abstract Projectile getProjectile();
 
-    public AbstractProjectile shoot() {
+    public Projectile shoot() {
         timeFromLastShot = 0f;
-        AbstractProjectile projectile = getProjectile();
+        Projectile projectile = getProjectile();
         projectile.setMoveSpeed(projectile.getMoveSpeed() * Level.getCoeff());
         projectile.setTarget(foe);
 

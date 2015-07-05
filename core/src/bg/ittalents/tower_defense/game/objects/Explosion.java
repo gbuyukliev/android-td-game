@@ -11,7 +11,7 @@ public class Explosion extends AbstractObject {
     float explosionDuration;
     float damage;
 
-    public Explosion(AbstractProjectile projectile) {
+    public Explosion(Projectile projectile) {
         super(projectile.position.x, projectile.position.y, null);
         this.animation = Assets.instance.getProjectile(Assets.EXPLOSION);
         damage = projectile.tower.damage;

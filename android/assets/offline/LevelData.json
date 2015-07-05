@@ -1,22 +1,4 @@
 {
-  "waveTypes": [
-    {
-      "typeOfCreeps": "basicCreep",
-      "numOfCreeps": 6
-    },
-    {
-      "typeOfCreeps": "slowCreep",
-      "numOfCreeps": 3
-    },
-    {
-      "typeOfCreeps": "specialCreep",
-      "numOfCreeps": 6
-    },
-    {
-      "typeOfCreeps": "bossCreep",
-      "numOfCreeps": 1
-    }
-  ],
   "creeps": [
     {
       "typeOfCreep": "basicCreep",

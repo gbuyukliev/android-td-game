@@ -4,7 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonWriter;
 
-import bg.ittalents.tower_defense.game.waves.LevelData;
+import bg.ittalents.tower_defense.game.LevelData;
 
 class Offline implements INetwork {
     private static final String PATH = "offline/";

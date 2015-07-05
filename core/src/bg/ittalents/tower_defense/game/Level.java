@@ -13,12 +13,11 @@ import com.badlogic.gdx.utils.Disposable;
 
 import java.util.Iterator;
 
-import bg.ittalents.tower_defense.game.objects.AbstractCreep;
-import bg.ittalents.tower_defense.game.objects.AbstractProjectile;
 import bg.ittalents.tower_defense.game.objects.AbstractTower;
+import bg.ittalents.tower_defense.game.objects.AbstractCreep;
 import bg.ittalents.tower_defense.game.objects.Explosion;
-import bg.ittalents.tower_defense.game.objects.WaveBasic;
-import bg.ittalents.tower_defense.game.objects.WaveManager;
+import bg.ittalents.tower_defense.game.objects.Projectile;
+import bg.ittalents.tower_defense.game.objects.Wave;
 import bg.ittalents.tower_defense.game.ui.Gui;
 import bg.ittalents.tower_defense.network.Network;
 import bg.ittalents.tower_defense.network.UserInfo;
@@ -45,7 +44,7 @@ public class Level implements Disposable {
     private boolean triggerCountTime;
     private boolean isClicked;
     private boolean isPaused;
-    private WaveManager wave;
+    private Wave wave;
     private ShapeRenderer shapeRenderer;
 
     private Gui gui;
@@ -57,7 +56,7 @@ public class Level implements Disposable {
 
     private Array<AbstractTower> towers;
     private Array<AbstractCreep> creeps;
-    private Array<AbstractProjectile> projectiles;
+    private Array<Projectile> projectiles;
     private Array<Explosion> explosions;
     private Array<Array<Vector2>> waypoints;
     private int pathCount;
@@ -97,10 +96,10 @@ public class Level implements Disposable {
         Network.getInstance().getLevelData(UserInfo.getUserName(), UserInfo.getLevel());
 
         this.gui = gui;
+        wave = Wave.createWave(0);
         shapeRenderer = new ShapeRenderer();
         money = STARTING_MONEY;
         lives = STARTING_LIVES;
-        wave = new WaveBasic();
         currentWave = 0;
         currentCreep = DEFAULT_CURRENT_CREEP;
         timeSinceSpawn = 0;
@@ -112,7 +111,7 @@ public class Level implements Disposable {
         towers = new Array<AbstractTower>();
         creeps = new Array<AbstractCreep>();
         waypoints = new Array<Array<Vector2>>();
-        projectiles = new Array<AbstractProjectile>();
+        projectiles = new Array<Projectile>();
         explosions = new Array<Explosion>();
 
         loadLevelData(tiledMap);
@@ -262,7 +261,7 @@ public class Level implements Disposable {
 
     public void spawnWave() {
         currentWave++;
-        wave = WaveManager.createWave(currentWave);
+        wave = Wave.createWave(currentWave);
 
         currentCreep = DEFAULT_CURRENT_CREEP;
 
@@ -286,17 +285,17 @@ public class Level implements Disposable {
         timeSinceSpawn += deltaTime;
         timeSinceLastWave += deltaTime;
 
-        if (!isTriggerCountTime() && creeps.size == 0 && (currentCreep > wave.getNumOfCreeps() || currentWave == 0)) {
+        if (!isTriggerCountTime() && creeps.size == 0 && (currentCreep > wave.getCreepsCount() || currentWave == 0)) {
             timeSinceLastWave = 0;
             triggerCountTime = true;
         }
 
-        if (timeSinceLastWave > TIME_TILL_NEXT_WAVE && creeps.size == 0 && (currentWave == 0 || currentCreep > wave.getNumOfCreeps())) {
+        if (timeSinceLastWave > TIME_TILL_NEXT_WAVE && creeps.size == 0 && (currentWave == 0 || currentCreep > wave.getCreepsCount())) {
             spawnWave();
             triggerCountTime = false;
         }
 
-        if (currentCreep <= wave.getNumOfCreeps() && !isTriggerCountTime()) {
+        if (currentCreep <= wave.getCreepsCount() && !isTriggerCountTime()) {
             if (wave.getTypeOfCreeps().equals("slowCreep") && timeSinceSpawn > DEFAULT_TIME_INBETWEEN_SPAWNS_SLOW - fasterSpawn) {
                 spawnCreepInWave();
             } else if (!wave.getTypeOfCreeps().equals("slowCreep") && timeSinceSpawn > DEFAULT_TIME_INBETWEEN_SPAWNS - fasterSpawn) {
@@ -334,8 +333,8 @@ public class Level implements Disposable {
     }
 
     private void updateProjectiles(float deltaTime) {
-        for (Iterator<AbstractProjectile> projectileIterator = projectiles.iterator(); projectileIterator.hasNext();) {
-            AbstractProjectile projectile = projectileIterator.next();
+        for (Iterator<Projectile> projectileIterator = projectiles.iterator(); projectileIterator.hasNext();) {
+            Projectile projectile = projectileIterator.next();
             if (projectile.isVisible()) {
                 projectile.update(deltaTime);
             } else {
@@ -439,7 +438,7 @@ public class Level implements Disposable {
         for (AbstractTower tower : towers) {
             tower.render(batch);
         }
-        for (AbstractProjectile projectile : projectiles) {
+        for (Projectile projectile : projectiles) {
             projectile.render(batch);
         }
         for (AbstractCreep creep : creeps) {
