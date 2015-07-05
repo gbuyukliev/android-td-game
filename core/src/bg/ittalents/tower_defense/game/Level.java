@@ -325,7 +325,7 @@ public class Level implements Disposable {
             } else {
                 if (creep.isDead()) {
                     money += creep.getReward();
-                    score += creep.getReward();
+                    score += creep.getReward() / 2;
                 } else {
                     lives--;
                 }
