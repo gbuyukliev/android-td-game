@@ -6,15 +6,15 @@ public class Projectile extends AbstractObject {
     public static final float SPLASH_RADIUS = 80f;
     public static final float SLOW_AMOUNT = 0.5f;
     protected float moveSpeed;
-    protected AbstractCreep target;
-    protected AbstractTower tower;
+    protected Creep target;
+    protected Tower tower;
     Animation animation;
     float stateTime;
     float splashRadius;
     float slowAmount;
     boolean isSpecial;
 
-    public Projectile(float positionX, float positionY, Animation animation, AbstractTower tower) {
+    public Projectile(float positionX, float positionY, Animation animation, Tower tower) {
         super(positionX, positionY, null);
         this.tower = tower;
         this.animation = animation;
@@ -25,7 +25,7 @@ public class Projectile extends AbstractObject {
         determineType();
     }
 
-    public void setTarget(AbstractCreep target) {
+    public void setTarget(Creep target) {
         this.target = target;
     }
 

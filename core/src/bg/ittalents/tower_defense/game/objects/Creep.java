@@ -9,9 +9,14 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.utils.Array;
 
-import bg.ittalents.tower_defense.game.Assets;
+import java.util.HashMap;
+import java.util.Map;
 
-public abstract class AbstractCreep extends AbstractObject {
+import bg.ittalents.tower_defense.game.Assets;
+import bg.ittalents.tower_defense.game.Level;
+import bg.ittalents.tower_defense.game.LevelData;
+
+public class Creep extends AbstractObject {
 
     public static final float WAYPOINT_TOLERANCE = 5f;
 
@@ -26,6 +31,9 @@ public abstract class AbstractCreep extends AbstractObject {
     protected float slowedMoveSpeed;
     protected float savedMoveSpeed;
     private float timeSinceSlowed;
+
+    protected Level level;
+    private static LevelData.CreepType creep;
 
     int currentWaypoint;
     Array<Vector2> waypoints;
@@ -59,48 +67,53 @@ public abstract class AbstractCreep extends AbstractObject {
         public void render(Batch batch) {
             healthBarBG.draw(batch);
             health.draw(batch, getTextureX() + BUFFER_X, getTextureY() + BUFFER_Y,
-                    AbstractCreep.this.getHealth() / AbstractCreep.this.maxHealth * 40f, 5f);
+                    Creep.this.getHealth() / Creep.this.maxHealth * 40f, 5f);
         }
     }
 
-    public AbstractCreep(float positionX, float positionY, Animation animation) {
+    public Creep(float positionX, float positionY, Animation animation, Level level) {
         super(positionX, positionY, animation.getKeyFrames()[0]);
         this.animation = animation;
+        this.level = level;
         angle = 90f;
         timeSinceSlowed = 0;
         currentWaypoint = -1;
         healthBar = new HealthBar();
     }
 
-    public AbstractCreep(float positionX, float positionY, Animation animation, String typeOfCreep, int reward, float moveSpeed, float health) {
-        this(positionX, positionY, animation);
-        setTypeOfCreep(typeOfCreep);
-        setReward(reward);
-        setMoveSpeed(moveSpeed);
-        setHealth(health);
-        maxHealth = health;
-        slowedMoveSpeed = moveSpeed * Projectile.SLOW_AMOUNT;
-        savedMoveSpeed = moveSpeed;
-    }
+    public static Creep createCreep(Vector2 startingLocation, Wave wave, Level level) {
+        creep = level.getLevelData().getCreep(wave.getTypeOfCreeps());
+        Animation animation = null;
 
-    public static AbstractCreep createCreep(Array<Vector2> currentPath, Wave wave) {
-        switch(wave.getTypeOfCreeps()) {
+        switch(creep.getTypeOfCreeps()) {
             case "basicCreep":
-                return new CreepBasic(currentPath.first().x, currentPath.first().y,
-                        Assets.instance.getCreep(Assets.CREEP_BASIC));
+                animation = Assets.instance.getCreep(Assets.CREEP_BASIC);
+                break;
             case "slowCreep":
-                return new CreepSlow(currentPath.first().x, currentPath.first().y,
-                        Assets.instance.getCreep(Assets.CREEP_SLOW));
+                animation = Assets.instance.getCreep(Assets.CREEP_SLOW);
+                break;
             case "specialCreep":
-                return new CreepSpecial(currentPath.first().x, currentPath.first().y,
-                        Assets.instance.getCreep(Assets.CREEP_SPECIAL));
+                animation = Assets.instance.getCreep(Assets.CREEP_SPECIAL);
+                break;
             case "bossCreep":
-                return new CreepBoss(currentPath.first().x, currentPath.first().y,
-                        Assets.instance.getCreep(Assets.CREEP_BOSS));
+                animation = Assets.instance.getCreep(Assets.CREEP_BOSS);
+                break;
             default:
-                return new CreepBasic(currentPath.first().x, currentPath.first().y,
-                        Assets.instance.getCreep(Assets.CREEP_BASIC));
+                break;
         }
+
+        Creep createdCreep = new Creep(startingLocation.x, startingLocation.y,
+                animation, level);
+
+        createdCreep.setHealth(creep.getHealth() * Level.getCoeff());
+        createdCreep.setMoveSpeed(creep.getMoveSpeed() * Level.getCoeff());
+        createdCreep.setReward(creep.getReward() * (int) Level.getCoeff());
+        createdCreep.setTypeOfCreep(creep.getTypeOfCreeps());
+        createdCreep.maxHealth = createdCreep.health;
+        createdCreep.slowedMoveSpeed = createdCreep.moveSpeed * Projectile.SLOW_AMOUNT;
+        createdCreep.savedMoveSpeed = createdCreep.moveSpeed;
+
+        return createdCreep;
     }
 
     public void setWaypoints(Array<Vector2> waypoints) {

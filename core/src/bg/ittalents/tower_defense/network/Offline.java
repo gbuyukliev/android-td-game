@@ -14,7 +14,7 @@ class Offline implements INetwork {
     private INetworkLevelListener networkLevelListener;
 
     @Override
-    public void getLevelData(String username, int levelNumber) {
+    public void getLevelData(String username) {
         String levelPath = PATH + LEVEL_DATA_FILES + EXTENSION;
 
         if (Gdx.files.internal(levelPath).exists() && networkLevelListener != null) {
