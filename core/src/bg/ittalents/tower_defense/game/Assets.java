@@ -70,8 +70,9 @@ public class Assets implements Disposable, AssetErrorListener {
     public static final int TOWER_TYPE_6 = 5;
     public static final int TOWER_TYPE_7 = 6;
 
-    //projectile types
     public static final String SOUND_LASER = "laser";
+
+    //projectile types
     public static final String PROJECTILE_FIRE = "projectile-fire";
     public static final String PROJECTILE_GRAY = "projectile-gray";
     public static final String PROJECTILE_ICE = "projectile-ice";
@@ -216,8 +217,8 @@ public class Assets implements Disposable, AssetErrorListener {
 
             TextureRegion[] frames = new TextureRegion[frameCount];
 
-            for (int frameIndex = 1; frameIndex <= frameCount; frameIndex++) {
-                frames[frameIndex - 1] = atlas.findRegion(path + frameIndex);
+            for (int frameIndex = 0; frameIndex < frameCount; frameIndex++) {
+                frames[frameIndex] = atlas.findRegion(path + frameIndex);
             }
 
             Animation anim = new Animation(1f / frameCount, frames);

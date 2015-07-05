@@ -9,7 +9,7 @@ public class TowerSpecial extends AbstractTower {
 
     public TowerSpecial(float positionX, float positionY, TextureRegion[] textures, Level level) {
         super(positionX, positionY, textures, level);
-        projectileAnimation = Assets.instance.getProjectile(Assets.PROJECTILE_PURPLE);
+        projectileAnimation = Assets.instance.getProjectile(Assets.PROJECTILE_GREEN);
         typeOfTower = "specialTower";
         damage = 30;
         fireRate = 0.9f;
