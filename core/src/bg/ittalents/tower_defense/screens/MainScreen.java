@@ -41,6 +41,7 @@ public class MainScreen extends AbstractGameScreen implements INetworkScreenList
     private Table registerWindow;
     private Table loginWindow;
     private Table optionsWindow;
+    private Table editAccountInfo;
     private LevelSelectorWindow levelSelectorWindow;
     private Table topPlaersWindow;
     private TextButton btnTopPlayers;
@@ -71,6 +72,7 @@ public class MainScreen extends AbstractGameScreen implements INetworkScreenList
         levelSelectorWindow = new LevelSelectorWindow(skin, this);
         topPlaersWindow = new TopPlayersWindow(skin, this);
         optionsWindow = new PreferencesWindow(skin, this);
+        editAccountInfo = new EditAccountInfoWindow(skin, this);
         buildStatusTable();
 //        mainTable.add(loginWindow).center();
 
@@ -211,6 +213,9 @@ public class MainScreen extends AbstractGameScreen implements INetworkScreenList
                 stage.addActor(loggedTable);
                 break;
             case ACCOUNT_INFO:
+                mainTable.add(editAccountInfo);
+                stage.addActor(loggedTable);
+                break;
             case LOGIN :
                 hideButtons(false);
                 mainTable.add(loginWindow);
@@ -267,7 +272,8 @@ public class MainScreen extends AbstractGameScreen implements INetworkScreenList
 
     @Override
     public void resize(int width, int height) {
-        buildStage();
+        stage.getViewport().update(width, height);
+//        buildStage();
     }
 
     @Override

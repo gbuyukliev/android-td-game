@@ -23,17 +23,17 @@ import bg.ittalents.tower_defense.network.Network;
 
 public class EditAccountInfoWindow extends Window {
 
-    private static final String REGISTER_NICKNAME = "Nickname";
-    private static final String REGISTER_USERNAME = "Username";
-    private static final String REGISTER_PASSWORD = "Password";
-    private static final String REGISTER_PASSWORD2 = "Repeat Password";
-    private static final String REGISTER_EMAIL = "Email";
-    private static final String[] REGISTER_FIELDS = {REGISTER_NICKNAME, REGISTER_USERNAME, REGISTER_PASSWORD, REGISTER_PASSWORD2, REGISTER_EMAIL};
+    private static final String NICKNAME = "Nickname";
+    private static final String OLD_PASSWORD = "Password";
+    private static final String PASSWORD = "New Password";
+    private static final String PASSWORD2 = "Repeat New Password";
+    private static final String EMAIL = "Email";
+    private static final String[] TEXT_FIELDS = {NICKNAME, OLD_PASSWORD, PASSWORD, PASSWORD2, EMAIL};
 
     public static final float PADDING = 10f;
-    public static final float BUTTON_WIDTH = 100f;
+    public static final float BUTTON_WIDTH = 120f;
     public static final float WINDOW_TRANSPARENCY = 0.7f;
-    public static final String TITLE = "Register";
+    public static final String TITLE = "Edit Account Info";
 
     private Map<String, TextField> textFields;
 
@@ -66,19 +66,19 @@ public class EditAccountInfoWindow extends Window {
         ScrollPane scrollPane = new ScrollPane(table, getSkin());
         this.add(scrollPane).colspan(2);
 
-        addFiledRowsToTable(textFields, table, getSkin(), REGISTER_FIELDS);
+        addFiledRowsToTable(textFields, table, getSkin(), TEXT_FIELDS);
 
         checkBox = new CheckBox("Send notification when\nsomeone beats your record! ", getSkin());
         checkBox.setChecked(true);
         table.add(checkBox).colspan(2).pad(PADDING);
         this.row();
-        TextButton btnRegister = new TextButton("Register", getSkin());
+        TextButton btnRegister = new TextButton("Save Changes", getSkin());
         btnRegister.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                Gdx.app.debug("Login", "Username: " + textFields.get(REGISTER_USERNAME).getText() + ", Password" + textFields.get(REGISTER_PASSWORD).getText());
-                if (textFields.get(REGISTER_PASSWORD).getText().equals(textFields.get(REGISTER_PASSWORD2).getText())) {
-                    register();
+//                Gdx.app.debug("Login", "Username: " + textFields.get(USERNAME).getText() + ", Password" + textFields.get(REGISTER_PASSWORD).getText());
+                if (textFields.get(PASSWORD).getText().equals(textFields.get(PASSWORD2).getText())) {
+                    changeInfo();
                 } else {
                     networkScreen.setStatus("Passwords do not match");
                 }
@@ -90,25 +90,25 @@ public class EditAccountInfoWindow extends Window {
         btnCancel.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                networkScreen.switchToWindow(INetworkScreenListener.SCREEN.LOGIN);
+                networkScreen.switchToWindow(INetworkScreenListener.SCREEN.LEVEL_SELECTOR);
             }
         });
         this.add(btnCancel).pad(PADDING).width(BUTTON_WIDTH);
     }
 
-    private void register() {
+    private void changeInfo() {
         JsonObject json = new JsonObject();
-        json.add("userName", new JsonPrimitive(textFields.get(REGISTER_USERNAME).getText()));
-        json.add("nickName", new JsonPrimitive(textFields.get(REGISTER_NICKNAME).getText()));
-        json.add("password", new JsonPrimitive(textFields.get(REGISTER_PASSWORD).getText()));
-        json.add("email", new JsonPrimitive(textFields.get(REGISTER_EMAIL).getText()));
+//        json.add("userName", new JsonPrimitive(textFields.get(REGISTER_USERNAME).getText()));
+//        json.add("nickName", new JsonPrimitive(textFields.get(REGISTER_NICKNAME).getText()));
+//        json.add("password", new JsonPrimitive(textFields.get(REGISTER_PASSWORD).getText()));
+//        json.add("email", new JsonPrimitive(textFields.get(REGISTER_EMAIL).getText()));
         json.add("spam", new JsonPrimitive(checkBox.isChecked()));
 
-        Gdx.app.debug("URL", Network.URL + Network.REGISTER_MANAGER);
+        Gdx.app.debug("URL", Network.URL + Network.ACCOUNT_INFO_MANAGER);
         Gdx.app.debug("JSON", json.toString());
 
         final Net.HttpRequest httpRequest = new Net.HttpRequest(Net.HttpMethods.POST);
-        httpRequest.setUrl(Network.URL + Network.REGISTER_MANAGER);
+        httpRequest.setUrl(Network.URL + Network.ACCOUNT_INFO_MANAGER);
         httpRequest.setHeader("Content-Type", "application/json");
         httpRequest.setContent(json.toString());
         Gdx.net.sendHttpRequest(httpRequest, new Net.HttpResponseListener() {
@@ -119,7 +119,7 @@ public class EditAccountInfoWindow extends Window {
                         @Override
                         public void run() {
 //                            Gdx.net.cancelHttpRequest(httpRequest);
-                            networkScreen.switchToWindow(INetworkScreenListener.SCREEN.LOGIN);
+                            networkScreen.switchToWindow(INetworkScreenListener.SCREEN.LEVEL_SELECTOR);
                         }
                     });
                 } else {
