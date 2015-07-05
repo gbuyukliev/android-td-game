@@ -13,25 +13,20 @@ import bg.ittalents.tower_defense.game.Assets;
 
 public abstract class AbstractCreep extends AbstractObject {
 
-    public static final float WAYPOINT_TOLERANCE;
-
-    static {
-        WAYPOINT_TOLERANCE = 5f;
-    }
-
-    private float timeSlowed;
+    public static final float WAYPOINT_TOLERANCE = 5f;
+    public static final float SLOWED_MOVESPEED_COEFF = 0.5f;
 
     Animation animation;
     protected String typeOfCreep;
     protected int reward;
     protected float moveSpeed;
-    protected boolean isSpecial;
     protected float health;
     protected float maxHealth;
     protected float stateTime;
     protected HealthBar healthBar;
-    protected boolean isSlowed;
+    protected float slowedMoveSpeed;
     protected float savedMoveSpeed;
+    private float timeSinceSlowed;
 
     int currentWaypoint;
     Array<Vector2> waypoints;
@@ -73,11 +68,30 @@ public abstract class AbstractCreep extends AbstractObject {
         super(positionX, positionY, animation.getKeyFrames()[0]);
         this.animation = animation;
         angle = 90f;
-        timeSlowed = 0;
-        isSlowed = false;
+        timeSinceSlowed = 0;
         currentWaypoint = -1;
 
         healthBar = new HealthBar();
+    }
+
+    public static AbstractCreep createCreep(Array<Vector2> currentPath, WaveManager wave) {
+        switch(wave.getTypeOfCreeps()) {
+            case "basicCreep":
+                return new CreepBasic(currentPath.first().x, currentPath.first().y,
+                        Assets.instance.getCreep(Assets.CREEP_BASIC));
+            case "slowCreep":
+                return new CreepSlow(currentPath.first().x, currentPath.first().y,
+                        Assets.instance.getCreep(Assets.CREEP_SLOW));
+            case "specialCreep":
+                return new CreepSpecial(currentPath.first().x, currentPath.first().y,
+                        Assets.instance.getCreep(Assets.CREEP_SPECIAL));
+            case "bossCreep":
+                return new CreepSlow(currentPath.first().x, currentPath.first().y,
+                        Assets.instance.getCreep(Assets.CREEP_BOSS));
+            default:
+                return new CreepBasic(currentPath.first().x, currentPath.first().y,
+                        Assets.instance.getCreep(Assets.CREEP_BASIC));
+        }
     }
 
     public void setWaypoints(Array<Vector2> waypoints) {
@@ -134,23 +148,19 @@ public abstract class AbstractCreep extends AbstractObject {
     }
 
     public void getSlowed() {
-        if (!isSlowed) {
-            savedMoveSpeed = moveSpeed;
-            moveSpeed /= 2;
-            isSlowed = true;
-        }
+        moveSpeed = slowedMoveSpeed;
+        timeSinceSlowed = 0f;
+    }
+
+    public String getTypeOfCreep() {
+        return typeOfCreep;
     }
 
     public void updateTimeSlowed(float deltaTime) {
-        timeSlowed += deltaTime;
+        timeSinceSlowed += deltaTime;
 
-        if (!isSlowed) {
+        if (timeSinceSlowed >= 3f) {
             moveSpeed = savedMoveSpeed;
-            timeSlowed = 0;
-        }
-
-        if (timeSlowed >= 3f) {
-            isSlowed = false;
         }
     }
 

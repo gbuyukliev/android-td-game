@@ -8,16 +8,12 @@ public class TowerBasic extends AbstractTower {
 
     public TowerBasic(float positionX, float positionY, TextureRegion[] textures, Level level) {
         super(positionX, positionY, textures, level);
-
-        timeFromLastShot = Float.MAX_VALUE;
         typeOfTower = "basicTower";
         damage = 20;
-        attackSpeed = 1f;
+        fireRate = 1f;
         range = 120f;
-        rotationSpeed = 90f;
         price = 50;
-        moneySpent = price;
-        isUpgradable = true;
         upgradePrice = 30;
+        moneySpent = price;
     }
 }

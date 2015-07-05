@@ -8,11 +8,12 @@ public class CreepBasic extends AbstractCreep {
 
     public CreepBasic(float positionX, float positionY, Animation animation) {
         super(positionX, positionY, animation);
+        typeOfCreep = "basicCreep";
         reward = 25 * (int) Level.getCoeff();
         moveSpeed = 50f * Level.getCoeff();
         health = 180f * Level.getCoeff();
         maxHealth = 180f * Level.getCoeff();
-        isSpecial = false;
+        slowedMoveSpeed = moveSpeed * SLOWED_MOVESPEED_COEFF;
         savedMoveSpeed = moveSpeed;
     }
 }

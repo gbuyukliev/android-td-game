@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
@@ -17,12 +16,8 @@ import java.util.Iterator;
 import bg.ittalents.tower_defense.game.objects.AbstractCreep;
 import bg.ittalents.tower_defense.game.objects.AbstractProjectile;
 import bg.ittalents.tower_defense.game.objects.AbstractTower;
-import bg.ittalents.tower_defense.game.objects.CreepBasic;
-import bg.ittalents.tower_defense.game.objects.CreepBoss;
-import bg.ittalents.tower_defense.game.objects.CreepSpecial;
-import bg.ittalents.tower_defense.game.objects.CreepSlow;
-import bg.ittalents.tower_defense.game.objects.TowerBasic;
-import bg.ittalents.tower_defense.game.objects.Wave;
+import bg.ittalents.tower_defense.game.objects.WaveBasic;
+import bg.ittalents.tower_defense.game.objects.WaveManager;
 import bg.ittalents.tower_defense.game.ui.Gui;
 import bg.ittalents.tower_defense.network.Network;
 import bg.ittalents.tower_defense.network.UserInfo;
@@ -31,7 +26,8 @@ public class Level implements Disposable {
 
     public static final int STARTING_LIVES = 30;
     public static final int STARTING_MONEY = 210;
-    public static final int MONEY_FOR_COMPLETING_LEVEL = 50;
+    public static final float DEFAULT_TIME_INBETWEEN_SPAWNS = 1f;
+    public static final float DEFAULT_TIME_INBETWEEN_SPAWNS_SLOW = 1.5f;
 
     private static float waveCoeff = 1f;
     private static float fasterSpawn = 0f;
@@ -43,12 +39,12 @@ public class Level implements Disposable {
     public static final String WAYPOINTS = "waypoints";
 
     //    private INetwork offline;
-    private int lives, money, score, currentWave, currentCreep, currentTowerPrice;
+    private int lives, money, score, currentWave, currentCreep;
     private float timeSinceSpawn, timeSinceLastWave, textTime;
     private boolean triggerCountTime;
     private boolean isClicked;
     private boolean isPaused;
-    private Wave wave;
+    private WaveManager wave;
     private ShapeRenderer shapeRenderer;
 
     private Gui gui;
@@ -102,8 +98,8 @@ public class Level implements Disposable {
         shapeRenderer = new ShapeRenderer();
         money = STARTING_MONEY;
         lives = STARTING_LIVES;
-        wave = new Wave();
-        currentWave = wave.getNumber();
+        wave = new WaveBasic();
+        currentWave = 0;
         currentCreep = DEFAULT_CURRENT_CREEP;
         timeSinceSpawn = 0;
         timeSinceLastWave = 0;
@@ -170,24 +166,10 @@ public class Level implements Disposable {
     }
 
     public void spawnCreep() {
-        AbstractCreep creep;
-
         int pathIndex = currentWave % pathCount;
         Array<Vector2> currentPath = this.waypoints.get(pathIndex);
 
-        if (wave.getTypeOfCreeps().equals("boss")) {
-            creep = new CreepBoss(currentPath.first().x, currentPath.first().y,
-                    Assets.instance.getCreep(Assets.CREEP_BOSS));
-        } else if (wave.getTypeOfCreeps().equals("slow")) {
-            creep = new CreepSlow(currentPath.first().x, currentPath.first().y,
-                    Assets.instance.getCreep(Assets.CREEP_GREEN_2));
-        } else if (wave.getTypeOfCreeps().equals("special")) {
-            creep = new CreepSpecial(currentPath.first().x, currentPath.first().y,
-                    Assets.instance.getCreep(Assets.CREEP_YELLOW_3));
-        } else {
-            creep = new CreepBasic(currentPath.first().x, currentPath.first().y,
-                    Assets.instance.getCreep(Assets.CREEP_BLUE_1));
-        }
+        AbstractCreep creep = AbstractCreep.createCreep(currentPath, wave);
 
         creep.setWaypoints(currentPath);
         creeps.add(creep);
@@ -197,10 +179,13 @@ public class Level implements Disposable {
         AbstractTower tower = AbstractTower.createTower((col + 0.5f) * tileWidth, (row + 0.5f) * tileHeight, type, this);
 
         if (money >= tower.getPrice()) {
-            currentTowerPrice = tower.getPrice();
             towers.add(tower);
             getTiles()[row][col].tower = tower;
             money -= tower.getPrice();
+        } else {
+            textTime = 0;
+            gui.getWarningTextField().setText("Not enough money to buy this tower!");
+            gui.getWarningTextField().setVisible(true);
         }
     }
 
@@ -246,6 +231,7 @@ public class Level implements Disposable {
             updateTowers(deltaTime);
         }
 
+        updateFastForwardButton();
         updateWarningText(deltaTime);
     }
 
@@ -257,6 +243,13 @@ public class Level implements Disposable {
         }
     }
 
+    private void incrementCoeff() {
+        if(currentWave != 1 && currentWave % 10 == 1) {
+            waveCoeff += 0.1f;
+            setFasterSpawn(getFasterSpawn() + 0.04f);
+        }
+    }
+
     private void spawnCreepInWave() {
         spawnCreep();
         currentCreep++;
@@ -265,37 +258,44 @@ public class Level implements Disposable {
 
     public void spawnWave() {
         currentWave++;
-        wave = new Wave(currentWave);
+        wave = WaveManager.createWave(currentWave);
 
         currentCreep = DEFAULT_CURRENT_CREEP;
-        money += MONEY_FOR_COMPLETING_LEVEL;
 
-        if(wave.getNumber() != 1 && wave.getNumber() % 10 == 1) {
-            waveCoeff += 0.1f;
-            setFasterSpawn(getFasterSpawn() + 0.04f);
-        }
-
+        incrementCoeff();
         spawnCreepInWave();
+    }
+
+    private void updateFastForwardButton() {
+        if (triggerCountTime) {
+            if (isPaused) {
+                gui.getFastForwardButton().setDisabled(true);
+            } else {
+                gui.getFastForwardButton().setDisabled(false);
+            }
+        } else {
+            gui.getFastForwardButton().setDisabled(true);
+        }
     }
 
     private void updateWave(float deltaTime) {
         timeSinceSpawn += deltaTime;
         timeSinceLastWave += deltaTime;
 
-        if (!isTriggerCountTime() && creeps.size == 0 && (currentCreep > wave.getNumOfCreeps() || wave.getNumber() == 0)) {
+        if (!isTriggerCountTime() && creeps.size == 0 && (currentCreep > wave.getNumOfCreeps() || currentWave == 0)) {
             timeSinceLastWave = 0;
             triggerCountTime = true;
         }
 
-        if (timeSinceLastWave > TIME_TILL_NEXT_WAVE && creeps.size == 0 && (wave.getNumber() == 0 || currentCreep > wave.getNumOfCreeps())) {
+        if (timeSinceLastWave > TIME_TILL_NEXT_WAVE && creeps.size == 0 && (currentWave == 0 || currentCreep > wave.getNumOfCreeps())) {
             spawnWave();
             triggerCountTime = false;
         }
 
         if (currentCreep <= wave.getNumOfCreeps() && !isTriggerCountTime()) {
-            if (wave.getTypeOfCreeps().equals("slow") && timeSinceSpawn > 1.5f - fasterSpawn) {
+            if (wave.getTypeOfCreeps().equals("slowCreep") && timeSinceSpawn > DEFAULT_TIME_INBETWEEN_SPAWNS_SLOW - fasterSpawn) {
                 spawnCreepInWave();
-            } else if (!wave.getTypeOfCreeps().equals("slow") && timeSinceSpawn > 1f - fasterSpawn) {
+            } else if (!wave.getTypeOfCreeps().equals("slowCreep") && timeSinceSpawn > DEFAULT_TIME_INBETWEEN_SPAWNS - fasterSpawn) {
                 spawnCreepInWave();
             }
         }
@@ -340,6 +340,7 @@ public class Level implements Disposable {
                 }
             }
             tower.update(deltaTime);
+
             if(tower.isReadyToShoot() && tower.hasTarget()) {
                 projectiles.add(tower.shoot());
             }
@@ -505,10 +506,6 @@ public class Level implements Disposable {
 
     public Gui getGui() {
         return gui;
-    }
-
-    public int getCurrentTowerPrice() {
-        return currentTowerPrice;
     }
 
     public static void setCoeff(float newWaveCoeff) {

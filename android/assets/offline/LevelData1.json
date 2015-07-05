@@ -50,7 +50,7 @@
       "damage": 1,
       "typeOfTower": "normalDamageTower",
       "price": 1.2,
-      "attackSpeed": 1,
+      "fireRate": 1,
       "range": 1,
       "sellPrice": 0
     }

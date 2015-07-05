@@ -47,18 +47,18 @@ public class Assets implements Disposable, AssetErrorListener {
     public static final String PROJECTILE = "projectile";
 
     //creep types
-    public static final String CREEP_BLUE_1 = "blue1";
+    public static final String CREEP_BASIC = "blue1";
     public static final String CREEP_RED_1 = "red1";
     public static final String CREEP_GREEN_1 = "green1";
     public static final String CREEP_YELLOW_1 = "yellow1";
     public static final String CREEP_BLUE_2 = "blue2";
     public static final String CREEP_RED_2 = "red2";
-    public static final String CREEP_GREEN_2 = "green2";
+    public static final String CREEP_SLOW = "green2";
     public static final String CREEP_YELLOW_2 = "yellow2";
     public static final String CREEP_BLUE_3 = "blue3";
     public static final String CREEP_RED_3 = "red3";
     public static final String CREEP_GREEN_3 = "green3";
-    public static final String CREEP_YELLOW_3 = "yellow3";
+    public static final String CREEP_SPECIAL = "yellow3";
     public static final String CREEP_BOSS = "boss";
 
     public static final int TOWER_TYPE_SLOW = 0;
@@ -194,20 +194,20 @@ public class Assets implements Disposable, AssetErrorListener {
         private AssetCreeps(TextureAtlas atlas) {
             creeps = new HashMap<>();
 
-            creeps.put(CREEP_BLUE_1, init(atlas, "blue", 1, 6));
+            creeps.put(CREEP_BASIC, init(atlas, "blue", 1, 6));
             creeps.put(CREEP_RED_1, init(atlas, "red", 1, 6));
             creeps.put(CREEP_GREEN_1, init(atlas, "green", 1, 6));
             creeps.put(CREEP_YELLOW_1, init(atlas, "yellow", 1, 6));
 
             creeps.put(CREEP_BLUE_2, init(atlas, "blue", 2, 4));
             creeps.put(CREEP_RED_2, init(atlas, "red", 2, 4));
-            creeps.put(CREEP_GREEN_2, init(atlas, "green", 2, 4));
+            creeps.put(CREEP_SLOW, init(atlas, "green", 2, 4));
             creeps.put(CREEP_YELLOW_2, init(atlas, "yellow", 2, 4));
 
             creeps.put(CREEP_BLUE_3, init(atlas, "blue", 3, 4));
             creeps.put(CREEP_RED_3, init(atlas, "red", 3, 4));
             creeps.put(CREEP_GREEN_3, init(atlas, "green", 3, 4));
-            creeps.put(CREEP_YELLOW_3, init(atlas, "yellow", 3, 4));
+            creeps.put(CREEP_SPECIAL, init(atlas, "yellow", 3, 4));
 
             creeps.put(CREEP_BOSS, initBoss(atlas));
         }

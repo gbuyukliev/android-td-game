@@ -8,16 +8,12 @@ public class TowerSplash extends AbstractTower {
 
     public TowerSplash(float positionX, float positionY, TextureRegion[] textures, Level level) {
         super(positionX, positionY, textures, level);
-
-        timeFromLastShot = Float.MAX_VALUE;
         typeOfTower = "splashTower";
-        damage = 20;
-        attackSpeed = 1f;
-        range = 120f;
-        rotationSpeed = 90f;
-        price = 50;
+        damage = 40;
+        fireRate = 1.6f;
+        range = 100f;
+        price = 80;
+        upgradePrice = 40;
         moneySpent = price;
-        isUpgradable = true;
-        upgradePrice = 30;
     }
 }
