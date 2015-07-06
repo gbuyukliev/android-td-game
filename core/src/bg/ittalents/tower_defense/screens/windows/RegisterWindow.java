@@ -19,6 +19,7 @@ import com.google.gson.JsonPrimitive;
 import java.util.HashMap;
 import java.util.Map;
 
+import bg.ittalents.tower_defense.network.EmailValidator;
 import bg.ittalents.tower_defense.network.Network;
 
 public class RegisterWindow extends Window {
@@ -37,6 +38,7 @@ public class RegisterWindow extends Window {
 
     private Map<String, TextField> textFields;
 
+    private EmailValidator emailValidator;
     private CheckBox checkBox;
     private INetworkScreenListener networkScreen;
 
@@ -45,7 +47,9 @@ public class RegisterWindow extends Window {
         this.setMovable(false);
         this.networkScreen = networkScreen;
         textFields = new HashMap<String, TextField>();
+        emailValidator = new EmailValidator();
         buildRegisterWindow();
+
     }
 
     private static void addFiledRowsToTable(Map fields, Table table, Skin skin, String... fieldNames) {
@@ -82,7 +86,7 @@ public class RegisterWindow extends Window {
             public void changed(ChangeEvent event, Actor actor) {
                 Gdx.app.debug("Login", "Username: " + textFields.get(REGISTER_USERNAME).getText() + ", Password" + textFields.get(REGISTER_PASSWORD).getText());
                 if (textFields.get(REGISTER_PASSWORD).getText().equals(textFields.get(REGISTER_PASSWORD2).getText())) {
-                    register();
+                    validateInput();
                 } else {
                     networkScreen.setStatus("Passwords do not match");
                 }
@@ -98,6 +102,20 @@ public class RegisterWindow extends Window {
             }
         });
         this.add(btnCancel).pad(PADDING).width(BUTTON_WIDTH);
+    }
+
+    private void validateInput() {
+        if (textFields.get(REGISTER_USERNAME).getText().length() == 0 &&
+                textFields.get(REGISTER_NICKNAME).getText().length() == 0 &&
+                textFields.get(REGISTER_PASSWORD).getText().length() == 0) {
+            networkScreen.setStatus("All fields must be filled");
+            return;
+        }
+        if (!emailValidator.validate(textFields.get(REGISTER_EMAIL).getText())) {
+            networkScreen.setStatus("Invalid email format");
+            return;
+        }
+        register();
     }
 
     private void register() {

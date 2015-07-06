@@ -242,7 +242,9 @@ public class Gui implements Disposable, IParent {
 
     public void renderMenu() {
         if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE) || Gdx.input.isKeyPressed(Input.Keys.BACK)) {
-            level.setPaused(true);
+            if (!level.isPaused()) {
+                level.setPaused(true);
+            }
             mainTable.clearChildren();
             mainTable.add(ingameWindow);
             isMenu = true;
