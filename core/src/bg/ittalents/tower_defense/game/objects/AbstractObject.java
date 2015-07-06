@@ -5,18 +5,15 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
 public abstract class AbstractObject {
-    //position of center
+//    position of center
     Vector2 position;
-    //position to render
-//    Vector2 texturePosition;
+
     float angle;
     boolean visible;
     TextureRegion texture;
 
     public AbstractObject(float positionX, float positionY, TextureRegion texture) {
         position = new Vector2(positionX, positionY);
-//        texturePosition = new Vector2(positionX - (texture.getRegionWidth() / 2),
-//                positionY - (texture.getRegionHeight() / 2));
         this.texture = texture;
         visible = true;
     }
@@ -45,8 +42,6 @@ public abstract class AbstractObject {
     protected void updatePosition(float x, float y) {
         position.x = x;
         position.y = y;
-//        texturePosition.x = x - texture.getRegionWidth() / 2;
-//        texturePosition.y = y - texture.getRegionHeight() / 2;
     }
 
     public void render(Batch batch) {

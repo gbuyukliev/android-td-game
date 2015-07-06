@@ -172,19 +172,4 @@ public class LevelData {
 
         return null;
     }
-
-//    static void getData() {
-//        Json json = new Json();
-//        json.setTypeName(null);
-//        json.setUsePrototypes(false);
-//        json.setIgnoreUnknownFields(true);
-//        json.setOutputType(JsonWriter.OutputType.json);
-//
-//        Data data = json.fromJson(Data.class, Gdx.files.internal("offline/LevelData.json"));
-//
-//        Array<CreepType> results = new Array<CreepType>();
-//        for (CreepType creep : data.creeps) {
-//            results.add(creep.typeOfCreep);
-//        }
-//    }
 }
