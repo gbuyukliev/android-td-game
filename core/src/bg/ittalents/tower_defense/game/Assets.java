@@ -72,6 +72,7 @@ public class Assets implements Disposable, AssetErrorListener {
     public static final int TOWER_TYPE_7 = 6;
 
     public static final String SOUND_LASER = "laser";
+    public static final String EXPLOSION_SOUND = "explosion_sound";
 
     //projectile types
     public static final String PROJECTILE_FIRE = "projectile-fire";
@@ -302,10 +303,12 @@ public class Assets implements Disposable, AssetErrorListener {
         public AssetSounds() {
             sounds = new HashMap<String, Sound>();
             assetManager.load("sounds/laser.wav", Sound.class);
+            assetManager.load("sounds/explosion_sound.mp3", Sound.class);
 
             assetManager.finishLoading();
 
             sounds.put(SOUND_LASER, assetManager.get("sounds/laser.wav", Sound.class));
+            sounds.put(EXPLOSION_SOUND, assetManager.get("sounds/explosion_sound.mp3", Sound.class));
         }
 
         public Sound get(String key) {

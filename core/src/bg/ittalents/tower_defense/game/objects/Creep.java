@@ -1,5 +1,6 @@
 package bg.ittalents.tower_defense.game.objects;
 
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
@@ -15,6 +16,7 @@ import java.util.Map;
 import bg.ittalents.tower_defense.game.Assets;
 import bg.ittalents.tower_defense.game.Level;
 import bg.ittalents.tower_defense.game.LevelData;
+import bg.ittalents.tower_defense.utils.AudioManager;
 
 public class Creep extends AbstractObject {
 
@@ -35,8 +37,10 @@ public class Creep extends AbstractObject {
     private Level level;
     private static LevelData.CreepType creep;
 
-    int currentWaypoint;
-    Array<Vector2> waypoints;
+    private Sound sound;
+
+    private int currentWaypoint;
+    private Array<Vector2> waypoints;
 
     private class HealthBar {
         private final short BUFFER_X = 3;
@@ -79,6 +83,8 @@ public class Creep extends AbstractObject {
         timeSinceSlowed = 0;
         currentWaypoint = -1;
         healthBar = new HealthBar();
+
+        sound = Assets.instance.getSound(Assets.EXPLOSION_SOUND);
     }
 
     public static Creep createCreep(Vector2 startingLocation, Wave wave, Level level) {
@@ -165,6 +171,7 @@ public class Creep extends AbstractObject {
     public void receiveDamage(float damage) {
         setHealth(getHealth() - damage);
         if (getHealth() <= 0) {
+            AudioManager.instance.play(sound);
             setVisible(false);
         }
     }

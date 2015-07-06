@@ -6,8 +6,10 @@ import com.badlogic.gdx.graphics.FPSLogger;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
+import bg.ittalents.tower_defense.game.Assets;
 import bg.ittalents.tower_defense.game.WorldController;
 import bg.ittalents.tower_defense.game.WorldRenderer;
+import bg.ittalents.tower_defense.utils.AudioManager;
 
 public class GameScreen extends AbstractGameScreen {
 

@@ -17,9 +17,11 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 
+import bg.ittalents.tower_defense.game.Assets;
 import bg.ittalents.tower_defense.network.Network;
 import bg.ittalents.tower_defense.network.UserInfo;
 import bg.ittalents.tower_defense.screens.windows.*;
+import bg.ittalents.tower_defense.utils.AudioManager;
 
 public class MainScreen extends AbstractGameScreen implements INetworkScreenListener, IParent, ILevelSelect {
 

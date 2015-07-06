@@ -49,6 +49,7 @@ public class PreferencesWindow extends Window {
         btnClose.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
+                Gui.isMenu = false;
                 parent.back();
             }
         });

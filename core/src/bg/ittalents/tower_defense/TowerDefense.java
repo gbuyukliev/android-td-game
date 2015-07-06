@@ -22,7 +22,6 @@ public class TowerDefense extends Game {
 //		Assets.instance.getMusic().setLooping(true);
 //		Assets.instance.getMusic().setVolume(0.3f);
 //		Assets.instance.getMusic().play();
-
 		AudioManager.instance.play(Assets.instance.getMusic());
 	}
 }

@@ -236,6 +236,12 @@ public class Level implements Disposable {
         }
     }
 
+    private void updateScore() {
+        if (score <= 0) {
+
+        }
+    }
+
     public void update(float deltaTime) {
         if (getLevelData() != null) {
             if (!isPaused) {
@@ -248,6 +254,7 @@ public class Level implements Disposable {
 
             updateButtons();
             updateWarningText(deltaTime);
+            updateScore();
         }
     }
 
@@ -297,6 +304,10 @@ public class Level implements Disposable {
             gui.getPauseButton().setDisabled(true);
         } else {
             gui.getPauseButton().setDisabled(false);
+        }
+
+        if (!isPaused) {
+            Gui.isMenu = false;
         }
     }
 
