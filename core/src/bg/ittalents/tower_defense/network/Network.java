@@ -8,7 +8,7 @@ import com.badlogic.gdx.utils.JsonWriter;
 import bg.ittalents.tower_defense.game.LevelData;
 
 public class Network {
-    public static final String URL = "http://192.168.1.105:8080/towerdefense/";
+    public static final String URL = "http://localhost:8080/towerdefense/";
     //    public static final String URL = "http://jsonstub.com/towerdefense/";
     public static final String LOGIN_MANAGER = "LoginManager";
     public static final String REGISTER_MANAGER = "RegisterManager";

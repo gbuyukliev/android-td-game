@@ -5,35 +5,39 @@ import com.badlogic.gdx.Net;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 
+import bg.ittalents.tower_defense.game.LevelData;
+
 class Online implements INetwork {
 
     INetworkLevelListener networkLevelListener;
 
     @Override
     public void getLevelData(String username) {
-        Offline offline = new Offline();
-        offline.setListener(networkLevelListener);
-        offline.getLevelData(username);
+//        Offline offline = new Offline();
+//        offline.setListener(networkLevelListener);
+//        offline.getLevelData(username);
 
-//        Net.HttpRequest httpRequest = new Net.HttpRequest(Net.HttpMethods.GET);
-//        httpRequest.setUrl(Network.URL + Network.LEVEL_MANAGER);
-//        httpRequest.setContent("userName=" + username);
-//        Gdx.net.sendHttpRequest(httpRequest, new Net.HttpResponseListener() {
-//            @Override
-//            public void handleHttpResponse(Net.HttpResponse httpResponse) {
+        Net.HttpRequest httpRequest = new Net.HttpRequest(Net.HttpMethods.GET);
+        httpRequest.setUrl(Network.URL + Network.LEVEL_MANAGER);
+        httpRequest.setContent("userName=" + username);
+        Gdx.net.sendHttpRequest(httpRequest, new Net.HttpResponseListener() {
+            @Override
+            public void handleHttpResponse(Net.HttpResponse httpResponse) {
 //                Gdx.app.debug("Level Data", httpResponse.getResultAsString());
-//            }
-//
-//            @Override
-//            public void failed(Throwable t) {
-//
-//            }
-//
-//            @Override
-//            public void cancelled() {
-//
-//            }
-//        });
+                LevelData levelData = Network.parseJson(httpResponse.getResultAsString());
+                networkLevelListener.onLevelLoaded(levelData);
+            }
+
+            @Override
+            public void failed(Throwable t) {
+
+            }
+
+            @Override
+            public void cancelled() {
+
+            }
+        });
     }
 
     @Override
